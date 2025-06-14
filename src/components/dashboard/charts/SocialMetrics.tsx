@@ -1,7 +1,8 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Progress } from "recharts";
+import { Progress } from "@/components/ui/progress";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Shield, Users, Heart, Scale } from "lucide-react";
 
 const safetyData = [
@@ -43,7 +44,7 @@ export function SocialMetrics() {
               <XAxis dataKey="type" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip />
-              <Bar dataKey="count" fill={(entry: any) => entry.color} />
+              <Bar dataKey="count" fill="#3B82F6" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
