@@ -1,4 +1,3 @@
-
 import { AppSidebar } from "@/components/AppSidebar";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Footer } from "@/components/Footer";
@@ -8,6 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { FocusRadarChart } from "@/components/dashboard/charts/FocusRadarChart";
 import { MetricsPieChart } from "@/components/dashboard/charts/MetricsPieChart";
 import { TrendsLineChart } from "@/components/dashboard/charts/TrendsLineChart";
+import { ESGScoreBreakdownChart } from "@/components/dashboard/charts/ESGScoreBreakdownChart";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { motion, easeOut } from "framer-motion"; // <-- Import easeOut
 
@@ -25,6 +25,9 @@ export default function Dashboard() {
         <div className="flex flex-col flex-1 min-w-0">
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-4 md:p-6">
+            {/* ESG Score Breakdown at the top */}
+            <ESGScoreBreakdownChart />
+            {/* Main dashboard charts */}
             <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               <motion.div {...cardMotion}>
                 <MetricsPieChart />
