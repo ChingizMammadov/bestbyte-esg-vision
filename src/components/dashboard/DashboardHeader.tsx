@@ -13,38 +13,60 @@ export function DashboardHeader() {
     return "Good evening, Jane";
   };
 
+  const getCurrentDate = () => {
+    return new Date().toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   return (
-    <header className="w-full py-4 px-4 md:px-8 flex flex-col lg:flex-row items-start lg:items-center justify-between bg-background/70 border-b border-white/10 gap-4">
-      <div className="flex-1">
-        <h1 className="text-2xl md:text-3xl font-extrabold text-primary tracking-tight drop-shadow-xl">
-          {getGreeting()}
-        </h1>
-        <p className="text-xs md:text-sm font-medium text-primary/70">
-          Here are your latest ESG insights for Acme Corp.
-        </p>
-      </div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full lg:w-auto">
-        <div className="relative w-full sm:w-auto">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search..." className="pl-8 w-full sm:w-48 md:w-64 bg-white" />
-        </div>
-        <Button variant="outline" className="w-full sm:w-auto bg-white">
-          <Calendar className="mr-2 h-4 w-4" />
-          Select Period
-        </Button>
-      </div>
-      <div className="flex flex-row gap-2 items-center bg-gray-100/80 px-3 py-2 rounded-lg shadow-sm hover:shadow-md transition group w-full lg:w-auto justify-between">
-        <div className="flex items-center gap-2">
-          <User className="w-5 h-5 text-primary/70" />
-          <div className="text-gray-700 text-xs md:text-sm font-medium">
-            <span className="hidden sm:inline">Logged in as </span>
-            <span className="font-bold text-primary">jane@acme.com</span>
+    <header className="w-full py-4 px-4 md:px-6 bg-white/95 border-b border-gray-200 shadow-sm">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        {/* Company and Greeting Section */}
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="lg:hidden" />
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+              Acme Corp
+            </h1>
+            <p className="text-sm text-gray-600">{getGreeting()}</p>
+            <p className="text-xs text-gray-500">{getCurrentDate()}</p>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <SidebarTrigger className="hidden md:inline-flex" />
-          <Button variant="ghost" size="sm" className="flex gap-1 items-center hover:bg-red-100 hover:text-red-600 font-semibold text-xs transition active:scale-95">
-            <LogOut size={16} />
+
+        {/* Search and Controls */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
+          <div className="relative w-full sm:w-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input 
+              placeholder="Search ESG data..." 
+              className="pl-10 w-full sm:w-64 bg-white border-gray-300 focus:border-blue-500" 
+            />
+          </div>
+          <Button variant="outline" className="w-full sm:w-auto bg-white border-gray-300 hover:bg-gray-50">
+            <Calendar className="mr-2 h-4 w-4" />
+            Select Period
+          </Button>
+        </div>
+
+        {/* User Info and Logout */}
+        <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg w-full lg:w-auto justify-between lg:justify-start">
+          <div className="flex items-center gap-2">
+            <User className="w-5 h-5 text-gray-600" />
+            <div className="text-sm">
+              <span className="text-gray-600">Logged in as </span>
+              <span className="font-semibold text-gray-900">jane@acme.com</span>
+            </div>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="flex items-center gap-2 hover:bg-red-100 hover:text-red-600 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Log Out</span>
           </Button>
         </div>

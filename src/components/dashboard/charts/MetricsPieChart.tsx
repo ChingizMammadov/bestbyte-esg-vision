@@ -1,52 +1,68 @@
 
-import { PieChart, Pie, Cell, Tooltip as ChartTooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip as ChartTooltip, ResponsiveContainer, Legend } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const mockMetrics = [
-  { name: "Carbon", value: 60, color: "#718096" }, // Gray
-  { name: "Water", value: 25, color: "#4299e1" },  // Blue
-  { name: "Energy", value: 15, color: "#48bb78" }, // Green
+const esgData = [
+  { name: "Carbon", value: 60, color: "#6B7280", unit: "tons CO2" }, // Gray for Carbon
+  { name: "Water", value: 25, color: "#3B82F6", unit: "thousand liters" },  // Blue for Water
+  { name: "Energy", value: 15, color: "#10B981", unit: "MWh" }, // Green for Energy
 ];
+
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 border rounded-lg shadow-lg">
+        <p className="font-semibold text-gray-900">{data.name}</p>
+        <p className="text-sm text-gray-600">{data.value}% ({data.value} {data.unit})</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export function MetricsPieChart() {
   return (
-    <Card className="bg-white/95 border rounded-2xl shadow-xl h-full dashboard-card hover-scale-hover">
-      <CardHeader>
-        <CardTitle>Carbon / Water / Energy</CardTitle>
-        <CardDescription>Breakdown of core metrics</CardDescription>
+    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-bold text-gray-900">Carbon / Water / Energy</CardTitle>
+        <CardDescription className="text-gray-600">Interactive breakdown of core ESG metrics</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={170}>
+        <ResponsiveContainer width="100%" height={200}>
           <PieChart>
-            <ChartTooltip
-              cursor={{ fill: "#f0f9ff", opacity: 0.4 }}
-              formatter={(value: any, name: string) => [`${value} units`, name]}
-            />
+            <ChartTooltip content={<CustomTooltip />} />
             <Pie
               dataKey="value"
-              data={mockMetrics}
+              data={esgData}
               cx="50%"
               cy="50%"
-              outerRadius={65}
-              label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-                const RADIAN = Math.PI / 180;
-                const radius = 80;
-                const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                const metric = mockMetrics[index];
-                return (
-                  <text x={x} y={y} fill={metric.color} textAnchor={x > cx ? "start" : "end"} dominantBaseline="central" className="font-bold text-xs">
-                    {metric.name}
-                  </text>
-                );
-              }}
+              outerRadius={70}
+              innerRadius={30}
+              paddingAngle={2}
+              label={({ name, value }) => `${name}: ${value}%`}
+              labelLine={false}
               isAnimationActive={true}
-              animationDuration={700}
+              animationDuration={800}
             >
-              {mockMetrics.map((entry, idx) => (
-                <Cell key={`cell-${idx}`} fill={entry.color} stroke={entry.color} />
+              {esgData.map((entry, index) => (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={entry.color} 
+                  stroke={entry.color}
+                  className="hover:opacity-80 transition-opacity cursor-pointer"
+                />
               ))}
             </Pie>
+            <Legend 
+              verticalAlign="bottom" 
+              height={36}
+              formatter={(value, entry: any) => (
+                <span style={{ color: entry.color }} className="text-sm font-medium">
+                  {value}
+                </span>
+              )}
+            />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

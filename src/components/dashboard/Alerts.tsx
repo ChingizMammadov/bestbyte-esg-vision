@@ -1,13 +1,34 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, TrendingDown, AlertTriangle } from "lucide-react";
+import { Info, TrendingDown, AlertTriangle, Clock, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const initialAlerts = [
-  { id: 1, level: "warning", message: "ESG Report deadline in 7 days.", color: "bg-yellow-100 text-yellow-800", icon: AlertTriangle },
-  { id: 2, level: "info", message: "Your carbon data is trending downward!", color: "bg-green-100 text-green-800", icon: TrendingDown },
-  { id: 3, level: "danger", message: "Emissions target exceeded for Q2.", color: "bg-red-100 text-red-800", icon: AlertTriangle },
+  { 
+    id: 1, 
+    type: "deadline", 
+    message: "ESG Report due in 7 days", 
+    date: "2023-06-30",
+    color: "bg-yellow-100 text-yellow-800 border-yellow-200", 
+    icon: Clock 
+  },
+  { 
+    id: 2, 
+    type: "positive", 
+    message: "Your carbon data is trending downward!", 
+    date: "2023-06-10",
+    color: "bg-green-100 text-green-800 border-green-200", 
+    icon: TrendingDown 
+  },
+  { 
+    id: 3, 
+    type: "urgent", 
+    message: "Carbon emissions exceed target – urgent action required!", 
+    date: "2023-06-15",
+    color: "bg-red-100 text-red-800 border-red-200", 
+    icon: AlertTriangle 
+  },
 ];
 
 export function Alerts() {
@@ -18,41 +39,46 @@ export function Alerts() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-yellow-50/70 to-white/80 border rounded-2xl shadow-xl h-full">
-      <CardHeader>
-        <CardTitle>Alerts</CardTitle>
+    <Card className="bg-white border rounded-2xl shadow-lg h-full">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-bold text-gray-900">ESG Alerts</CardTitle>
       </CardHeader>
       <CardContent>
-        <ul className="space-y-3">
+        <div className="space-y-3">
           <AnimatePresence>
-            {displayedAlerts.length > 0 ? displayedAlerts.map((a) => (
-              <motion.li
-                key={a.id}
+            {displayedAlerts.length > 0 ? displayedAlerts.map((alert) => (
+              <motion.div
+                key={alert.id}
                 layout
-                initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                className={`${a.color} p-3 rounded-lg flex items-start gap-3 shadow group hover:shadow-md cursor-pointer transition`}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+                className={`${alert.color} p-4 rounded-lg border flex items-start gap-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer`}
               >
-                <a.icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <span className="font-semibold text-sm">{a.message}</span>
+                <alert.icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm">{alert.message}</p>
+                  <p className="text-xs opacity-75 mt-1">{alert.date}</p>
                 </div>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDismissAlert(a.id);
+                    handleDismissAlert(alert.id);
                   }}
-                  className="ml-2 text-xs px-2 py-1 rounded bg-white/50 hover:bg-white/80 text-gray-600 font-semibold transition-all"
+                  className="text-xs px-3 py-1 rounded bg-white/60 hover:bg-white/80 font-semibold transition-colors flex-shrink-0"
                 >
                   Dismiss
                 </button>
-              </motion.li>
+              </motion.div>
             )) : (
-              <p className="text-sm text-gray-500 text-center py-4">No new alerts.</p>
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                <p className="text-sm text-gray-500">No active alerts</p>
+                <p className="text-xs text-gray-400">All ESG metrics are on track</p>
+              </div>
             )}
           </AnimatePresence>
-        </ul>
+        </div>
       </CardContent>
     </Card>
   );
