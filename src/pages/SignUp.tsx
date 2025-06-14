@@ -36,6 +36,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
@@ -202,29 +203,31 @@ export default function SignUp() {
                         <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                           <Command>
                             <CommandInput placeholder="Search industry..." />
-                            <CommandEmpty>No industry found.</CommandEmpty>
-                            <CommandGroup>
-                              {industries.map((industry) => (
-                                <CommandItem
-                                  value={industry}
-                                  key={industry}
-                                  onSelect={() => {
-                                    form.setValue("industry", industry);
-                                    setIndustryPopoverOpen(false);
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      industry === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                  {industry}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            <CommandList>
+                              <CommandEmpty>No industry found.</CommandEmpty>
+                              <CommandGroup>
+                                {industries.map((industry) => (
+                                  <CommandItem
+                                    value={industry}
+                                    key={industry}
+                                    onSelect={() => {
+                                      form.setValue("industry", industry);
+                                      setIndustryPopoverOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        industry === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {industry}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
                           </Command>
                         </PopoverContent>
                       </Popover>
