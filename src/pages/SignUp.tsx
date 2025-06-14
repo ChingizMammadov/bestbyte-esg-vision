@@ -2,7 +2,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Shield, Check, ChevronsUpDown, CheckCircle2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -42,6 +42,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
 
 const industries = [
   "Technology", "Banking & Finance", "Healthcare", "Manufacturing", 
@@ -89,6 +90,14 @@ export default function SignUp() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { signUp, user } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,15 +117,32 @@ export default function SignUp() {
   const watchedIndustry = form.watch("industry");
   const watchedCompanySize = form.watch("companySize");
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Sign up form submitted:", values);
-    // Here you would typically make an API call to create an account.
-    // This requires backend integration, e.g., with Supabase.
-    toast({
-      title: "Account Created Successfully!",
-      description: "Welcome to BestByte. Redirecting you now...",
-    });
-    setIsSuccess(true);
+    
+    try {
+      const { error } = await signUp(values.email, values.password);
+      
+      if (error) {
+        toast({
+          title: "Sign Up Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Account Created Successfully!",
+          description: "Please check your email for verification before signing in.",
+        });
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
   
   if (isSuccess) {
@@ -128,13 +154,16 @@ export default function SignUp() {
             <div className="bg-white rounded-2xl shadow-xl border p-6 md:p-8">
               <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Account Created!</h1>
-              <p className="text-gray-600 mb-6">Congratulations! Welcome to BestByte. You can now start your ESG journey.</p>
+              <p className="text-gray-600 mb-6">
+                Congratulations! Your account has been created successfully. 
+                Please check your email for a verification link before signing in.
+              </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild className="flex-1">
-                  <Link to="/login">Log In</Link>
+                  <Link to="/login">Go to Login</Link>
                 </Button>
                 <Button asChild variant="outline" className="flex-1">
-                  <Link to="/dashboard">Explore Dashboard</Link>
+                  <Link to="/">Back to Home</Link>
                 </Button>
               </div>
             </div>

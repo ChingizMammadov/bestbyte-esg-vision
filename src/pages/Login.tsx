@@ -4,13 +4,12 @@ import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Shield, Lock } from "lucide-react";
+import { Eye, EyeOff, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -22,7 +21,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, user } = useAuth();
 
   // Redirect if already logged in
   useEffect(() => {
@@ -78,27 +77,20 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const { error } = isSignUp 
-        ? await signUp(formData.email, formData.password)
-        : await signIn(formData.email, formData.password);
+      const { error } = await signIn(formData.email, formData.password);
 
       if (error) {
         toast({
-          title: isSignUp ? "Sign Up Failed" : "Login Failed",
+          title: "Login Failed",
           description: error.message,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Success!",
-          description: isSignUp 
-            ? "Account created successfully! Please check your email for verification."
-            : "Logged in successfully!",
+          description: "Logged in successfully!",
         });
-        
-        if (!isSignUp) {
-          navigate("/dashboard");
-        }
+        navigate("/dashboard");
       }
     } catch (error) {
       toast({
@@ -123,10 +115,10 @@ export default function Login() {
                 <span className="text-xl md:text-2xl font-bold text-primary">BestByte</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                {isSignUp ? "Create Account" : "Welcome Back"}
+                Welcome Back
               </h1>
               <p className="text-gray-600 text-sm md:text-base">
-                {isSignUp ? "Sign up to access your ESG dashboard" : "Sign in to access your ESG dashboard"}
+                Sign in to access your ESG dashboard
               </p>
             </div>
 
@@ -186,19 +178,21 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full bg-primary text-white py-2.5 md:py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {isLoading ? (isSignUp ? "Creating Account..." : "Signing In...") : (isSignUp ? "Create Account" : "Sign In Securely")}
+                {isLoading ? "Signing In..." : "Sign In Securely"}
               </button>
 
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600">
-                  {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-                  <button
-                    type="button"
-                    onClick={() => setIsSignUp(!isSignUp)}
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
                     className="text-primary font-semibold hover:underline"
                   >
-                    {isSignUp ? "Sign in here" : "Create one here"}
-                  </button>
+                    Create your account here
+                  </Link>
+                </p>
+                <p className="text-xs text-gray-500 mt-2">
+                  Our sign-up process collects company details to provide you with tailored ESG reporting.
                 </p>
               </div>
             </form>
