@@ -1,6 +1,5 @@
 
 import React from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { BarChartIcon } from "@/components/icons/BarChartIcon";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,8 +53,6 @@ async function fetchEsgScores(): Promise<EsgScore[]> {
 
 export function ESGScoreBreakdownChart() {
   const [selected, setSelected] = React.useState<string | null>(null);
-  const isMobile = useIsMobile();
-  const layout = isMobile ? "vertical" : "horizontal";
 
   const {
     data: esgScores,
@@ -95,7 +92,7 @@ export function ESGScoreBreakdownChart() {
           <Skeleton className="h-7 w-1/2 bg-blue-200/50" />
         </div>
         <Skeleton className="h-4 w-3/4 mb-6 bg-blue-200/50" />
-        <div className="flex justify-around items-end pt-2 pb-4 px-2 sm:px-4" style={{ height: "280px" }}>
+        <div className="flex justify-around items-end pt-2 pb-4 px-2 sm:px-4" style={{ height: "320px" }}>
           <Skeleton className="h-2/3 w-20 bg-blue-200/50 rounded-t-xl" />
           <Skeleton className="h-full w-20 bg-blue-200/50 rounded-t-xl" />
           <Skeleton className="h-3/4 w-20 bg-blue-200/50 rounded-t-xl" />
@@ -144,7 +141,7 @@ export function ESGScoreBreakdownChart() {
         </div>
         <div className="md:ml-4 mt-1 flex-1">
           <p className="text-sm md:text-base text-blue-900/90 font-normal mb-0">
-            Explore ESG performance. Select a bar to focus on a category.
+            Explore ESG performance. Click a bar to focus on a category.
           </p>
           <span className="text-xs md:text-sm text-blue-900/60 font-light">
             Our ESG score breakdown helps identify strengths and areas for improvement.
@@ -160,10 +157,9 @@ export function ESGScoreBreakdownChart() {
       {/* ESG Interactive Bar Chart */}
       <div className="pt-2 pb-4 px-2 sm:px-4 flex flex-col w-full justify-center">
         {esgScores && esgScores.length > 0 ? (
-          <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "280px" : "260px" }}>
+          <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: "320px" }}>
             <BreakdownBarChart
               data={esgScores}
-              layout={layout}
               selected={selected}
               setSelected={setSelected}
             />

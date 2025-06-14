@@ -20,7 +20,6 @@ const scoreColor = (score: number) => {
 
 export function BreakdownBarChart({
   data,
-  layout,
   selected,
   setSelected,
 }: {
@@ -30,23 +29,15 @@ export function BreakdownBarChart({
     score: number;
     details: string;
   }[];
-  layout: "vertical" | "horizontal";
   selected: string | null;
   setSelected: (s: string | null) => void;
 }) {
-  const yAxisWidth = layout === "horizontal" ? 120 : undefined;
-
   return (
-    <ResponsiveContainer width="100%" height={layout === "vertical" ? 280 : 260}>
+    <ResponsiveContainer width="100%" height={320}>
       <BarChart
-        layout={layout}
         data={data}
-        margin={
-          layout === "vertical"
-            ? { top: 20, bottom: 20, left: 20, right: 20 }
-            : { left: 20, right: 60, top: 20, bottom: 20 }
-        }
-        barCategoryGap={layout === "vertical" ? "20%" : "25%"}
+        margin={{ top: 20, bottom: 20, left: 20, right: 20 }}
+        barCategoryGap="25%"
       >
         <defs>
           <linearGradient id="colorE" x1="0" y1="0" x2="0" y2="1">
@@ -63,27 +54,20 @@ export function BreakdownBarChart({
           </linearGradient>
         </defs>
         <XAxis
-          dataKey={layout === "vertical" ? "category" : "score"}
-          type={layout === "vertical" ? "category" : "number"}
+          dataKey="category"
           axisLine={false}
           tickLine={false}
           tick={{
             fontWeight: 600,
-            fontSize: layout === "vertical" ? 14 : 13,
+            fontSize: 14,
             fill: "#374151"
           }}
-          domain={[0, 100]}
-          hide={layout === "horizontal"}
         />
         <YAxis
-          dataKey={layout === 'horizontal' ? 'category' : undefined}
-          type="category"
           domain={[0, 100]}
           axisLine={false}
           tickLine={false}
-          width={yAxisWidth}
-          tick={{ fontSize: 14, fontWeight: 600, fill: "#374151" }}
-          hide={layout === "vertical"}
+          tick={{ fontSize: 12, fontWeight: 500, fill: "#6B7280" }}
         />
         <ChartTooltip
           cursor={{ fill: "rgba(165,180,252,0.15)" }}
@@ -114,17 +98,20 @@ export function BreakdownBarChart({
         <Bar
           dataKey="score"
           animationDuration={600}
-          radius={layout === "vertical" ? [12, 12, 0, 0] : [0, 12, 12, 0]}
-          onClick={d => setSelected(selected === d.category ? null : d.category)}
+          radius={[12, 12, 0, 0]}
+          onClick={(d) => {
+            setSelected(selected === d.category ? null : d.category);
+            console.log(`Clicked ${d.category} - Score: ${d.score}`);
+          }}
           cursor="pointer"
-          maxBarSize={layout === 'vertical' ? 80 : 40}
+          maxBarSize={100}
           minPointSize={8}
         >
           {data.map((entry) => (
             <Cell
               key={entry.category}
               fill={`url(#color${entry.key})`}
-              strokeWidth={selected === entry.category ? 3 : 0}
+              strokeWidth={selected === entry.category ? 4 : 0}
               stroke={selected === entry.category ? barColors[entry.category as keyof typeof barColors] : 'transparent'}
               opacity={
                 selected === null || selected === entry.category
@@ -132,7 +119,7 @@ export function BreakdownBarChart({
                   : 0.4
               }
               style={{
-                filter: `drop-shadow(0 6px 16px ${barColors[entry.category as keyof typeof barColors]}30)`,
+                filter: `drop-shadow(0 8px 20px ${barColors[entry.category as keyof typeof barColors]}40)`,
                 cursor: "pointer",
                 transition: "all .4s ease",
               }}
@@ -140,7 +127,7 @@ export function BreakdownBarChart({
           ))}
           <LabelList
             dataKey="score"
-            position={layout === "vertical" ? "top" : "right"}
+            position="top"
             offset={16}
             formatter={(score: number, entry: { category: string }) => {
               const category = entry?.category;
@@ -151,7 +138,7 @@ export function BreakdownBarChart({
               return (
                 <tspan
                   className="font-bold"
-                  fontSize={layout === 'vertical' ? 16 : 16}
+                  fontSize={18}
                   fill={color}
                   style={{ textShadow: "0 2px 8px #fff" }}
                 >
