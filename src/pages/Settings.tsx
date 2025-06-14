@@ -3,121 +3,179 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, User, LogOut, Settings as SettingsIcon, Sliders } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Settings as SettingsIcon, User, Bell, Lock, Palette } from "lucide-react";
 import { motion } from "framer-motion";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-const pageVariants = {
-  initial: { opacity: 0, x: 100 },
-  in: { opacity: 1, x: 0 },
-  out: { opacity: 0, x: -100 }
-};
-
-const pageTransition = {
-  type: "tween",
-  ease: "anticipate",
-  duration: 0.4
-};
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Settings() {
-  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [emailReports, setEmailReports] = useState(false);
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-50 font-sans">
+      <div className="flex min-h-screen bg-gray-50">
         <AppSidebar />
-        
-        <div className="flex flex-col flex-1 min-w-0">
+        <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="w-full bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
-            <div className="flex items-center justify-between px-4 md:px-8 py-4">
+          <header className="bg-white border-b border-gray-200 px-4 py-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group"
-                >
-                  <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                  <span className="hidden sm:inline font-medium">Back to Dashboard</span>
+                <SidebarTrigger />
+                <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Back to Dashboard</span>
                 </Link>
-                <SidebarTrigger className="md:hidden" />
-                <div className="hidden md:flex items-center gap-2">
-                  <SettingsIcon className="w-6 h-6 text-primary" />
-                  <h1 className="text-xl font-bold text-gray-900">Settings</h1>
-                </div>
               </div>
-
-              <nav className="hidden lg:flex items-center text-sm text-gray-500">
-                <Link to="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
-                <span className="mx-2">/</span>
-                <span className="text-gray-900 font-medium">Settings</span>
-              </nav>
-
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg">
-                  <User className="w-4 h-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">jane@acme.com</span>
+              <div className="flex items-center gap-4">
+                <div className="hidden md:block text-sm text-gray-600">
+                  <span className="font-medium">Acme Corp</span>
+                  <span className="ml-2">Logged in as jane@acme.com</span>
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate('/login')}
-                  className="flex items-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Log Out</span>
+                <Button variant="outline" size="sm">
+                  Log Out
                 </Button>
               </div>
             </div>
           </header>
 
-          <motion.main 
-            className="flex-1 p-4 md:p-8"
-            initial="initial"
-            animate="in"
-            exit="out"
-            variants={pageVariants}
-            transition={pageTransition}
-          >
-            <div className="max-w-7xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.5 }}
-                className="text-center py-20"
-              >
-                <Sliders className="w-24 h-24 text-primary mx-auto mb-6" />
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Platform Settings</h2>
-                <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                  Customize your ESG platform experience, manage user preferences, notification settings, and system configurations.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button
-                    onClick={() => navigate('/dashboard')}
-                    className="flex items-center gap-2"
-                  >
-                    <SettingsIcon className="w-4 h-4" />
-                    Back to Dashboard
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => navigate('/carbon-calculator')}
-                    className="flex items-center gap-2"
-                  >
-                    <Sliders className="w-4 h-4" />
-                    Calculator Settings
-                  </Button>
+          {/* Main Content */}
+          <main className="flex-1 p-4 md:p-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="max-w-4xl mx-auto"
+            >
+              {/* Page Header */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="bg-gray-100 p-2 rounded-lg">
+                    <SettingsIcon className="w-6 h-6 text-gray-600" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                      Settings
+                    </h1>
+                    <p className="text-gray-600 mt-1">
+                      Manage your account and application preferences
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            </div>
-          </motion.main>
+              </div>
+
+              {/* Settings Content */}
+              <div className="space-y-6">
+                {/* Profile Settings */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <User className="w-5 h-5" />
+                      Profile Settings
+                    </CardTitle>
+                    <CardDescription>
+                      Update your personal information and company details
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input id="firstName" defaultValue="Jane" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input id="lastName" defaultValue="Smith" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address</Label>
+                      <Input id="email" type="email" defaultValue="jane@acme.com" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="company">Company Name</Label>
+                      <Input id="company" defaultValue="Acme Corp" />
+                    </div>
+                    <Button>Save Changes</Button>
+                  </CardContent>
+                </Card>
+
+                {/* Notifications */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bell className="w-5 h-5" />
+                      Notifications
+                    </CardTitle>
+                    <CardDescription>
+                      Configure how you receive updates and alerts
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label htmlFor="notifications" className="text-sm font-medium">
+                          Push Notifications
+                        </Label>
+                        <p className="text-sm text-gray-600">
+                          Receive notifications about important updates
+                        </p>
+                      </div>
+                      <Switch
+                        id="notifications"
+                        checked={notifications}
+                        onCheckedChange={setNotifications}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label htmlFor="emailReports" className="text-sm font-medium">
+                          Email Reports
+                        </Label>
+                        <p className="text-sm text-gray-600">
+                          Get monthly ESG reports delivered to your email
+                        </p>
+                      </div>
+                      <Switch
+                        id="emailReports"
+                        checked={emailReports}
+                        onCheckedChange={setEmailReports}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Security */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Lock className="w-5 h-5" />
+                      Security
+                    </CardTitle>
+                    <CardDescription>
+                      Manage your password and security settings
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Button variant="outline">Change Password</Button>
+                    <Button variant="outline">Enable Two-Factor Authentication</Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </motion.div>
+          </main>
 
           <Footer />
-          <ChatbotWidget />
         </div>
       </div>
+      <ChatbotWidget />
     </SidebarProvider>
   );
 }
