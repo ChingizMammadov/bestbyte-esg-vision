@@ -143,15 +143,6 @@ function DataPoints() {
         color="#3B82F6"
         lineWidth={3}
       />
-      <mesh>
-        <planeGeometry args={[5, 5]} />
-        <meshStandardMaterial 
-          color="#3B82F6"
-          transparent
-          opacity={0.1}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
     </group>
   );
 }
