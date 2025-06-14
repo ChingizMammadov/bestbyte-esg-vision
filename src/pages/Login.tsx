@@ -1,10 +1,10 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Shield, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,17 +14,93 @@ export default function Login() {
     email: "",
     password: ""
   });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors = {
+      email: "",
+      password: ""
+    };
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Password validation
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+    return !newErrors.email && !newErrors.password;
+  };
+
+  const simulateEmailNotification = (email: string) => {
+    // Simulate sending email notification
+    console.log(`Simulated email sent to: ${email}`);
+    console.log("Email content: Welcome back! You have successfully logged in to BestByte ESG Dashboard.");
+    
+    toast({
+      title: "Login Successful",
+      description: `A confirmation email has been sent to ${email}`,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields correctly",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
     console.log("Login form submitted:", formData, { rememberMe, enable2FA });
-    // Handle login logic here
-    navigate("/dashboard");
+
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Here you would typically make an API call to authenticate the user
+      // For now, we'll simulate a successful login
+      
+      // Simulate email notification
+      simulateEmailNotification(formData.email);
+      
+      // Navigate to dashboard after successful login
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -44,36 +120,46 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
                 <input
                   type="email"
                   required
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition text-sm md:text-base"
+                  className={`w-full px-3 md:px-4 py-2 md:py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition text-sm md:text-base ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  }`}
                   placeholder="your@email.com"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Password *</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     value={formData.password}
                     onChange={(e) => handleInputChange("password", e.target.value)}
-                    className="w-full px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition text-sm md:text-base"
+                    className={`w-full px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition text-sm md:text-base ${
+                      errors.password ? "border-red-500" : "border-gray-300"
+                    }`}
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-2.5 md:top-3 text-gray-500 hover:text-gray-700"
+                    className="absolute right-3 top-2.5 md:top-3.5 text-gray-500 hover:text-gray-700"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                )}
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -115,9 +201,10 @@ export default function Login() {
 
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-2.5 md:py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 text-sm md:text-base"
+                disabled={isLoading}
+                className="w-full bg-primary text-white py-2.5 md:py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                Sign In Securely
+                {isLoading ? "Signing In..." : "Sign In Securely"}
               </button>
 
               <div className="text-center pt-4 border-t">
