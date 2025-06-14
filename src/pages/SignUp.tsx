@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -40,6 +41,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const industries = [
   "Technology", "Banking & Finance", "Healthcare", "Manufacturing", 
@@ -86,6 +88,7 @@ export default function SignUp() {
   const [isIndustryPopoverOpen, setIndustryPopoverOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -167,7 +170,13 @@ export default function SignUp() {
                     <FormItem>
                       <FormLabel>Company Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your company name" {...field} />
+                        <Input 
+                          placeholder="Enter your company name" 
+                          {...field}
+                          autoComplete="organization"
+                          inputMode="text"
+                          className="text-base md:text-sm h-12 md:h-10"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -180,57 +189,75 @@ export default function SignUp() {
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>Industry *</FormLabel>
-                      <Popover open={isIndustryPopoverOpen} onOpenChange={setIndustryPopoverOpen}>
-                        <PopoverTrigger asChild>
+                      {isMobile ? (
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value
-                                ? industries.find(
-                                    (industry) => industry === field.value
-                                  )
-                                : "Select your industry"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                              <SelectValue placeholder="Select your industry" />
+                            </SelectTrigger>
                           </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                          <Command>
-                            <CommandInput placeholder="Search industry..." />
-                            <CommandList>
-                              <CommandEmpty>No industry found.</CommandEmpty>
-                              <CommandGroup>
-                                {industries.map((industry) => (
-                                  <CommandItem
-                                    value={industry}
-                                    key={industry}
-                                    onSelect={() => {
-                                      form.setValue("industry", industry);
-                                      setIndustryPopoverOpen(false);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        industry === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {industry}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                          <SelectContent className="max-h-60">
+                            {industries.map(industry => (
+                              <SelectItem key={industry} value={industry} className="text-base md:text-sm">
+                                {industry}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Popover open={isIndustryPopoverOpen} onOpenChange={setIndustryPopoverOpen}>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between h-12 md:h-10 text-base md:text-sm",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                  ? industries.find(
+                                      (industry) => industry === field.value
+                                    )
+                                  : "Select your industry"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                            <Command>
+                              <CommandInput placeholder="Search industry..." className="text-base md:text-sm" />
+                              <CommandList>
+                                <CommandEmpty>No industry found.</CommandEmpty>
+                                <CommandGroup>
+                                  {industries.map((industry) => (
+                                    <CommandItem
+                                      value={industry}
+                                      key={industry}
+                                      onSelect={() => {
+                                        form.setValue("industry", industry);
+                                        setIndustryPopoverOpen(false);
+                                      }}
+                                      className="text-base md:text-sm"
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          industry === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {industry}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -244,7 +271,13 @@ export default function SignUp() {
                       <FormItem>
                         <FormLabel>Please specify your industry</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your industry" {...field} />
+                          <Input 
+                            placeholder="Your industry" 
+                            {...field}
+                            autoComplete="off"
+                            inputMode="text"
+                            className="text-base md:text-sm h-12 md:h-10"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -260,13 +293,15 @@ export default function SignUp() {
                       <FormLabel>Company Size *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
                             <SelectValue placeholder="Select company size" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="max-h-60">
                           {companySizes.map(size => (
-                            <SelectItem key={size} value={size}>{size}</SelectItem>
+                            <SelectItem key={size} value={size} className="text-base md:text-sm">
+                              {size}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -283,7 +318,13 @@ export default function SignUp() {
                       <FormItem>
                         <FormLabel>Please specify your company size</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 2500 employees" {...field} />
+                          <Input 
+                            placeholder="e.g., 2500 employees" 
+                            {...field}
+                            autoComplete="off"
+                            inputMode="text"
+                            className="text-base md:text-sm h-12 md:h-10"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -298,7 +339,14 @@ export default function SignUp() {
                     <FormItem>
                       <FormLabel>Email Address *</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="your@email.com" {...field} />
+                        <Input 
+                          type="email" 
+                          placeholder="your@email.com" 
+                          {...field}
+                          autoComplete="email"
+                          inputMode="email"
+                          className="text-base md:text-sm h-12 md:h-10"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -312,7 +360,14 @@ export default function SignUp() {
                     <FormItem>
                       <FormLabel>Phone Number (Optional)</FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="+1 (555) 123-4567" {...field} />
+                        <Input 
+                          type="tel" 
+                          placeholder="+1 (555) 123-4567" 
+                          {...field}
+                          autoComplete="tel"
+                          inputMode="tel"
+                          className="text-base md:text-sm h-12 md:h-10"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -331,11 +386,13 @@ export default function SignUp() {
                             type={showPassword ? "text" : "password"}
                             placeholder="Create a strong password"
                             {...field}
+                            autoComplete="new-password"
+                            className="text-base md:text-sm h-12 md:h-10 pr-12"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1"
                           >
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                           </button>
@@ -353,7 +410,7 @@ export default function SignUp() {
                   </p>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                <Button type="submit" className="w-full h-12 text-base md:text-sm" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? "Creating Account..." : "Create Account"}
                 </Button>
 
