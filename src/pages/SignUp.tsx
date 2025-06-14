@@ -273,7 +273,7 @@ export default function SignUp() {
                                     ? industries.find(
                                         (industry) => industry === field.value
                                       )
-                                    : "Select the industry that best represents your business"}
+                                    : "Select the industry"}
                                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
