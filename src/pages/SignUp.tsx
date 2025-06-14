@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -39,6 +38,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 const industries = [
   "Technology", "Banking & Finance", "Healthcare", "Manufacturing", 
@@ -51,7 +51,7 @@ const companySizes = [
 ];
 
 const formSchema = z.object({
-  companyName: z.string().min(1, { message: "Company name is required." }).regex(/^[a-zA-Z0-9\s.,'&_-\p{L}]+$/u, { message: "Please enter a valid company name." }),
+  companyName: z.string().min(1, { message: "Company name is required." }).regex(/^[a-zA-Z0-9\s.,'&_\-\p{L}]+$/u, { message: "Please enter a valid company name." }),
   industry: z.string().min(1, { message: "Please select an industry." }),
   otherIndustry: z.string().optional(),
   companySize: z.string().min(1, { message: "Please select a company size." }),
@@ -84,6 +84,7 @@ export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isIndustryPopoverOpen, setIndustryPopoverOpen] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -114,8 +115,6 @@ export default function SignUp() {
     setIsSuccess(true);
   };
   
-  const { toast } = useToast();
-
   if (isSuccess) {
     return (
       <div className="flex flex-col min-h-screen bg-background font-sans">
