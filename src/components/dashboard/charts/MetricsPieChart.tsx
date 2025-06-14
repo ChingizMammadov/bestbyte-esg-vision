@@ -28,19 +28,19 @@ export function MetricsPieChart() {
         <CardTitle className="text-lg font-bold text-gray-900">Carbon / Water / Energy</CardTitle>
         <CardDescription className="text-gray-600">Interactive breakdown of core ESG metrics</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={200}>
+      <CardContent className="pb-6">
+        <ResponsiveContainer width="100%" height={250}>
           <PieChart>
             <ChartTooltip content={<CustomTooltip />} />
             <Pie
               dataKey="value"
               data={esgData}
               cx="50%"
-              cy="50%"
-              outerRadius={70}
-              innerRadius={30}
-              paddingAngle={2}
-              label={({ name, value }) => `${name}: ${value}%`}
+              cy="45%"
+              outerRadius={80}
+              innerRadius={35}
+              paddingAngle={3}
+              label={false}
               labelLine={false}
               isAnimationActive={true}
               animationDuration={800}
@@ -56,9 +56,10 @@ export function MetricsPieChart() {
             </Pie>
             <Legend 
               verticalAlign="bottom" 
-              height={36}
+              height={50}
+              wrapperStyle={{ paddingTop: '10px' }}
               formatter={(value, entry: any) => (
-                <span style={{ color: entry.color }} className="text-sm font-medium">
+                <span style={{ color: entry.color }} className="text-sm font-medium px-2">
                   {value}
                 </span>
               )}
