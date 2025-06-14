@@ -86,53 +86,57 @@ function DataPoints() {
     }
   });
 
-  const dataPoints = radarData.map((item, index) => {
-    const radius = (item.score / 100) * 2.5;
-    const x = Math.cos(item.angle) * radius;
-    const z = Math.sin(item.angle) * radius;
-    const y = Math.sin(state.clock.elapsedTime + index) * 0.1;
+  const dataPoints = useMemo(() => {
+    return radarData.map((item, index) => {
+      const radius = (item.score / 100) * 2.5;
+      const x = Math.cos(item.angle) * radius;
+      const z = Math.sin(item.angle) * radius;
 
-    return (
-      <group key={item.subject} position={[x, y, z]}>
-        <Sphere args={[0.1, 16, 16]}>
-          <meshStandardMaterial 
+      return (
+        <group key={item.subject} position={[x, 0, z]}>
+          <Sphere args={[0.1, 16, 16]}>
+            <meshStandardMaterial 
+              color={item.color}
+              emissive={item.color}
+              emissiveIntensity={0.3}
+              roughness={0.2}
+              metalness={0.8}
+            />
+          </Sphere>
+          <pointLight
             color={item.color}
-            emissive={item.color}
-            emissiveIntensity={0.3}
-            roughness={0.2}
-            metalness={0.8}
+            intensity={0.5}
+            distance={2}
+            decay={2}
           />
-        </Sphere>
-        <pointLight
-          color={item.color}
-          intensity={0.5}
-          distance={2}
-          decay={2}
-        />
-        <Text
-          position={[0, 0.3, 0]}
-          fontSize={0.15}
-          color={item.color}
-          anchorX="center"
-          anchorY="middle"
-          font="/fonts/inter-bold.woff"
-        >
-          {item.score}
-        </Text>
-      </group>
-    );
-  });
+          <Text
+            position={[0, 0.3, 0]}
+            fontSize={0.15}
+            color={item.color}
+            anchorX="center"
+            anchorY="middle"
+            font="/fonts/inter-bold.woff"
+          >
+            {item.score}
+          </Text>
+        </group>
+      );
+    });
+  }, []);
 
   // Create connecting lines between data points
-  const connectionPoints = radarData.map((item) => {
-    const radius = (item.score / 100) * 2.5;
-    return new THREE.Vector3(
-      Math.cos(item.angle) * radius,
-      0,
-      Math.sin(item.angle) * radius
-    );
-  });
-  connectionPoints.push(connectionPoints[0]); // Close the shape
+  const connectionPoints = useMemo(() => {
+    const points = radarData.map((item) => {
+      const radius = (item.score / 100) * 2.5;
+      return new THREE.Vector3(
+        Math.cos(item.angle) * radius,
+        0,
+        Math.sin(item.angle) * radius
+      );
+    });
+    points.push(points[0]); // Close the shape
+    return points;
+  }, []);
 
   return (
     <group ref={groupRef}>
