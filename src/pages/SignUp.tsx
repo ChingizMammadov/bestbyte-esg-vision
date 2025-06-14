@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -45,13 +46,21 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 
 const industries = [
-  "Technology", "Banking & Finance", "Healthcare", "Manufacturing", 
+  "Technology", "Finance & Banking", "Healthcare", "Manufacturing", 
   "Retail", "Energy & Utilities", "Transportation", "Real Estate", "Other"
 ];
 
 const companySizes = [
   "1-10 employees", "11-50 employees", "51-200 employees", 
   "201-1000 employees", "1000+ employees", "Other"
+];
+
+const esgFocusAreas = [
+  "Environmental Impact", "Social Responsibility", "Governance"
+];
+
+const reportingTypes = [
+  "Basic ESG Reporting", "Comprehensive ESG Reporting", "Regulatory ESG Reporting"
 ];
 
 const formSchema = z.object({
@@ -65,6 +74,13 @@ const formSchema = z.object({
   password: z.string()
     .min(8, { message: "Password must be at least 8 characters long." })
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: "Password must include an uppercase letter, a lowercase letter, and a number." }),
+  confirmPassword: z.string(),
+  esgFocus: z.string().min(1, { message: "Please select your primary ESG focus area." }),
+  reportingType: z.string().min(1, { message: "Please select your reporting type." }),
+  agreeToTerms: z.boolean().refine(val => val === true, { message: "You must agree to the terms and conditions." }),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords do not match.",
+  path: ['confirmPassword'],
 }).refine(data => {
     if (data.industry === 'Other') {
         return !!data.otherIndustry && data.otherIndustry.trim().length > 0;
@@ -85,6 +101,7 @@ const formSchema = z.object({
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isIndustryPopoverOpen, setIndustryPopoverOpen] = useState(false);
   const navigate = useNavigate();
@@ -111,6 +128,10 @@ export default function SignUp() {
       email: "",
       phone: "",
       password: "",
+      confirmPassword: "",
+      esgFocus: "",
+      reportingType: "",
+      agreeToTerms: false,
     },
   });
 
@@ -121,7 +142,10 @@ export default function SignUp() {
     console.log("Sign up form submitted:", values);
     
     try {
-      const { error } = await signUp(values.email, values.password);
+      const redirectUrl = `${window.location.origin}/`;
+      const { error } = await signUp(values.email, values.password, {
+        emailRedirectTo: redirectUrl
+      });
       
       if (error) {
         toast({
@@ -192,119 +216,197 @@ export default function SignUp() {
 
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter your company name" 
-                          {...field}
-                          autoComplete="organization"
-                          inputMode="text"
-                          className="text-base md:text-sm h-12 md:h-10"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* Company Details Section */}
+                <div className="border-b pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Company Details</h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Name *</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your company's official name" 
+                            {...field}
+                            autoComplete="organization"
+                            inputMode="text"
+                            className="text-base md:text-sm h-12 md:h-10"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="industry"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Industry *</FormLabel>
-                      {isMobile ? (
+                  <FormField
+                    control={form.control}
+                    name="industry"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Industry *</FormLabel>
+                        {isMobile ? (
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                                <SelectValue placeholder="Select the industry that best represents your business" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-h-60">
+                              {industries.map(industry => (
+                                <SelectItem key={industry} value={industry} className="text-base md:text-sm">
+                                  {industry}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <Popover open={isIndustryPopoverOpen} onOpenChange={setIndustryPopoverOpen}>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    "w-full justify-between h-12 md:h-10 text-base md:text-sm",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value
+                                    ? industries.find(
+                                        (industry) => industry === field.value
+                                      )
+                                    : "Select the industry that best represents your business"}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                              <Command>
+                                <CommandInput placeholder="Search industry..." className="text-base md:text-sm" />
+                                <CommandList>
+                                  <CommandEmpty>No industry found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {industries.map((industry) => (
+                                      <CommandItem
+                                        value={industry}
+                                        key={industry}
+                                        onSelect={() => {
+                                          form.setValue("industry", industry);
+                                          setIndustryPopoverOpen(false);
+                                        }}
+                                        className="text-base md:text-sm"
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            industry === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                        {industry}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {watchedIndustry === 'Other' && (
+                    <FormField
+                      control={form.control}
+                      name="otherIndustry"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Please specify your industry</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="Your industry" 
+                              {...field}
+                              autoComplete="off"
+                              inputMode="text"
+                              className="text-base md:text-sm h-12 md:h-10"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <FormField
+                    control={form.control}
+                    name="companySize"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Size *</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
-                              <SelectValue placeholder="Select your industry" />
+                              <SelectValue placeholder="Select your company's size based on employees" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="max-h-60">
-                            {industries.map(industry => (
-                              <SelectItem key={industry} value={industry} className="text-base md:text-sm">
-                                {industry}
+                            {companySizes.map(size => (
+                              <SelectItem key={size} value={size} className="text-base md:text-sm">
+                                {size}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
-                      ) : (
-                        <Popover open={isIndustryPopoverOpen} onOpenChange={setIndustryPopoverOpen}>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  "w-full justify-between h-12 md:h-10 text-base md:text-sm",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value
-                                  ? industries.find(
-                                      (industry) => industry === field.value
-                                    )
-                                  : "Select your industry"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                            <Command>
-                              <CommandInput placeholder="Search industry..." className="text-base md:text-sm" />
-                              <CommandList>
-                                <CommandEmpty>No industry found.</CommandEmpty>
-                                <CommandGroup>
-                                  {industries.map((industry) => (
-                                    <CommandItem
-                                      value={industry}
-                                      key={industry}
-                                      onSelect={() => {
-                                        form.setValue("industry", industry);
-                                        setIndustryPopoverOpen(false);
-                                      }}
-                                      className="text-base md:text-sm"
-                                    >
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          industry === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {industry}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  {watchedCompanySize === 'Other' && (
+                    <FormField
+                      control={form.control}
+                      name="otherCompanySize"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Please specify your company size</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="e.g., 2500 employees" 
+                              {...field}
+                              autoComplete="off"
+                              inputMode="text"
+                              className="text-base md:text-sm h-12 md:h-10"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
-                      <FormMessage />
-                    </FormItem>
+                    />
                   )}
-                />
+                </div>
 
-                {watchedIndustry === 'Other' && (
+                {/* Contact Information Section */}
+                <div className="border-b pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact Information</h3>
+                  
                   <FormField
                     control={form.control}
-                    name="otherIndustry"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Please specify your industry</FormLabel>
+                        <FormLabel>Email Address *</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="Your industry" 
+                            type="email" 
+                            placeholder="yourname@company.com" 
                             {...field}
-                            autoComplete="off"
-                            inputMode="text"
+                            autoComplete="email"
+                            inputMode="email"
                             className="text-base md:text-sm h-12 md:h-10"
                           />
                         </FormControl>
@@ -312,46 +414,20 @@ export default function SignUp() {
                       </FormItem>
                     )}
                   />
-                )}
 
-                <FormField
-                  control={form.control}
-                  name="companySize"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Size *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
-                            <SelectValue placeholder="Select company size" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="max-h-60">
-                          {companySizes.map(size => (
-                            <SelectItem key={size} value={size} className="text-base md:text-sm">
-                              {size}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                {watchedCompanySize === 'Other' && (
                   <FormField
                     control={form.control}
-                    name="otherCompanySize"
+                    name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Please specify your company size</FormLabel>
+                        <FormLabel>Phone Number (Optional)</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="e.g., 2500 employees" 
+                            type="tel" 
+                            placeholder="+1 (555) 123-4567" 
                             {...field}
-                            autoComplete="off"
-                            inputMode="text"
+                            autoComplete="tel"
+                            inputMode="tel"
                             className="text-base md:text-sm h-12 md:h-10"
                           />
                         </FormControl>
@@ -359,75 +435,148 @@ export default function SignUp() {
                       </FormItem>
                     )}
                   />
-                )}
+                </div>
 
+                {/* Account Security Section */}
+                <div className="border-b pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Account Security</h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password *</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Create a strong password"
+                              {...field}
+                              autoComplete="new-password"
+                              className="text-base md:text-sm h-12 md:h-10 pr-12"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1"
+                            >
+                              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password *</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="Re-enter your password"
+                              {...field}
+                              autoComplete="new-password"
+                              className="text-base md:text-sm h-12 md:h-10 pr-12"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1"
+                            >
+                              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* ESG Preferences Section */}
+                <div className="border-b pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">ESG Preferences</h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name="esgFocus"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Primary ESG Focus Area *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                              <SelectValue placeholder="Which ESG category do you want to focus on?" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {esgFocusAreas.map(area => (
+                              <SelectItem key={area} value={area} className="text-base md:text-sm">
+                                {area}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="reportingType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>ESG Reporting Type *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                              <SelectValue placeholder="Select the type of ESG reporting your company needs" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {reportingTypes.map(type => (
+                              <SelectItem key={type} value={type} className="text-base md:text-sm">
+                                {type}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Terms and Conditions */}
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="agreeToTerms"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address *</FormLabel>
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
-                        <Input 
-                          type="email" 
-                          placeholder="your@email.com" 
-                          {...field}
-                          autoComplete="email"
-                          inputMode="email"
-                          className="text-base md:text-sm h-12 md:h-10"
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number (Optional)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="tel" 
-                          placeholder="+1 (555) 123-4567" 
-                          {...field}
-                          autoComplete="tel"
-                          inputMode="tel"
-                          className="text-base md:text-sm h-12 md:h-10"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password *</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Create a strong password"
-                            {...field}
-                            autoComplete="new-password"
-                            className="text-base md:text-sm h-12 md:h-10 pr-12"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1"
-                          >
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm">
+                          I agree to the{" "}
+                          <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
+                          {" "}and{" "}
+                          <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                          , and confirm GDPR compliance for data protection. *
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -440,15 +589,8 @@ export default function SignUp() {
                 </div>
 
                 <Button type="submit" className="w-full h-12 text-base md:text-sm" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? "Creating Account..." : "Create Account"}
+                  {form.formState.isSubmitting ? "Creating Account..." : "Start Your ESG Journey"}
                 </Button>
-
-                <div className="text-center text-xs text-gray-600">
-                  By signing up, you agree to our{" "}
-                  <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
-                  {" "}and{" "}
-                  <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
-                </div>
 
                 <div className="text-center pt-4 border-t">
                   <p className="text-sm text-gray-600">
