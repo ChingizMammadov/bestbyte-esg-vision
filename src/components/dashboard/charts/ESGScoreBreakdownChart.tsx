@@ -297,14 +297,24 @@ export function ESGScoreBreakdownChart() {
 
       {/* ESG Interactive Bar Chart */}
       <div className="pt-2 pb-4 px-2 sm:px-4 flex flex-col w-full justify-center">
-        <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "200px" : "220px" }}>
-          <BreakdownBarChart
-            data={esgScores}
-            layout={layout}
-            selected={selected}
-            setSelected={setSelected}
-          />
-        </div>
+        {esgScores && esgScores.length > 0 ? (
+          <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "200px" : "220px" }}>
+            <BreakdownBarChart
+              data={esgScores}
+              layout={layout}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center min-h-[180px] rounded-xl bg-white/70 border border-blue-100 shadow-inner my-5">
+            <span className="text-2xl text-blue-500 mb-2">😕</span>
+            <p className="font-semibold text-blue-900">No data to display</p>
+            <p className="text-xs text-blue-800/60 mt-1">
+              ESG score breakdown data is unavailable.
+            </p>
+          </div>
+        )}
         {/* Category key (icon + label): always visible, spacious and clear */}
         <div className="flex flex-row mt-4 mb-1 w-full items-center justify-evenly md:justify-center gap-x-6 gap-y-2 flex-wrap">
           {esgScores.map(cat => (
