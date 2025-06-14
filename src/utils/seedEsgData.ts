@@ -4,19 +4,22 @@ import { supabase } from "@/integrations/supabase/client";
 export async function seedEsgData() {
   console.log("🌱 Seeding ESG data...");
   
-  // Sample ESG scores data
+  // Sample ESG scores data with required id field
   const esgScoresData = [
     {
+      id: 1,
       category: "Environmental",
       score: 78,
       metric_detail: "Strong renewable energy adoption and carbon reduction initiatives. Leading in sustainable practices with room for improvement in waste management."
     },
     {
+      id: 2,
       category: "Social",
       score: 85,
       metric_detail: "Excellent employee diversity and workplace safety programs. High employee satisfaction scores and comprehensive benefits package."
     },
     {
+      id: 3,
       category: "Governance",
       score: 72,
       metric_detail: "Good board diversity and transparency practices. Solid ethics policies with opportunities to enhance shareholder engagement."
@@ -36,9 +39,10 @@ export async function seedEsgData() {
 
     console.log("✅ ESG scores seeded successfully:", scoresData);
 
-    // Sample environmental data
+    // Sample environmental data with required id field
     const environmentalData = [
       {
+        id: 1,
         metric_name: "Carbon Emissions",
         value: 2500,
         month: "January",
@@ -46,6 +50,7 @@ export async function seedEsgData() {
         region: "Global"
       },
       {
+        id: 2,
         metric_name: "Water Usage",
         value: 15000,
         month: "January", 
