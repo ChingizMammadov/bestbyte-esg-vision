@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -62,6 +63,36 @@ const reportingTypes = [
   "Basic ESG Reporting", "Comprehensive ESG Reporting", "Regulatory ESG Reporting"
 ];
 
+const countries = [
+  { code: "+1", name: "United States", flag: "🇺🇸" },
+  { code: "+1", name: "Canada", flag: "🇨🇦" },
+  { code: "+44", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "+49", name: "Germany", flag: "🇩🇪" },
+  { code: "+33", name: "France", flag: "🇫🇷" },
+  { code: "+39", name: "Italy", flag: "🇮🇹" },
+  { code: "+34", name: "Spain", flag: "🇪🇸" },
+  { code: "+31", name: "Netherlands", flag: "🇳🇱" },
+  { code: "+46", name: "Sweden", flag: "🇸🇪" },
+  { code: "+47", name: "Norway", flag: "🇳🇴" },
+  { code: "+45", name: "Denmark", flag: "🇩🇰" },
+  { code: "+358", name: "Finland", flag: "🇫🇮" },
+  { code: "+41", name: "Switzerland", flag: "🇨🇭" },
+  { code: "+43", name: "Austria", flag: "🇦🇹" },
+  { code: "+32", name: "Belgium", flag: "🇧🇪" },
+  { code: "+351", name: "Portugal", flag: "🇵🇹" },
+  { code: "+353", name: "Ireland", flag: "🇮🇪" },
+  { code: "+48", name: "Poland", flag: "🇵🇱" },
+  { code: "+420", name: "Czech Republic", flag: "🇨🇿" },
+  { code: "+36", name: "Hungary", flag: "🇭🇺" },
+  { code: "+994", name: "Azerbaijan", flag: "🇦🇿" },
+  { code: "+91", name: "India", flag: "🇮🇳" },
+  { code: "+86", name: "China", flag: "🇨🇳" },
+  { code: "+81", name: "Japan", flag: "🇯🇵" },
+  { code: "+82", name: "South Korea", flag: "🇰🇷" },
+  { code: "+61", name: "Australia", flag: "🇦🇺" },
+  { code: "+64", name: "New Zealand", flag: "🇳🇿" },
+];
+
 const formSchema = z.object({
   companyName: z.string().min(1, { message: "Company name is required." }).regex(/^[a-zA-Z0-9\s.,'&_\-\p{L}]+$/u, { message: "Please enter a valid company name." }),
   industry: z.string().min(1, { message: "Please select an industry." }),
@@ -69,6 +100,7 @@ const formSchema = z.object({
   companySize: z.string().min(1, { message: "Please select a company size." }),
   otherCompanySize: z.string().optional(),
   email: z.string().email({ message: "Please enter a valid email address." }),
+  countryCode: z.string().optional(),
   phone: z.string().optional(),
   password: z.string()
     .min(8, { message: "Password must be at least 8 characters long." })
@@ -103,6 +135,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isIndustryPopoverOpen, setIndustryPopoverOpen] = useState(false);
+  const [isCountryPopoverOpen, setCountryPopoverOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
@@ -125,6 +158,7 @@ export default function SignUp() {
       companySize: "",
       otherCompanySize: "",
       email: "",
+      countryCode: "+1",
       phone: "",
       password: "",
       confirmPassword: "",
@@ -136,6 +170,7 @@ export default function SignUp() {
 
   const watchedIndustry = form.watch("industry");
   const watchedCompanySize = form.watch("companySize");
+  const watchedCountryCode = form.watch("countryCode");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Sign up form submitted:", values);
@@ -245,7 +280,7 @@ export default function SignUp() {
                         {isMobile ? (
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                              <SelectTrigger className="text-base md:text-sm h-12 md:h-10 justify-between">
                                 <SelectValue placeholder="Select the industry that best represents your business" />
                               </SelectTrigger>
                             </FormControl>
@@ -265,15 +300,17 @@ export default function SignUp() {
                                   variant="outline"
                                   role="combobox"
                                   className={cn(
-                                    "w-full justify-between h-12 md:h-10 text-base md:text-sm",
+                                    "w-full justify-between h-12 md:h-10 text-base md:text-sm text-left font-normal",
                                     !field.value && "text-muted-foreground"
                                   )}
                                 >
-                                  {field.value
-                                    ? industries.find(
-                                        (industry) => industry === field.value
-                                      )
-                                    : "Select the industry"}
+                                  <span className="truncate">
+                                    {field.value
+                                      ? industries.find(
+                                          (industry) => industry === field.value
+                                        )
+                                      : "Select the industry"}
+                                  </span>
                                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                               </FormControl>
@@ -346,7 +383,7 @@ export default function SignUp() {
                         <FormLabel>Company Size *</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10 justify-between">
                               <SelectValue placeholder="Select your company's size based on employees" />
                             </SelectTrigger>
                           </FormControl>
@@ -411,26 +448,89 @@ export default function SignUp() {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number (Optional)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="tel" 
-                            placeholder="+1 (555) 123-4567" 
-                            {...field}
-                            autoComplete="tel"
-                            inputMode="tel"
-                            className="text-base md:text-sm h-12 md:h-10"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="space-y-2">
+                    <FormLabel>Phone Number (Optional)</FormLabel>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <FormField
+                        control={form.control}
+                        name="countryCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Popover open={isCountryPopoverOpen} onOpenChange={setCountryPopoverOpen}>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    className="w-full justify-between h-12 md:h-10 text-base md:text-sm"
+                                  >
+                                    <span className="truncate">
+                                      {watchedCountryCode || "+1"}
+                                    </span>
+                                    <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[280px] p-0" align="start">
+                                <Command>
+                                  <CommandInput placeholder="Search country..." className="text-base md:text-sm" />
+                                  <CommandList>
+                                    <CommandEmpty>No country found.</CommandEmpty>
+                                    <CommandGroup>
+                                      {countries.map((country) => (
+                                        <CommandItem
+                                          value={`${country.name} ${country.code}`}
+                                          key={`${country.name}-${country.code}`}
+                                          onSelect={() => {
+                                            form.setValue("countryCode", country.code);
+                                            setCountryPopoverOpen(false);
+                                          }}
+                                          className="text-base md:text-sm"
+                                        >
+                                          <Check
+                                            className={cn(
+                                              "mr-2 h-4 w-4",
+                                              country.code === watchedCountryCode
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            )}
+                                          />
+                                          <span className="mr-2">{country.flag}</span>
+                                          <span className="flex-1">{country.name}</span>
+                                          <span className="text-muted-foreground">{country.code}</span>
+                                        </CommandItem>
+                                      ))}
+                                    </CommandGroup>
+                                  </CommandList>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input 
+                                type="tel" 
+                                placeholder="51 702 3232" 
+                                {...field}
+                                autoComplete="tel"
+                                inputMode="tel"
+                                className="text-base md:text-sm h-12 md:h-10"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Account Security Section */}
@@ -508,7 +608,7 @@ export default function SignUp() {
                         <FormLabel>Primary ESG Focus Area *</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10 justify-between">
                               <SelectValue placeholder="Which ESG category do you want to focus on?" />
                             </SelectTrigger>
                           </FormControl>
@@ -533,7 +633,7 @@ export default function SignUp() {
                         <FormLabel>ESG Reporting Type *</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10">
+                            <SelectTrigger className="text-base md:text-sm h-12 md:h-10 justify-between">
                               <SelectValue placeholder="Select the type of ESG reporting your company needs" />
                             </SelectTrigger>
                           </FormControl>
