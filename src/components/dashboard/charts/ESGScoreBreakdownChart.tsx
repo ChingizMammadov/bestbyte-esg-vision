@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   BarChart,
@@ -71,8 +70,8 @@ const calcESGScore = () =>
   );
 const esgOverall = calcESGScore();
 
-// Animated chart data
-const AnimatedBarChart = ({
+// Simplified chart component without custom animation
+const BreakdownBarChart = ({
   data,
   layout,
   selected,
@@ -83,43 +82,13 @@ const AnimatedBarChart = ({
   selected: string | null;
   setSelected: (s: string | null) => void;
 }) => {
-  const [animatedScores, setAnimatedScores] = useState(data.map(() => 0));
-  useEffect(() => {
-    let raf: number;
-    let frame = 0;
-    function animate() {
-      frame += 1;
-      setAnimatedScores((prev) =>
-        data.map((cat, i) => {
-          const target = cat.score;
-          const value =
-            prev[i] +
-            Math.min(
-              4 + 0.25 * (target - prev[i]),
-              target - prev[i]
-            );
-          return Math.abs(value - target) < 1 ? target : value;
-        })
-      );
-      if (!data.every((cat, i) => Math.abs(animatedScores[i] - cat.score) < 1)) {
-        raf = requestAnimationFrame(animate);
-      }
-    }
-    animate();
-    return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line
-  }, [data]);
-
   const yAxisWidth = layout === "horizontal" ? 80 : undefined;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         layout={layout}
-        data={data.map((d, i) => ({
-          ...d,
-          score: Math.round(animatedScores[i]),
-        }))}
+        data={data}
         margin={
           layout === "vertical"
             ? { top: 20, bottom: 5, left: 5, right: 5 }
@@ -171,8 +140,8 @@ const AnimatedBarChart = ({
               return (
                 <div className="bg-background/80 backdrop-blur-sm text-foreground p-3 rounded-lg shadow-xl border border-border/50 max-w-xs animate-in fade-in-0 zoom-in-95">
                   <div className="flex items-center gap-2.5 mb-2">
-                    {icons[data.category]}
-                    <span className="font-bold text-base" style={{ color: barColors[data.category] }}>
+                    {icons[data.category as keyof typeof icons]}
+                    <span className="font-bold text-base" style={{ color: barColors[data.category as keyof typeof barColors] }}>
                       {data.category}
                     </span>
                   </div>
@@ -191,7 +160,7 @@ const AnimatedBarChart = ({
         />
         <Bar
           dataKey="score"
-          isAnimationActive={false}
+          animationDuration={500}
           radius={layout === "vertical" ? [8, 8, 0, 0] : [0, 8, 8, 0]}
           onClick={d => setSelected(selected === d.category ? null : d.category)}
           cursor="pointer"
@@ -202,34 +171,36 @@ const AnimatedBarChart = ({
             <Cell
               key={entry.category}
               fill={`url(#color${entry.key})`}
-              strokeWidth={1.5}
-              stroke={selected === entry.category ? barColors[entry.category] : 'transparent'}
+              strokeWidth={2}
+              stroke={selected === entry.category ? barColors[entry.category as keyof typeof barColors] : 'transparent'}
               opacity={
                 selected === null || selected === entry.category
                   ? 1
-                  : 0.25
+                  : 0.3
               }
               style={{
-                filter: `drop-shadow(0 4px 10px ${barColors[entry.category]}33)`,
+                filter: `drop-shadow(0 4px 10px ${barColors[entry.category as keyof typeof barColors]}33)`,
                 cursor: "pointer",
-                transition: "all .2s ease-in-out",
+                transition: "all .3s ease-in-out",
               }}
             />
           ))}
           <LabelList
             dataKey="score"
             position={layout === "vertical" ? "top" : "right"}
-            offset={layout === 'vertical' ? 10 : 12}
-            formatter={(score: number, d: any) => {
-              const cat = d?.category;
-              if (!cat) return null;
-              const color = barColors[cat] ?? "#3B82F6";
+            offset={12}
+            formatter={(score: number, entry: { category: string }) => {
+              const category = entry?.category;
+              if (!category || score === undefined) {
+                  return null;
+              }
+              const color = barColors[category as keyof typeof barColors] ?? "#3B82F6";
               return (
                 <tspan
                   className="font-black"
                   fontSize={layout === 'vertical' ? 14 : 15}
                   fill={color}
-                  style={{ textShadow: "0 1px 3px #fffd" }}
+                  style={{ textShadow: "0 1px 5px rgba(255, 255, 255, 0.8)" }}
                 >
                   {Math.round(score)}
                 </tspan>
@@ -333,7 +304,7 @@ export function ESGScoreBreakdownChart() {
       {/* ESG Interactive Bar Chart */}
       <div className="pt-2 pb-4 px-2 sm:px-4 flex flex-col w-full justify-center">
         <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "200px" : "220px" }}>
-          <AnimatedBarChart
+          <BreakdownBarChart
             data={esgScores}
             layout={layout}
             selected={selected}
@@ -350,12 +321,12 @@ export function ESGScoreBreakdownChart() {
               <span
                 className="rounded-full p-1.5"
                 style={{
-                  background: barColors[cat.category] + "15",
+                  background: barColors[cat.category as keyof typeof barColors] + "15",
                 }}
               >
-                {icons[cat.category]}
+                {icons[cat.category as keyof typeof icons]}
               </span>
-              <span className="text-xs md:text-[13px] font-semibold" style={{ color: barColors[cat.category] }}>
+              <span className="text-xs md:text-[13px] font-semibold" style={{ color: barColors[cat.category as keyof typeof barColors] }}>
                 {cat.category}
               </span>
             </button>
@@ -405,5 +376,3 @@ function BarChartHorizontalIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-// ... end of file ...
