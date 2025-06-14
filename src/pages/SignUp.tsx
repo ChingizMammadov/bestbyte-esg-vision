@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -142,10 +141,7 @@ export default function SignUp() {
     console.log("Sign up form submitted:", values);
     
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      const { error } = await signUp(values.email, values.password, {
-        emailRedirectTo: redirectUrl
-      });
+      const { error } = await signUp(values.email, values.password);
       
       if (error) {
         toast({
