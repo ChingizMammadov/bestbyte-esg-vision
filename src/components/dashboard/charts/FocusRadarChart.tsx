@@ -41,7 +41,6 @@ function RadarGrid() {
           points={points}
           color="#E5E7EB"
           lineWidth={1}
-          opacity={0.6}
         />
       );
     });
@@ -62,7 +61,6 @@ function RadarGrid() {
           points={points}
           color="#D1D5DB"
           lineWidth={2}
-          opacity={0.8}
         />
       );
     });
@@ -115,7 +113,6 @@ function DataPoints() {
             color={item.color}
             anchorX="center"
             anchorY="middle"
-            font="/fonts/inter-bold.woff"
           >
             {item.score}
           </Text>
@@ -145,10 +142,9 @@ function DataPoints() {
         points={connectionPoints}
         color="#3B82F6"
         lineWidth={3}
-        opacity={0.8}
       />
       <mesh>
-        <ringGeometry args={[0, 2.5, 3]} />
+        <planeGeometry args={[5, 5]} />
         <meshStandardMaterial 
           color="#3B82F6"
           transparent
@@ -175,7 +171,6 @@ function Labels() {
               color="#374151"
               anchorX="center"
               anchorY="middle"
-              font="/fonts/inter-bold.woff"
             >
               {item.subject}
             </Text>
@@ -185,7 +180,6 @@ function Labels() {
               color="#6B7280"
               anchorX="center"
               anchorY="middle"
-              font="/fonts/inter-regular.woff"
             >
               {item.value}
             </Text>
@@ -203,9 +197,6 @@ function Scene() {
       <directionalLight 
         position={[10, 10, 5]} 
         intensity={1}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
       />
       <pointLight position={[0, 5, 0]} intensity={0.3} color="#3B82F6" />
       
@@ -239,7 +230,6 @@ export function FocusRadarChart() {
         <div className="w-full h-full rounded-lg overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
           <Canvas
             camera={{ position: [6, 4, 6], fov: 50 }}
-            shadows
             gl={{ antialias: true, alpha: true }}
           >
             <Scene />
