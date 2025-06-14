@@ -13,9 +13,10 @@ import {
 import {
   Leaf,
   Gavel,
-  ArrowUp,
+  Users, // Changed from ArrowUp
   CheckCircle,
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // ESG DATA
 const esgScores = [
@@ -45,7 +46,7 @@ const esgScores = [
 // Icon/color helpers
 const icons = {
   Environmental: <Leaf className="text-green-600 w-6 h-6 md:w-5 md:h-5" />,
-  Social: <ArrowUp className="text-blue-500 w-6 h-6 md:w-5 md:h-5" />,
+  Social: <Users className="text-blue-500 w-6 h-6 md:w-5 md:h-5" />,
   Governance: <Gavel className="text-gray-500 w-6 h-6 md:w-5 md:h-5" />,
 };
 const barColors = {
@@ -109,8 +110,10 @@ const AnimatedBarChart = ({
     // eslint-disable-next-line
   }, [data]);
 
+  const yAxisWidth = layout === "horizontal" ? 80 : undefined;
+
   return (
-    <ResponsiveContainer width="100%" height={layout === "vertical" ? 180 : 148}>
+    <ResponsiveContainer width="100%" height="100%">
       <BarChart
         layout={layout}
         data={data.map((d, i) => ({
@@ -119,46 +122,67 @@ const AnimatedBarChart = ({
         }))}
         margin={
           layout === "vertical"
-            ? { top: 10, bottom: 14, left: 10, right: 10 }
-            : { left: 24, right: 8, top: 0, bottom: 0 }
+            ? { top: 20, bottom: 5, left: 5, right: 5 }
+            : { left: 5, right: 40, top: 10, bottom: 10 }
         }
-        barCategoryGap={layout === "vertical" ? "28%" : "40%"}
+        barCategoryGap={layout === "vertical" ? "28%" : "35%"}
       >
+        <defs>
+          <linearGradient id="colorE" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={barColors.Environmental} stopOpacity={0.7} />
+            <stop offset="100%" stopColor={barColors.Environmental} stopOpacity={1} />
+          </linearGradient>
+          <linearGradient id="colorS" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={barColors.Social} stopOpacity={0.7} />
+            <stop offset="100%" stopColor={barColors.Social} stopOpacity={1} />
+          </linearGradient>
+          <linearGradient id="colorG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={barColors.Governance} stopOpacity={0.7} />
+            <stop offset="100%" stopColor={barColors.Governance} stopOpacity={1} />
+          </linearGradient>
+        </defs>
         <XAxis
-          dataKey={layout === "vertical" ? "category" : undefined}
+          dataKey={layout === "vertical" ? "category" : "score"}
           type={layout === "vertical" ? "category" : "number"}
           axisLine={false}
           tickLine={false}
           tick={layout === "vertical" ? {
             fontWeight: 700,
             fontSize: 13,
-          } : false}
+          } : { fontSize: 12 }}
+          domain={[0, 100]}
           hide={layout === "horizontal"}
         />
         <YAxis
+          dataKey={layout === 'horizontal' ? 'category' : undefined}
+          type="category"
           domain={[0, 100]}
           axisLine={false}
           tickLine={false}
-          fontSize={layout === "horizontal" ? 13 : undefined}
+          width={yAxisWidth}
+          tick={{fontSize: 13, fontWeight: 600}}
           hide={layout === "vertical"}
         />
         <ChartTooltip
-          cursor={{ fill: "rgba(165,180,252,0.17)" }}
+          cursor={{ fill: "rgba(165,180,252,0.1)" }}
           content={({ active, payload }) => {
             if (active && payload && payload.length > 0) {
               const data = payload[0].payload;
               return (
-                <div className="bg-white text-slate-900 p-3 rounded-xl shadow-lg border border-blue-100 max-w-[230px] animate-fade-in">
-                  <div className="flex items-center gap-2 mb-2">
+                <div className="bg-background/80 backdrop-blur-sm text-foreground p-3 rounded-lg shadow-xl border border-border/50 max-w-xs animate-in fade-in-0 zoom-in-95">
+                  <div className="flex items-center gap-2.5 mb-2">
                     {icons[data.category]}
-                    <span className="font-bold" style={{ color: barColors[data.category] }}>
-                      {data.category} Score
+                    <span className="font-bold text-base" style={{ color: barColors[data.category] }}>
+                      {data.category}
                     </span>
                   </div>
-                  <span className={`font-semibold text-base ${scoreColor(data.score)}`}>
-                    {data.score}/100
-                  </span>
-                  <div className="text-xs text-gray-500 mt-1">{data.details}</div>
+                  <div className="flex items-baseline gap-1.5">
+                      <span className={`font-black text-2xl ${scoreColor(data.score)}`}>
+                        {data.score}
+                      </span>
+                      <span className="font-semibold text-sm text-muted-foreground">/ 100</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1.5">{data.details}</p>
                 </div>
               );
             }
@@ -168,53 +192,51 @@ const AnimatedBarChart = ({
         <Bar
           dataKey="score"
           isAnimationActive={false}
-          radius={layout === "vertical" ? [12, 12, 0, 0] : [0, 12, 12, 0]}
+          radius={layout === "vertical" ? [8, 8, 0, 0] : [0, 8, 8, 0]}
           onClick={d => setSelected(selected === d.category ? null : d.category)}
           cursor="pointer"
-          maxBarSize={44}
-          minPointSize={9}
-          fill="#E0E7EF"
+          maxBarSize={layout === 'vertical' ? 50 : 22}
+          minPointSize={5}
         >
-          {data.map((entry, idx) => (
+          {data.map((entry) => (
             <Cell
               key={entry.category}
-              fill={barColors[entry.category]}
+              fill={`url(#color${entry.key})`}
+              strokeWidth={1.5}
+              stroke={selected === entry.category ? barColors[entry.category] : 'transparent'}
               opacity={
                 selected === null || selected === entry.category
                   ? 1
-                  : 0.38
+                  : 0.25
               }
               style={{
-                filter: `drop-shadow(0 2px 8px ${barColors[entry.category]}22)`,
+                filter: `drop-shadow(0 4px 10px ${barColors[entry.category]}33)`,
                 cursor: "pointer",
-                transition: "opacity .18s",
+                transition: "all .2s ease-in-out",
               }}
             />
           ))}
           <LabelList
             dataKey="score"
             position={layout === "vertical" ? "top" : "right"}
+            offset={layout === 'vertical' ? 10 : 12}
             formatter={(score: number, d: any) => {
-              // Defensive check: handle if 'd' is undefined or does not have category
-              const cat = d && d.category ? d.category : undefined;
-              const color = cat ? barColors[cat] : "#3B82F6";
+              const cat = d?.category;
+              if (!cat) return null;
+              const color = barColors[cat] ?? "#3B82F6";
               return (
-                <span
-                  className={`font-bold text-base shadow-sm ${
-                    layout === "vertical" ? "block" : "inline"
-                  }`}
-                  style={{
-                    color,
-                    textShadow: "0 2px 4px #fff7",
-                  }}
+                <tspan
+                  className="font-black"
+                  fontSize={layout === 'vertical' ? 14 : 15}
+                  fill={color}
+                  style={{ textShadow: "0 1px 3px #fffd" }}
                 >
-                  {score}/100
-                </span>
+                  {Math.round(score)}
+                </tspan>
               );
             }}
           />
         </Bar>
-        {/* NO EXTRA ICON XAXIS - handled below in legend */}
       </BarChart>
     </ResponsiveContainer>
   );
@@ -222,7 +244,8 @@ const AnimatedBarChart = ({
 
 export function ESGScoreBreakdownChart() {
   const [selected, setSelected] = useState<string | null>(null);
-  const [layout, setLayout] = useState<"vertical" | "horizontal">("vertical");
+  const isMobile = useIsMobile();
+  const layout = isMobile ? "vertical" : "horizontal";
 
   return (
     <div
@@ -230,7 +253,7 @@ export function ESGScoreBreakdownChart() {
         w-full 
         rounded-2xl 
         shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
-        overflow-visible
+        overflow-hidden
         bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
         border border-blue-200/60
         animate-fade-in
@@ -247,10 +270,10 @@ export function ESGScoreBreakdownChart() {
         </div>
         <div className="md:ml-4 mt-1 flex-1">
           <p className="text-sm md:text-base text-blue-900/90 font-normal mb-0">
-            Explore the company's ESG performance across Environmental, Social, and Governance metrics.
+            Explore ESG performance. Select a bar to focus on a category.
           </p>
           <span className="text-xs md:text-sm text-blue-900/60 font-light">
-            Our ESG score breakdown helps identify strengths and areas for improvement in each category.
+            Our ESG score breakdown helps identify strengths and areas for improvement.
           </span>
         </div>
       </div>
@@ -305,37 +328,11 @@ export function ESGScoreBreakdownChart() {
               : "Low"}
           </span>
         </div>
-        {/* Layout toggle */}
-        <div className="flex flex-1 md:flex-none gap-3 justify-end items-center mt-2 md:mt-0 px-1 w-full md:w-auto">
-          <span className="text-xs text-gray-500 mr-2">Chart Layout:</span>
-          <button
-            onClick={() => setLayout("vertical")}
-            className={`px-3 py-1 rounded font-medium border ${
-              layout === "vertical"
-                ? "bg-blue-100 border-blue-400 text-blue-900"
-                : "hover:bg-blue-50 border-slate-200 text-gray-500"
-            } transition`}
-            aria-label="Vertical Bar Chart"
-          >
-            <BarChartIcon className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setLayout("horizontal")}
-            className={`px-3 py-1 rounded font-medium border ${
-              layout === "horizontal"
-                ? "bg-blue-100 border-blue-400 text-blue-900"
-                : "hover:bg-blue-50 border-slate-200 text-gray-500"
-            } transition`}
-            aria-label="Horizontal Bar Chart"
-          >
-            <BarChartHorizontalIcon className="w-5 h-5" />
-          </button>
-        </div>
       </div>
 
       {/* ESG Interactive Bar Chart */}
-      <div className="pt-1 pb-2 px-2 sm:px-6 flex flex-col w-full justify-center">
-        <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: "170px" }}>
+      <div className="pt-2 pb-4 px-2 sm:px-4 flex flex-col w-full justify-center">
+        <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "200px" : "220px" }}>
           <AnimatedBarChart
             data={esgScores}
             layout={layout}
@@ -344,11 +341,14 @@ export function ESGScoreBreakdownChart() {
           />
         </div>
         {/* Category key (icon + label): always visible, spacious and clear */}
-        <div className="flex flex-row mt-2 mb-1 w-full items-center justify-evenly md:justify-center gap-6">
+        <div className="flex flex-row mt-4 mb-1 w-full items-center justify-evenly md:justify-center gap-x-6 gap-y-2 flex-wrap">
           {esgScores.map(cat => (
-            <span key={cat.category} className="flex flex-col items-center gap-1">
+            <button key={cat.category} 
+              onClick={() => setSelected(selected === cat.category ? null : cat.category)}
+              className={`flex flex-col items-center gap-1.5 p-2 rounded-lg transition-all duration-200 ${selected === cat.category ? 'bg-blue-100/80' : ''} ${selected === null ? '' : selected === cat.category ? 'opacity-100' : 'opacity-40 hover:opacity-80'}`}
+            >
               <span
-                className="rounded-full p-1"
+                className="rounded-full p-1.5"
                 style={{
                   background: barColors[cat.category] + "15",
                 }}
@@ -358,7 +358,7 @@ export function ESGScoreBreakdownChart() {
               <span className="text-xs md:text-[13px] font-semibold" style={{ color: barColors[cat.category] }}>
                 {cat.category}
               </span>
-            </span>
+            </button>
           ))}
         </div>
       </div>
