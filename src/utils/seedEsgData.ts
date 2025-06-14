@@ -27,7 +27,7 @@ export async function seedEsgData() {
     // Insert ESG scores
     const { data: scoresData, error: scoresError } = await supabase
       .from("esg_scores")
-      .upsert(esgScoresData, { onConflict: "category" });
+      .insert(esgScoresData);
 
     if (scoresError) {
       console.error("❌ Error seeding ESG scores:", scoresError);
@@ -56,7 +56,7 @@ export async function seedEsgData() {
 
     const { data: envData, error: envError } = await supabase
       .from("environmental_data")
-      .upsert(environmentalData);
+      .insert(environmentalData);
 
     if (envError) {
       console.error("❌ Error seeding environmental data:", envError);

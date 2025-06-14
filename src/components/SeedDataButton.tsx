@@ -4,10 +4,17 @@ import { Button } from "@/components/ui/button";
 import { seedEsgData } from "@/utils/seedEsgData";
 import { useToast } from "@/hooks/use-toast";
 import { Database, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function SeedDataButton() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // Only show button to authenticated users
+  if (!user) {
+    return null;
+  }
 
   const handleSeedData = async () => {
     setIsLoading(true);

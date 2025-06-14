@@ -1,15 +1,16 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Shield, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [enable2FA, setEnable2FA] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -21,6 +22,14 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signIn, signUp, user } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -54,17 +63,6 @@ export default function Login() {
     return !newErrors.email && !newErrors.password;
   };
 
-  const simulateEmailNotification = (email: string) => {
-    // Simulate sending email notification
-    console.log(`Simulated email sent to: ${email}`);
-    console.log("Email content: Welcome back! You have successfully logged in to BestByte ESG Dashboard.");
-    
-    toast({
-      title: "Login Successful",
-      description: `A confirmation email has been sent to ${email}`,
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -78,24 +76,34 @@ export default function Login() {
     }
 
     setIsLoading(true);
-    console.log("Login form submitted:", formData, { rememberMe, enable2FA });
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Here you would typically make an API call to authenticate the user
-      // For now, we'll simulate a successful login
-      
-      // Simulate email notification
-      simulateEmailNotification(formData.email);
-      
-      // Navigate to dashboard after successful login
-      navigate("/dashboard");
+      const { error } = isSignUp 
+        ? await signUp(formData.email, formData.password)
+        : await signIn(formData.email, formData.password);
+
+      if (error) {
+        toast({
+          title: isSignUp ? "Sign Up Failed" : "Login Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success!",
+          description: isSignUp 
+            ? "Account created successfully! Please check your email for verification."
+            : "Logged in successfully!",
+        });
+        
+        if (!isSignUp) {
+          navigate("/dashboard");
+        }
+      }
     } catch (error) {
       toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -114,8 +122,12 @@ export default function Login() {
                 <div className="rounded-full bg-gradient-to-tr from-green-700 to-teal-400 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-white text-lg md:text-xl font-bold">B</div>
                 <span className="text-xl md:text-2xl font-bold text-primary">BestByte</span>
               </div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-              <p className="text-gray-600 text-sm md:text-base">Sign in to access your ESG dashboard</p>
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                {isSignUp ? "Create Account" : "Welcome Back"}
+              </h1>
+              <p className="text-gray-600 text-sm md:text-base">
+                {isSignUp ? "Sign up to access your ESG dashboard" : "Sign in to access your ESG dashboard"}
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
@@ -162,40 +174,10 @@ export default function Login() {
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded border-gray-300 text-primary focus:ring-primary"
-                  />
-                  <span className="text-sm text-gray-700">Remember me</span>
-                </label>
-                <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                  Forgot password?
-                </Link>
-              </div>
-
-              <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <Lock className="w-4 h-4 md:w-5 md:h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  <label className="flex items-start gap-2">
-                    <input
-                      type="checkbox"
-                      checked={enable2FA}
-                      onChange={(e) => setEnable2FA(e.target.checked)}
-                      className="rounded border-gray-300 text-primary focus:ring-primary mt-0.5"
-                    />
-                    <span className="text-xs md:text-sm text-blue-800 font-medium">Enable Two-Factor Authentication</span>
-                  </label>
-                </div>
-              </div>
-
               <div className="flex items-start gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
                 <Shield className="w-4 h-4 md:w-5 md:h-5 text-green-600 mt-0.5 flex-shrink-0" />
                 <p className="text-xs md:text-sm text-green-800">
-                  Secure login with enterprise-grade encryption and GDPR compliance.
+                  Secure authentication with enterprise-grade encryption and GDPR compliance.
                 </p>
               </div>
 
@@ -204,15 +186,19 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full bg-primary text-white py-2.5 md:py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {isLoading ? "Signing In..." : "Sign In Securely"}
+                {isLoading ? (isSignUp ? "Creating Account..." : "Signing In...") : (isSignUp ? "Create Account" : "Sign In Securely")}
               </button>
 
               <div className="text-center pt-4 border-t">
                 <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link to="/signup" className="text-primary font-semibold hover:underline">
-                    Create one here
-                  </Link>
+                  {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+                  <button
+                    type="button"
+                    onClick={() => setIsSignUp(!isSignUp)}
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    {isSignUp ? "Sign in here" : "Create one here"}
+                  </button>
                 </p>
               </div>
             </form>

@@ -4,13 +4,19 @@ import { LogOut, User, Calendar, Search } from 'lucide-react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export function DashboardHeader() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning, Jane";
-    if (hour < 18) return "Good afternoon, Jane";
-    return "Good evening, Jane";
+    const userName = user?.email?.split('@')[0] || 'User';
+    if (hour < 12) return `Good morning, ${userName}`;
+    if (hour < 18) return `Good afternoon, ${userName}`;
+    return `Good evening, ${userName}`;
   };
 
   const getCurrentDate = () => {
@@ -20,6 +26,11 @@ export function DashboardHeader() {
       month: 'long', 
       day: 'numeric' 
     });
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/login');
   };
 
   return (
@@ -58,12 +69,13 @@ export function DashboardHeader() {
             <User className="w-5 h-5 text-gray-600" />
             <div className="text-sm">
               <span className="text-gray-600">Logged in as </span>
-              <span className="font-semibold text-gray-900">jane@acme.com</span>
+              <span className="font-semibold text-gray-900">{user?.email}</span>
             </div>
           </div>
           <Button 
             variant="ghost" 
             size="sm" 
+            onClick={handleLogout}
             className="flex items-center gap-2 hover:bg-red-100 hover:text-red-600 transition-colors"
           >
             <LogOut className="w-4 h-4" />
