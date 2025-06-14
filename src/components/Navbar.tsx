@@ -1,11 +1,10 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
   { name: "Features", to: "/#features" },
   { name: "Pricing", to: "/pricing" },
-  { name: "About", to: "/#about" },
+  { name: "About", to: "/about" },
   { name: "Sign Up", to: "/signup" },
   { name: "Log In", to: "/login" },
 ];

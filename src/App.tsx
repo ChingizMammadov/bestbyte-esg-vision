@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import Pricing from "./pages/Pricing";
 import CarbonCalculator from "./pages/CarbonCalculator";
 import Dashboard from "./pages/Dashboard";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +26,9 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/carbon-calculator" element={<CarbonCalculator />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
