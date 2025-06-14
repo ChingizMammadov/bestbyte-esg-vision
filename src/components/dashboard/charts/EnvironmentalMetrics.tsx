@@ -1,0 +1,167 @@
+
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { Leaf, Droplets, Zap, Recycle } from "lucide-react";
+
+const carbonData = [
+  { month: "Jan", renewable: 2000, nonRenewable: 3000 },
+  { month: "Feb", renewable: 2200, nonRenewable: 2800 },
+  { month: "Mar", renewable: 2400, nonRenewable: 2600 },
+  { month: "Apr", renewable: 2600, nonRenewable: 2400 },
+  { month: "May", renewable: 2800, nonRenewable: 2200 },
+  { month: "Jun", renewable: 3000, nonRenewable: 2000 },
+];
+
+const waterData = [
+  { month: "Jan", usage: 1000000 },
+  { month: "Feb", usage: 950000 },
+  { month: "Mar", usage: 980000 },
+  { month: "Apr", usage: 920000 },
+  { month: "May", usage: 900000 },
+  { month: "Jun", usage: 880000 },
+];
+
+const energyData = [
+  { name: "Renewable", value: 65, color: "#10B981" },
+  { name: "Non-Renewable", value: 35, color: "#EF4444" },
+];
+
+const wasteData = [
+  { name: "Recycled", value: 60, color: "#10B981" },
+  { name: "Unrecycled", value: 40, color: "#F59E0B" },
+];
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-3 border rounded-lg shadow-lg">
+        <p className="font-semibold text-gray-900 mb-2">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-sm" style={{ color: entry.color }}>
+            {entry.name}: {entry.value.toLocaleString()} 
+            {entry.name.includes('renewable') ? ' tons CO2' : 
+             entry.name === 'usage' ? ' liters' : ''}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+export function EnvironmentalMetrics() {
+  const [selectedPeriod, setSelectedPeriod] = useState("monthly");
+
+  return (
+    <div className="space-y-6">
+      {/* Carbon Emissions */}
+      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <CardHeader className="pb-2">
+          <div className="flex items-center gap-2">
+            <Leaf className="w-5 h-5 text-green-600" />
+            <CardTitle className="text-lg font-bold text-gray-900">Carbon Emissions</CardTitle>
+          </div>
+          <CardDescription className="text-gray-600">Renewable vs Non-Renewable Sources</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={carbonData}>
+              <XAxis dataKey="month" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Bar dataKey="renewable" stackId="a" fill="#10B981" name="Renewable Energy" />
+              <Bar dataKey="nonRenewable" stackId="a" fill="#EF4444" name="Non-Renewable Energy" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Water Usage and Energy Consumption */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Droplets className="w-5 h-5 text-blue-600" />
+              <CardTitle className="text-lg font-bold text-gray-900">Water Usage</CardTitle>
+            </div>
+            <CardDescription className="text-gray-600">Monthly consumption trends</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={waterData}>
+                <XAxis dataKey="month" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="usage" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: "#3B82F6" }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-yellow-600" />
+              <CardTitle className="text-lg font-bold text-gray-900">Energy Sources</CardTitle>
+            </div>
+            <CardDescription className="text-gray-600">Renewable vs Non-Renewable</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  data={energyData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label={({ name, value }) => `${name}: ${value}%`}
+                >
+                  {energyData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Waste Management */}
+      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <CardHeader className="pb-2">
+          <div className="flex items-center gap-2">
+            <Recycle className="w-5 h-5 text-green-600" />
+            <CardTitle className="text-lg font-bold text-gray-900">Waste Management</CardTitle>
+          </div>
+          <CardDescription className="text-gray-600">Recycled vs Unrecycled waste</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                dataKey="value"
+                data={wasteData}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                innerRadius={40}
+                label={({ name, value }) => `${name}: ${value}%`}
+                labelLine={false}
+              >
+                {wasteData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

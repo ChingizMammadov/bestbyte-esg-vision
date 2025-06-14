@@ -1,3 +1,4 @@
+
 import { AppSidebar } from "@/components/AppSidebar";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Footer } from "@/components/Footer";
@@ -8,16 +9,23 @@ import { FocusRadarChart } from "@/components/dashboard/charts/FocusRadarChart";
 import { MetricsPieChart } from "@/components/dashboard/charts/MetricsPieChart";
 import { TrendsLineChart } from "@/components/dashboard/charts/TrendsLineChart";
 import { ESGScoreBreakdownChart } from "@/components/dashboard/charts/ESGScoreBreakdownChart";
+import { FilterControls } from "@/components/dashboard/FilterControls";
+import { DataCards } from "@/components/dashboard/DataCards";
+import { TabNavigation } from "@/components/dashboard/TabNavigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { motion, easeOut } from "framer-motion"; // <-- Import easeOut
+import { motion, easeOut } from "framer-motion";
+import { useState } from "react";
 
 const cardMotion = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: easeOut }, // <-- Use imported easeOut
+  transition: { duration: 0.5, ease: easeOut },
 };
 
 export default function Dashboard() {
+  const [selectedPeriod, setSelectedPeriod] = useState("monthly");
+  const [selectedRegion, setSelectedRegion] = useState("global");
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#23638B]/40 to-[#aed9da]/10 font-sans transition-all">
@@ -25,10 +33,29 @@ export default function Dashboard() {
         <div className="flex flex-col flex-1 min-w-0">
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-4 md:p-6">
+            {/* Filter Controls */}
+            <FilterControls 
+              selectedPeriod={selectedPeriod}
+              setSelectedPeriod={setSelectedPeriod}
+              selectedRegion={selectedRegion}
+              setSelectedRegion={setSelectedRegion}
+            />
+
+            {/* Real-time Data Cards */}
+            <DataCards />
+
             {/* ESG Score Breakdown at the top */}
-            <ESGScoreBreakdownChart />
+            <motion.div {...cardMotion}>
+              <ESGScoreBreakdownChart />
+            </motion.div>
+
+            {/* Detailed ESG Metrics Tabs */}
+            <motion.div {...cardMotion} className="mt-6">
+              <TabNavigation />
+            </motion.div>
+
             {/* Main dashboard charts */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
               <motion.div {...cardMotion}>
                 <MetricsPieChart />
               </motion.div>
@@ -39,6 +66,8 @@ export default function Dashboard() {
                 <FocusRadarChart />
               </motion.div>
             </div>
+
+            {/* Activity Feed and Alerts */}
             <div className="w-full mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
               <motion.div {...cardMotion} className="lg:col-span-2">
                 <ActivityFeed />
