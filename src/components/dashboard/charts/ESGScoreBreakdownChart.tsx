@@ -1,22 +1,6 @@
-import React, { useState, useEffect } from "react";
-import {
-  BarChart,
-  Bar,
-  Tooltip as ChartTooltip,
-  XAxis,
-  YAxis,
-  Cell,
-  ResponsiveContainer,
-  LabelList,
-} from "recharts";
-import {
-  Leaf,
-  Gavel,
-  Users, // Changed from ArrowUp
-  CheckCircle,
-} from "lucide-react";
+
+import React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { BarChartIcon } from "@/components/icons/BarChartIcon";
 
 // ESG DATA -- always present and simple!
 const esgScores = [
@@ -46,17 +30,6 @@ import { BreakdownBarChart } from "./BreakdownBarChart";
 import { icons, barColors } from "./EsgBarIcons";
 import { EsgScoreSummaryCard } from "./EsgScoreSummaryCard";
 
-// Icon/color helpers
-const scoreColor = (score: number) => {
-  if (score >= 80) return "text-green-600";
-  if (score >= 60) return "text-yellow-500";
-  return "text-red-500";
-};
-const progressColor = (score: number) => {
-  if (score >= 80) return "#22C55E";
-  if (score >= 60) return "#EAB308";
-  return "#EF4444";
-};
 const calcESGScore = () =>
   Math.round(
     esgScores.reduce((sum, s) => sum + s.score, 0) / esgScores.length
@@ -186,3 +159,4 @@ function BarChartHorizontalIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
