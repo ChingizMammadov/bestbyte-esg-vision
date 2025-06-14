@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   BarChart,
@@ -12,11 +13,11 @@ import {
 import {
   Leaf,
   Gavel,
-  ArrowUp, // Use ArrowUp as a Social icon placeholder
+  ArrowUp,
   CheckCircle,
 } from "lucide-react";
 
-// ESG DATA (could be fetched dynamically)
+// ESG DATA
 const esgScores = [
   {
     category: "Environmental",
@@ -41,17 +42,16 @@ const esgScores = [
   },
 ];
 
-// Category icon and color utilities
+// Icon/color helpers
 const icons = {
-  Environmental: <Leaf className="text-green-600 w-5 h-5" />,
-  Social: <ArrowUp className="text-blue-500 w-5 h-5" />, // Use ArrowUp for Social
-  Governance: <Gavel className="text-gray-500 w-5 h-5" />,
+  Environmental: <Leaf className="text-green-600 w-6 h-6 md:w-5 md:h-5" />,
+  Social: <ArrowUp className="text-blue-500 w-6 h-6 md:w-5 md:h-5" />,
+  Governance: <Gavel className="text-gray-500 w-6 h-6 md:w-5 md:h-5" />,
 };
-
 const barColors = {
-  Environmental: "#22C55E", // green
-  Social: "#3B82F6", // blue
-  Governance: "#6B7280", // gray
+  Environmental: "#22C55E",
+  Social: "#3B82F6",
+  Governance: "#6B7280",
 };
 
 const scoreColor = (score: number) => {
@@ -59,22 +59,18 @@ const scoreColor = (score: number) => {
   if (score >= 60) return "text-yellow-500";
   return "text-red-500";
 };
-
 const progressColor = (score: number) => {
   if (score >= 80) return "#22C55E";
   if (score >= 60) return "#EAB308";
   return "#EF4444";
 };
-
-// Helper to calculate overall score (simple average here)
 const calcESGScore = () =>
   Math.round(
     esgScores.reduce((sum, s) => sum + s.score, 0) / esgScores.length
   );
-
 const esgOverall = calcESGScore();
 
-// Chart animation: Animate bar fill from 0
+// Animated chart data
 const AnimatedBarChart = ({
   data,
   layout,
@@ -86,12 +82,8 @@ const AnimatedBarChart = ({
   selected: string | null;
   setSelected: (s: string | null) => void;
 }) => {
-  const [animatedScores, setAnimatedScores] = useState(
-    data.map(() => 0)
-  );
-
+  const [animatedScores, setAnimatedScores] = useState(data.map(() => 0));
   useEffect(() => {
-    // Animate bars filling up
     let raf: number;
     let frame = 0;
     function animate() {
@@ -99,7 +91,6 @@ const AnimatedBarChart = ({
       setAnimatedScores((prev) =>
         data.map((cat, i) => {
           const target = cat.score;
-          // Springy animation, 30 frames max (0.5s)
           const value =
             prev[i] +
             Math.min(
@@ -109,9 +100,7 @@ const AnimatedBarChart = ({
           return Math.abs(value - target) < 1 ? target : value;
         })
       );
-      if (
-        !data.every((cat, i) => Math.abs(animatedScores[i] - cat.score) < 1)
-      ) {
+      if (!data.every((cat, i) => Math.abs(animatedScores[i] - cat.score) < 1)) {
         raf = requestAnimationFrame(animate);
       }
     }
@@ -120,9 +109,8 @@ const AnimatedBarChart = ({
     // eslint-disable-next-line
   }, [data]);
 
-  // Build chart options
   return (
-    <ResponsiveContainer width="100%" height={layout === "vertical" ? 188 : 128}>
+    <ResponsiveContainer width="100%" height={layout === "vertical" ? 180 : 148}>
       <BarChart
         layout={layout}
         data={data.map((d, i) => ({
@@ -131,10 +119,10 @@ const AnimatedBarChart = ({
         }))}
         margin={
           layout === "vertical"
-            ? { top: 12, bottom: 18, left: 10, right: 16 }
-            : { left: 26, right: 10, top: 0, bottom: 0 }
+            ? { top: 10, bottom: 14, left: 10, right: 10 }
+            : { left: 24, right: 8, top: 0, bottom: 0 }
         }
-        barCategoryGap="25%"
+        barCategoryGap={layout === "vertical" ? "28%" : "40%"}
       >
         <XAxis
           dataKey={layout === "vertical" ? "category" : undefined}
@@ -143,7 +131,7 @@ const AnimatedBarChart = ({
           tickLine={false}
           tick={layout === "vertical" ? {
             fontWeight: 700,
-            fontSize: 14,
+            fontSize: 13,
           } : false}
           hide={layout === "horizontal"}
         />
@@ -151,30 +139,26 @@ const AnimatedBarChart = ({
           domain={[0, 100]}
           axisLine={false}
           tickLine={false}
-          tick={
-            layout === "horizontal"
-              ? { fontWeight: 700, fontSize: 14 }
-              : false
-          }
+          fontSize={layout === "horizontal" ? 13 : undefined}
           hide={layout === "vertical"}
         />
         <ChartTooltip
-          cursor={{ fill: "rgba(165,180,252,0.14)" }}
+          cursor={{ fill: "rgba(165,180,252,0.17)" }}
           content={({ active, payload }) => {
             if (active && payload && payload.length > 0) {
               const data = payload[0].payload;
               return (
-                <div className="bg-white p-3 rounded-xl shadow-lg border border-blue-100 animate-fade-in">
-                  <div className="flex items-center gap-2 mb-1">
+                <div className="bg-white text-slate-900 p-3 rounded-xl shadow-lg border border-blue-100 max-w-[230px] animate-fade-in">
+                  <div className="flex items-center gap-2 mb-2">
                     {icons[data.category]}
-                    <span className="font-bold" style={{color: barColors[data.category]}}>
+                    <span className="font-bold" style={{ color: barColors[data.category] }}>
                       {data.category} Score
                     </span>
                   </div>
-                  <div className="text-sm text-gray-800 mb-1">
-                    <span className={`font-semibold text-sm ${scoreColor(data.score)}`}>{data.score}/100</span>
-                  </div>
-                  <div className="text-xs text-gray-500">{data.details}</div>
+                  <span className={`font-semibold text-base ${scoreColor(data.score)}`}>
+                    {data.score}/100
+                  </span>
+                  <div className="text-xs text-gray-500 mt-1">{data.details}</div>
                 </div>
               );
             }
@@ -184,11 +168,11 @@ const AnimatedBarChart = ({
         <Bar
           dataKey="score"
           isAnimationActive={false}
-          radius={[12, 12, 0, 0]}
+          radius={layout === "vertical" ? [12, 12, 0, 0] : [0, 12, 12, 0]}
           onClick={d => setSelected(selected === d.category ? null : d.category)}
           cursor="pointer"
           maxBarSize={44}
-          minPointSize={8}
+          minPointSize={9}
           fill="#E0E7EF"
         >
           {data.map((entry, idx) => (
@@ -200,10 +184,10 @@ const AnimatedBarChart = ({
                   ? 1
                   : 0.38
               }
-              className="transition-all"
               style={{
-                filter: `drop-shadow(0 2px 11px ${barColors[entry.category]}22)`,
+                filter: `drop-shadow(0 2px 8px ${barColors[entry.category]}22)`,
                 cursor: "pointer",
+                transition: "opacity .18s",
               }}
             />
           ))}
@@ -216,7 +200,7 @@ const AnimatedBarChart = ({
               const color = cat ? barColors[cat] : "#3B82F6";
               return (
                 <span
-                  className={`font-bold text-base ${
+                  className={`font-bold text-base shadow-sm ${
                     layout === "vertical" ? "block" : "inline"
                   }`}
                   style={{
@@ -230,37 +214,7 @@ const AnimatedBarChart = ({
             }}
           />
         </Bar>
-        {/* Render category icons below XAxis for vertical, to the left for horizontal */}
-        {layout === "vertical" ? (
-          <XAxis
-            dataKey="category"
-            axisLine={false}
-            tickLine={false}
-            tick={({ x, y, payload }) => {
-              const cat = payload.value;
-              return (
-                <g transform={`translate(${x},${y + 20})`}>
-                  <foreignObject width="40" height="30" x={-13} y={0}>
-                    <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                      {icons[cat]}
-                    </div>
-                  </foreignObject>
-                  <text
-                    x={8}
-                    y={36}
-                    textAnchor="middle"
-                    fontSize={13}
-                    fill="#374151"
-                  >
-                    {/* don't render below bar, since already above */}
-                  </text>
-                </g>
-              );
-            }}
-            interval={0}
-            height={28}
-          />
-        ) : null}
+        {/* NO EXTRA ICON XAXIS - handled below in legend */}
       </BarChart>
     </ResponsiveContainer>
   );
@@ -276,33 +230,36 @@ export function ESGScoreBreakdownChart() {
         w-full 
         rounded-2xl 
         shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
-        overflow-hidden
+        overflow-visible
         bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
         border border-blue-200/60
         animate-fade-in
+        my-3
       "
     >
       {/* Gradient header with bold title */}
-      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 px-4 pt-4 pb-1 flex flex-col gap-1 border-b border-blue-100">
+      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 px-5 py-4 flex flex-col md:flex-row md:items-center gap-1 border-b border-blue-100">
         <div className="flex items-center gap-2 mb-1">
-          <BarChartIcon className="text-blue-500 w-6 h-6 mr-1" />
-          <h2 className="font-black text-gray-900 text-lg md:text-xl tracking-tight leading-tight">
+          <BarChartIcon className="text-blue-500 w-7 h-7 mr-1" />
+          <h2 className="font-black text-gray-900 text-lg md:text-xl !leading-tight">
             Interactive ESG Score Breakdown
           </h2>
         </div>
-        <p className="text-sm md:text-base text-blue-900/90 font-normal mb-1">
-          Explore the company's ESG performance across Environmental, Social, and Governance metrics.
-        </p>
-        <span className="text-sm text-blue-900/60 font-light mb-2">
-          Our ESG score breakdown helps identify strengths and areas for improvement in each category.
-        </span>
+        <div className="md:ml-4 mt-1 flex-1">
+          <p className="text-sm md:text-base text-blue-900/90 font-normal mb-0">
+            Explore the company's ESG performance across Environmental, Social, and Governance metrics.
+          </p>
+          <span className="text-xs md:text-sm text-blue-900/60 font-light">
+            Our ESG score breakdown helps identify strengths and areas for improvement in each category.
+          </span>
+        </div>
       </div>
 
-      {/* ESG Score summary card (numeric, colored) */}
-      <div className="w-full flex flex-col md:flex-row items-center gap-3 md:gap-7 px-4 pt-4 pb-0">
+      {/* ESG Score summary card */}
+      <div className="w-full flex flex-col md:flex-row items-center gap-3 md:gap-7 px-5 pt-4 pb-1">
         <div className="
-            flex-1 min-w-[145px]
-            flex items-center gap-2 bg-white/70 px-5 py-2 rounded-lg border border-blue-100 shadow-inner
+            flex-1 min-w-[140px] 
+            flex items-center gap-2 bg-white/80 px-5 py-2 rounded-lg border border-blue-100 shadow-inner
             ">
           {/* Icon for overall */}
           <CheckCircle
@@ -315,7 +272,7 @@ export function ESGScoreBreakdownChart() {
                 : "text-red-500")
             }
           />
-          <span className="font-medium text-gray-900/80 text-lg">
+          <span className="font-medium text-gray-900/80 text-lg flex items-center">
             ESG Score:{" "}
             <span
               className={
@@ -333,7 +290,7 @@ export function ESGScoreBreakdownChart() {
           </span>
           <span
             className={
-              "ml-5 rounded px-2 py-1 text-xs font-semibold shadow-lg " +
+              "ml-4 rounded px-2 py-1 text-xs font-semibold shadow-lg " +
               (esgOverall >= 80
                 ? "bg-green-500/90 text-white"
                 : esgOverall >= 60
@@ -349,7 +306,7 @@ export function ESGScoreBreakdownChart() {
           </span>
         </div>
         {/* Layout toggle */}
-        <div className="flex flex-1 md:flex-none gap-2 justify-end items-center mt-2 md:mt-0 px-1">
+        <div className="flex flex-1 md:flex-none gap-3 justify-end items-center mt-2 md:mt-0 px-1 w-full md:w-auto">
           <span className="text-xs text-gray-500 mr-2">Chart Layout:</span>
           <button
             onClick={() => setLayout("vertical")}
@@ -377,8 +334,8 @@ export function ESGScoreBreakdownChart() {
       </div>
 
       {/* ESG Interactive Bar Chart */}
-      <div className="pt-1 pb-0 px-4 md:px-8 flex flex-col w-full justify-center">
-        <div className="flex w-full items-end justify-center max-w-full relative">
+      <div className="pt-1 pb-2 px-2 sm:px-6 flex flex-col w-full justify-center">
+        <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: "170px" }}>
           <AnimatedBarChart
             data={esgScores}
             layout={layout}
@@ -386,8 +343,8 @@ export function ESGScoreBreakdownChart() {
             setSelected={setSelected}
           />
         </div>
-        {/* Category key (icon + label) for mobile clarity */}
-        <div className="flex flex-row mt-3 mb-0 w-full items-center justify-evenly md:justify-center gap-6">
+        {/* Category key (icon + label): always visible, spacious and clear */}
+        <div className="flex flex-row mt-2 mb-1 w-full items-center justify-evenly md:justify-center gap-6">
           {esgScores.map(cat => (
             <span key={cat.category} className="flex flex-col items-center gap-1">
               <span
@@ -398,7 +355,7 @@ export function ESGScoreBreakdownChart() {
               >
                 {icons[cat.category]}
               </span>
-              <span className="text-[13px] font-semibold" style={{color: barColors[cat.category]}}>
+              <span className="text-xs md:text-[13px] font-semibold" style={{ color: barColors[cat.category] }}>
                 {cat.category}
               </span>
             </span>
@@ -409,7 +366,7 @@ export function ESGScoreBreakdownChart() {
   );
 }
 
-// Local-only Lucide icons for layout buttons
+// Lucide-style icons for layout buttons
 function BarChartIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -448,3 +405,5 @@ function BarChartHorizontalIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+// ... end of file ...
