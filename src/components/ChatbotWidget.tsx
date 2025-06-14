@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 
@@ -85,6 +84,28 @@ export const ChatbotWidget = () => {
       return {
         text: "I am well, thank you for asking! How can I assist you today with your ESG and sustainability needs?",
         buttons: ["What is ESG?", "Carbon footprint analysis", "ESG reporting help", "Compliance guidance"]
+      };
+    }
+
+    // Sign-up specific help
+    if (lowerInput.includes('select') && lowerInput.includes('industry')) {
+      return {
+        text: "For businesses focusing on energy use, sustainability, or financial reporting, you might want to select the 'Energy & Utilities' or 'Banking & Finance' industry. If your business doesn't fit neatly into one of the categories, you can select 'Other' and specify it. Let me know if you need further assistance!",
+        buttons: ["What is ESG?", "Main Menu"]
+      };
+    }
+    
+    if ((lowerInput.includes('minimum') && lowerInput.includes('password')) || (lowerInput.includes('password') && lowerInput.includes('length'))) {
+      return {
+        text: "Your password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number for security. Need help creating one?",
+        buttons: ["What are password best practices?", "Main Menu"]
+      };
+    }
+    
+    if (lowerInput.includes('company size')) {
+      return {
+        text: "Company size refers to the number of employees in your organization. If you're unsure, you can estimate based on your team size. Let me know if you'd like assistance!",
+        buttons: ["What is ESG?", "Main Menu"]
       };
     }
 
