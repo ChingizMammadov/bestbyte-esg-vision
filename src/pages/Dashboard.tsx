@@ -9,12 +9,12 @@ import { FocusRadarChart } from "@/components/dashboard/charts/FocusRadarChart";
 import { MetricsPieChart } from "@/components/dashboard/charts/MetricsPieChart";
 import { TrendsLineChart } from "@/components/dashboard/charts/TrendsLineChart";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion"; // <-- Import easeOut
 
 const cardMotion = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: "easeOut" }
+  transition: { duration: 0.5, ease: easeOut }, // <-- Use imported easeOut
 };
 
 export default function Dashboard() {
