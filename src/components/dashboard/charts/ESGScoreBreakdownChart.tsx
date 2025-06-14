@@ -11,13 +11,11 @@ import {
   LabelList,
 } from "recharts";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Leaf, People, Gavel, CheckCircle } from "lucide-react";
+  Leaf,
+  Gavel,
+  ArrowUp, // Use ArrowUp as a Social icon placeholder
+  CheckCircle,
+} from "lucide-react";
 
 // ESG DATA (could be fetched dynamically)
 const esgScores = [
@@ -46,9 +44,9 @@ const esgScores = [
 
 // Category icon and color utilities
 const icons = {
-  Environmental: <Leaf size={20} className="text-green-600" />,
-  Social: <People size={20} className="text-blue-500" />,
-  Governance: <Gavel size={20} className="text-gray-500" />,
+  Environmental: <Leaf className="text-green-600 w-5 h-5" />,
+  Social: <ArrowUp className="text-blue-500 w-5 h-5" />, // Use ArrowUp for Social
+  Governance: <Gavel className="text-gray-500 w-5 h-5" />,
 };
 
 const barColors = {
@@ -269,22 +267,21 @@ export function ESGScoreBreakdownChart() {
   const [layout, setLayout] = useState<"vertical" | "horizontal">("vertical");
 
   return (
-    <Card
+    <div
       className="
-        bg-gradient-to-br from-blue-100/70 via-white to-blue-50/60
-        border-0
-        rounded-2xl
-        shadow-[0_8px_28px_0_rgba(30,60,109,0.07)]
-        px-0 md:px-0 py-2
-        transition-shadow duration-300
-        w-full
+        w-full 
+        rounded-2xl 
+        shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
+        overflow-hidden
+        bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
+        border border-blue-200/60
         animate-fade-in
-        "
+      "
     >
       {/* Gradient header with bold title */}
-      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/70 via-white/60 to-blue-50/80 px-4 pt-4 pb-1 flex flex-col gap-1 border-b border-blue-100">
+      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 px-4 pt-4 pb-1 flex flex-col gap-1 border-b border-blue-100">
         <div className="flex items-center gap-2 mb-1">
-          <BarChartIcon size={23} className="text-blue-500 mr-1" />
+          <BarChartIcon className="text-blue-500 w-6 h-6 mr-1" />
           <h2 className="font-black text-gray-900 text-lg md:text-xl tracking-tight leading-tight">
             Interactive ESG Score Breakdown
           </h2>
@@ -305,9 +302,8 @@ export function ESGScoreBreakdownChart() {
             ">
           {/* Icon for overall */}
           <CheckCircle
-            size={28}
             className={
-              "mr-2 " +
+              "mr-2 w-7 h-7 " +
               (esgOverall >= 80
                 ? "text-green-500"
                 : esgOverall >= 60
@@ -360,7 +356,7 @@ export function ESGScoreBreakdownChart() {
             } transition`}
             aria-label="Vertical Bar Chart"
           >
-            <BarChartIcon size={19} />
+            <BarChartIcon className="w-5 h-5" />
           </button>
           <button
             onClick={() => setLayout("horizontal")}
@@ -371,13 +367,13 @@ export function ESGScoreBreakdownChart() {
             } transition`}
             aria-label="Horizontal Bar Chart"
           >
-            <BarChartHorizontalIcon size={19} />
+            <BarChartHorizontalIcon className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* ESG Interactive Bar Chart */}
-      <CardContent className="pt-1 pb-0 px-4 md:px-8 flex flex-col w-full justify-center">
+      <div className="pt-1 pb-0 px-4 md:px-8 flex flex-col w-full justify-center">
         <div className="flex w-full items-end justify-center max-w-full relative">
           <AnimatedBarChart
             data={esgScores}
@@ -404,8 +400,8 @@ export function ESGScoreBreakdownChart() {
             </span>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
