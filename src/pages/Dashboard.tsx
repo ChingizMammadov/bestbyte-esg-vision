@@ -12,6 +12,7 @@ import { ESGScoreBreakdownChart } from "@/components/dashboard/charts/ESGScoreBr
 import { FilterControls } from "@/components/dashboard/FilterControls";
 import { DataCards } from "@/components/dashboard/DataCards";
 import { TabNavigation } from "@/components/dashboard/TabNavigation";
+import { SeedDataButton } from "@/components/SeedDataButton";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { motion, easeOut } from "framer-motion";
 import { useState } from "react";
@@ -33,13 +34,16 @@ export default function Dashboard() {
         <div className="flex flex-col flex-1 min-w-0">
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-4 md:p-6">
-            {/* Filter Controls */}
-            <FilterControls 
-              selectedPeriod={selectedPeriod}
-              setSelectedPeriod={setSelectedPeriod}
-              selectedRegion={selectedRegion}
-              setSelectedRegion={setSelectedRegion}
-            />
+            {/* Filter Controls with Seed Button */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <FilterControls 
+                selectedPeriod={selectedPeriod}
+                setSelectedPeriod={setSelectedPeriod}
+                selectedRegion={selectedRegion}
+                setSelectedRegion={setSelectedRegion}
+              />
+              <SeedDataButton />
+            </div>
 
             {/* Real-time Data Cards */}
             <DataCards />
