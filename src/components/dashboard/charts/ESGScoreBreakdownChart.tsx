@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   BarChart,
@@ -211,19 +210,24 @@ const AnimatedBarChart = ({
           <LabelList
             dataKey="score"
             position={layout === "vertical" ? "top" : "right"}
-            formatter={(score: number, d: any) => (
-              <span
-                className={`font-bold text-base ${
-                  layout === "vertical" ? "block" : "inline"
-                }`}
-                style={{
-                  color: barColors[d.category],
-                  textShadow: "0 2px 4px #fff7",
-                }}
-              >
-                {score}/100
-              </span>
-            )}
+            formatter={(score: number, d: any) => {
+              // Defensive check: handle if 'd' is undefined or does not have category
+              const cat = d && d.category ? d.category : undefined;
+              const color = cat ? barColors[cat] : "#3B82F6";
+              return (
+                <span
+                  className={`font-bold text-base ${
+                    layout === "vertical" ? "block" : "inline"
+                  }`}
+                  style={{
+                    color,
+                    textShadow: "0 2px 4px #fff7",
+                  }}
+                >
+                  {score}/100
+                </span>
+              );
+            }}
           />
         </Bar>
         {/* Render category icons below XAxis for vertical, to the left for horizontal */}
