@@ -17,26 +17,26 @@ import {
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// ESG DATA
+// ESG DATA -- always present and simple!
 const esgScores = [
   {
     category: "Environmental",
     key: "E",
-    score: 70,
+    score: 70.4,
     details:
       "Based on carbon intensity, renewable energy use, waste reduction, and water efficiency.",
   },
   {
     category: "Social",
     key: "S",
-    score: 78,
+    score: 78.2,
     details:
       "Based on workplace safety, labor practice, community engagement, and diversity.",
   },
   {
     category: "Governance",
     key: "G",
-    score: 77,
+    score: 77.0,
     details:
       "Based on board diversity, executive compensation, ethics and transparency.",
   },
@@ -70,7 +70,7 @@ const calcESGScore = () =>
   );
 const esgOverall = calcESGScore();
 
-// Simplified chart component without custom animation
+// Simplified chart: visible by default, labels are never hidden, tooltips always work
 const BreakdownBarChart = ({
   data,
   layout,
@@ -85,7 +85,7 @@ const BreakdownBarChart = ({
   const yAxisWidth = layout === "horizontal" ? 80 : undefined;
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={layout === "vertical" ? 230 : 220}>
       <BarChart
         layout={layout}
         data={data}
@@ -94,7 +94,7 @@ const BreakdownBarChart = ({
             ? { top: 20, bottom: 5, left: 5, right: 5 }
             : { left: 5, right: 40, top: 10, bottom: 10 }
         }
-        barCategoryGap={layout === "vertical" ? "28%" : "35%"}
+        barCategoryGap={layout === "vertical" ? "30%" : "40%"}
       >
         <defs>
           <linearGradient id="colorE" x1="0" y1="0" x2="0" y2="1">
@@ -115,10 +115,10 @@ const BreakdownBarChart = ({
           type={layout === "vertical" ? "category" : "number"}
           axisLine={false}
           tickLine={false}
-          tick={layout === "vertical" ? {
+          tick={{
             fontWeight: 700,
-            fontSize: 13,
-          } : { fontSize: 12 }}
+            fontSize: layout === "vertical" ? 13 : 12,
+          }}
           domain={[0, 100]}
           hide={layout === "horizontal"}
         />
@@ -133,25 +133,25 @@ const BreakdownBarChart = ({
           hide={layout === "vertical"}
         />
         <ChartTooltip
-          cursor={{ fill: "rgba(165,180,252,0.1)" }}
+          cursor={{ fill: "rgba(165,180,252,0.12)" }}
           content={({ active, payload }) => {
             if (active && payload && payload.length > 0) {
-              const data = payload[0].payload;
+              const d = payload[0].payload;
               return (
-                <div className="bg-background/80 backdrop-blur-sm text-foreground p-3 rounded-lg shadow-xl border border-border/50 max-w-xs animate-in fade-in-0 zoom-in-95">
-                  <div className="flex items-center gap-2.5 mb-2">
-                    {icons[data.category as keyof typeof icons]}
-                    <span className="font-bold text-base" style={{ color: barColors[data.category as keyof typeof barColors] }}>
-                      {data.category}
+                <div className="bg-white/90 p-3 rounded-lg shadow-xl border border-border/50 max-w-xs animate-fade-in space-y-1.5">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    {icons[d.category as keyof typeof icons]}
+                    <span className="font-bold text-base" style={{ color: barColors[d.category as keyof typeof barColors] }}>
+                      {d.category}
                     </span>
                   </div>
                   <div className="flex items-baseline gap-1.5">
-                      <span className={`font-black text-2xl ${scoreColor(data.score)}`}>
-                        {data.score}
-                      </span>
-                      <span className="font-semibold text-sm text-muted-foreground">/ 100</span>
+                    <span className={`font-black text-2xl ${scoreColor(d.score)}`}>
+                      {d.score.toFixed(1)}
+                    </span>
+                    <span className="font-semibold text-sm text-gray-500">/ 100</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1.5">{data.details}</p>
+                  <p className="text-xs text-gray-400">{d.details}</p>
                 </div>
               );
             }
@@ -172,16 +172,16 @@ const BreakdownBarChart = ({
               key={entry.category}
               fill={`url(#color${entry.key})`}
               strokeWidth={2}
-              stroke={selected === entry.category ? barColors[entry.category as keyof typeof barColors] : 'transparent'}
+              stroke={selected === entry.category ? barColors[entry.category as keyof typeof barColors] : '#aaa'}
               opacity={
                 selected === null || selected === entry.category
                   ? 1
                   : 0.3
               }
               style={{
-                filter: `drop-shadow(0 4px 10px ${barColors[entry.category as keyof typeof barColors]}33)`,
+                filter: `drop-shadow(0 4px 10px ${barColors[entry.category as keyof typeof barColors]}22)`,
                 cursor: "pointer",
-                transition: "all .3s ease-in-out",
+                transition: "all .3s",
               }}
             />
           ))}
@@ -192,17 +192,17 @@ const BreakdownBarChart = ({
             formatter={(score: number, entry: { category: string }) => {
               const category = entry?.category;
               if (!category || score === undefined) {
-                  return null;
+                return null;
               }
               const color = barColors[category as keyof typeof barColors] ?? "#3B82F6";
               return (
                 <tspan
-                  className="font-black"
-                  fontSize={layout === 'vertical' ? 14 : 15}
+                  className="font-bold"
+                  fontSize={layout === 'vertical' ? 15 : 15}
                   fill={color}
-                  style={{ textShadow: "0 1px 5px rgba(255, 255, 255, 0.8)" }}
+                  style={{ textShadow: "0 1px 5px #fff8" }}
                 >
-                  {Math.round(score)}
+                  {score?.toFixed(1)}
                 </tspan>
               );
             }}
@@ -214,24 +214,22 @@ const BreakdownBarChart = ({
 };
 
 export function ESGScoreBreakdownChart() {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = React.useState<string | null>(null);
   const isMobile = useIsMobile();
   const layout = isMobile ? "vertical" : "horizontal";
 
   return (
-    <div
-      className="
-        w-full 
-        rounded-2xl 
-        shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
-        overflow-hidden
-        bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
-        border border-blue-200/60
-        animate-fade-in
-        my-3
-      "
-    >
-      {/* Gradient header with bold title */}
+    <div className="
+      w-full 
+      rounded-2xl 
+      shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
+      overflow-hidden
+      bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
+      border border-blue-200/60
+      animate-fade-in
+      my-3
+    ">
+      {/* Gradient header */}
       <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 px-5 py-4 flex flex-col md:flex-row md:items-center gap-1 border-b border-blue-100">
         <div className="flex items-center gap-2 mb-1">
           <BarChartIcon className="text-blue-500 w-7 h-7 mr-1" />
@@ -251,11 +249,7 @@ export function ESGScoreBreakdownChart() {
 
       {/* ESG Score summary card */}
       <div className="w-full flex flex-col md:flex-row items-center gap-3 md:gap-7 px-5 pt-4 pb-1">
-        <div className="
-            flex-1 min-w-[140px] 
-            flex items-center gap-2 bg-white/80 px-5 py-2 rounded-lg border border-blue-100 shadow-inner
-            ">
-          {/* Icon for overall */}
+        <div className="flex-1 min-w-[140px] flex items-center gap-2 bg-white/80 px-5 py-2 rounded-lg border border-blue-100 shadow-inner">
           <CheckCircle
             className={
               "mr-2 w-7 h-7 " +
