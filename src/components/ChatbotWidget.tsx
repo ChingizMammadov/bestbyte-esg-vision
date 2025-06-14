@@ -221,8 +221,8 @@ export const ChatbotWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {/* Attention Popup */}
+    <div className="fixed bottom-7 right-7 z-50 md:bottom-10 md:right-12" style={{ maxWidth: "calc(100vw - 20px)" }}>
+      {/* Attention Popup Styling */}
       {showPopup && !isOpen && (
         <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-xl border p-4 w-64 animate-bounce">
           <div className="flex justify-between items-start">
@@ -252,7 +252,7 @@ export const ChatbotWidget = () => {
           )}
         </button>
       ) : (
-        <div className="bg-white rounded-lg shadow-xl border w-96 h-[500px] flex flex-col">
+        <div className="bg-white rounded-lg shadow-xl border w-80 md:w-96 max-w-[96vw] h-[440px] md:h-[500px] flex flex-col">
           <div className="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">ESG Assistant</h3>
             <button

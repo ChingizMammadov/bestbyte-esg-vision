@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -40,7 +39,7 @@ const cardMotion = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 30 },
-  transition: { type: "spring", stiffness: 90, damping: 18 },
+  transition: { type: "spring" as const, stiffness: 90, damping: 18 },
 };
 
 export default function Dashboard() {
@@ -250,8 +249,26 @@ export default function Dashboard() {
               </motion.div>
             </div>
           </main>
-          <ChatbotWidget />
-          <Footer />
+          {/* Responsive Footer update */}
+          <footer className="w-full bg-gradient-to-tr from-white/70 to-gray-50/80 border-t border-gray-200 px-3 md:px-12 py-4 flex flex-col md:flex-row items-center justify-between gap-2 z-10 relative">
+            <div className="text-base font-semibold text-[#25624A] whitespace-nowrap">
+              <span className="font-bold text-green-700">BestByte</span> <span className="text-gray-400 font-normal">© 2025 • All rights reserved.</span>
+            </div>
+            <div className="flex flex-row flex-wrap justify-center md:justify-end gap-6 text-[15px] font-medium text-gray-500">
+              <a href="/contact" className="hover:text-primary transition">Contact</a>
+              <a href="/privacy" className="hover:text-primary transition">Privacy</a>
+              <a href="/terms" className="hover:text-primary transition">Terms</a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition">Twitter</a>
+              <a href="https://lovable.io" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition">Lovable</a>
+            </div>
+          </footer>
+          {/* Chatbot Widget will be placed above the footer */}
+          {/* >>> Make sure to provide bottom margin here <<< */}
+          <div className="pointer-events-none">
+            <div className="pointer-events-auto">
+              <ChatbotWidget />
+            </div>
+          </div>
         </div>
       </div>
     </SidebarProvider>
