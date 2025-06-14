@@ -1,89 +1,79 @@
 
-import React, { useState, useRef, useEffect } from "react";
-import { MessageSquare, X } from "lucide-react";
-
-const botResponses = [
-  "Hi! How can I help you with ESG compliance today?",
-  "You can calculate your company's carbon footprint using our Carbon Calculator.",
-  "To see ESG trends, head to your Dashboard and interact with the charts.",
-  "Need a new ESG report? Go to Reporting.",
-];
+import React, { useState } from "react";
+import { MessageCircle, X, Send } from "lucide-react";
 
 export const ChatbotWidget = () => {
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([{ from: "bot", text: botResponses[0] }]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { text: "Hi! I'm here to help you with ESG insights. How can I assist you today?", isBot: true }
+  ]);
   const [input, setInput] = useState("");
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (open && scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [open, messages.length]);
 
   const handleSend = () => {
     if (!input.trim()) return;
-    setMessages(msgs => [
-      ...msgs,
-      { from: "user", text: input }
-    ]);
-    setTimeout(() => {
-      const reply = botResponses[(msgs.length) % botResponses.length] || botResponses[0];
-      setMessages(msgs => [
-        ...msgs,
-        { from: "bot", text: reply }
-      ]);
-    }, 900);
+    
+    const newMessages = [
+      ...messages,
+      { text: input, isBot: false },
+      { text: "Thanks for your question! I'm a demo chatbot. For full functionality, please sign up for our service.", isBot: true }
+    ];
+    
+    setMessages(newMessages);
     setInput("");
   };
 
   return (
-    <>
-      {/* Chatbot icon button */}
-      <button
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-primary p-4 rounded-full shadow-xl hover:scale-110 transition"
-        onClick={() => setOpen(v => !v)}
-        aria-label="Chatbot"
-      >
-        <MessageSquare className="text-white w-7 h-7" />
-      </button>
-      {/* Chat window */}
-      {open && (
-        <div className="fixed bottom-24 md:bottom-24 right-6 md:right-8 z-50 w-[330px] bg-white rounded-2xl shadow-2xl border animate-fade-in flex flex-col overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 bg-primary text-white">
-            <div className="font-semibold">BestByte Assistant</div>
-            <button onClick={() => setOpen(false)} className="hover:opacity-65 transition">
-              <X className="w-5 h-5" />
+    <div className="fixed bottom-6 right-6 z-50">
+      {!isOpen ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-200 hover:scale-105"
+        >
+          <MessageCircle size={24} />
+        </button>
+      ) : (
+        <div className="bg-white rounded-lg shadow-xl border w-80 h-96 flex flex-col">
+          <div className="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
+            <h3 className="font-semibold">ESG Assistant</h3>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="hover:bg-white hover:bg-opacity-20 p-1 rounded"
+            >
+              <X size={18} />
             </button>
           </div>
-          <div ref={scrollRef} className="flex-1 px-4 py-4 overflow-y-auto max-h-80 space-y-3 bg-gray-50">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`rounded-xl px-4 py-2 text-base ${msg.from === "bot" ? "bg-white border text-gray-900" : "bg-primary text-white"}`}>
+          
+          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}>
+                <div className={`max-w-xs p-3 rounded-lg text-sm ${
+                  msg.isBot 
+                    ? 'bg-gray-100 text-gray-800' 
+                    : 'bg-primary text-white'
+                }`}>
                   {msg.text}
                 </div>
               </div>
             ))}
           </div>
-          <form
-            className="flex border-t"
-            onSubmit={e => {
-              e.preventDefault();
-              handleSend();
-            }}
-          >
+          
+          <div className="p-4 border-t flex gap-2">
             <input
-              className="flex-1 px-4 py-3 border-0 outline-none text-gray-800"
-              type="text"
-              placeholder="Type your question..."
               value={input}
-              onChange={e => setInput(e.target.value)}
-              autoFocus
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="Ask about ESG metrics..."
+              className="flex-1 px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary"
             />
-            <button type="submit" className="bg-primary text-white px-5 py-3 rounded-none hover:bg-emerald-700 transition">Send</button>
-          </form>
+            <button
+              onClick={handleSend}
+              className="bg-primary text-white p-2 rounded-lg hover:bg-opacity-90"
+            >
+              <Send size={16} />
+            </button>
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 };

@@ -19,6 +19,14 @@ export default function CarbonCalculator() {
       sum + (Number(inputs[field.key]) || 0) * field.factor,
     0
   );
+
+  const handleInputChange = (key: string, value: string) => {
+    setInputs(prev => ({
+      ...prev,
+      [key]: value === "" ? 0 : Math.max(0, Number(value))
+    }));
+  };
+
   return (
     <div className="flex flex-col min-h-screen font-sans bg-background">
       <Navbar />
@@ -35,13 +43,8 @@ export default function CarbonCalculator() {
                     type="number"
                     min="0"
                     step="any"
-                    value={inputs[f.key] ?? ""}
-                    onChange={e =>
-                      setInputs(i => ({
-                        ...i,
-                        [f.key]: e.target.value === "" ? "" : Math.max(0, Number(e.target.value))
-                      }))
-                    }
+                    value={inputs[f.key] || ""}
+                    onChange={e => handleInputChange(f.key, e.target.value)}
                     placeholder="0"
                   />
                 </div>
