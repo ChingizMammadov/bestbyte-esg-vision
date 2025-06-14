@@ -95,10 +95,10 @@ export function ESGScoreBreakdownChart() {
           <Skeleton className="h-7 w-1/2 bg-blue-200/50" />
         </div>
         <Skeleton className="h-4 w-3/4 mb-6 bg-blue-200/50" />
-        <div className="flex justify-around items-end pt-2 pb-4 px-2 sm:px-4" style={{ height: "220px" }}>
-          <Skeleton className="h-2/3 w-16 bg-blue-200/50 rounded-t-lg" />
-          <Skeleton className="h-full w-16 bg-blue-200/50 rounded-t-lg" />
-          <Skeleton className="h-3/4 w-16 bg-blue-200/50 rounded-t-lg" />
+        <div className="flex justify-around items-end pt-2 pb-4 px-2 sm:px-4" style={{ height: "280px" }}>
+          <Skeleton className="h-2/3 w-20 bg-blue-200/50 rounded-t-xl" />
+          <Skeleton className="h-full w-20 bg-blue-200/50 rounded-t-xl" />
+          <Skeleton className="h-3/4 w-20 bg-blue-200/50 rounded-t-xl" />
         </div>
       </div>
     );
@@ -160,7 +160,7 @@ export function ESGScoreBreakdownChart() {
       {/* ESG Interactive Bar Chart */}
       <div className="pt-2 pb-4 px-2 sm:px-4 flex flex-col w-full justify-center">
         {esgScores && esgScores.length > 0 ? (
-          <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "200px" : "220px" }}>
+          <div className="flex w-full items-end justify-center max-w-full relative" style={{ minHeight: layout === 'vertical' ? "280px" : "260px" }}>
             <BreakdownBarChart
               data={esgScores}
               layout={layout}
@@ -169,7 +169,7 @@ export function ESGScoreBreakdownChart() {
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center min-h-[180px] rounded-xl bg-white/70 border border-blue-100 shadow-inner my-5">
+          <div className="flex flex-col items-center justify-center min-h-[220px] rounded-xl bg-white/70 border border-blue-100 shadow-inner my-5">
             <span className="text-2xl text-blue-500 mb-2">📊</span>
             <p className="font-semibold text-blue-900">No ESG Data Available</p>
             <p className="text-xs text-blue-800/60 mt-1">
@@ -182,21 +182,21 @@ export function ESGScoreBreakdownChart() {
         )}
         {/* Category key (icon + label): always visible, spacious and clear */}
         {esgScores && esgScores.length > 0 && (
-          <div className="flex flex-row mt-4 mb-1 w-full items-center justify-evenly md:justify-center gap-x-6 gap-y-2 flex-wrap">
+          <div className="flex flex-row mt-6 mb-1 w-full items-center justify-evenly md:justify-center gap-x-8 gap-y-3 flex-wrap">
             {esgScores.map(cat => (
               <button key={cat.category} 
                 onClick={() => setSelected(selected === cat.category ? null : cat.category)}
-                className={`flex flex-col items-center gap-1.5 p-2 rounded-lg transition-all duration-200 ${selected === cat.category ? 'bg-blue-100/80' : ''} ${selected === null ? '' : selected === cat.category ? 'opacity-100' : 'opacity-40 hover:opacity-80'}`}
+                className={`flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-300 ${selected === cat.category ? 'bg-blue-100/80 scale-105' : 'hover:bg-blue-50/60'} ${selected === null ? '' : selected === cat.category ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`}
               >
                 <span
-                  className="rounded-full p-1.5"
+                  className="rounded-full p-2"
                   style={{
-                    background: barColors[cat.category as keyof typeof barColors] + "15",
+                    background: barColors[cat.category as keyof typeof barColors] + "20",
                   }}
                 >
                   {icons[cat.category as keyof typeof icons]}
                 </span>
-                <span className="text-xs md:text-[13px] font-semibold" style={{ color: barColors[cat.category as keyof typeof barColors] }}>
+                <span className="text-sm md:text-[14px] font-semibold" style={{ color: barColors[cat.category as keyof typeof barColors] }}>
                   {cat.category}
                 </span>
               </button>
