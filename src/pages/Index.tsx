@@ -1,14 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
-};
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/Hero";
+import { Features } from "@/components/Features";
+import { Testimonials } from "@/components/Testimonials";
+import { ChatbotWidget } from "@/components/ChatbotWidget";
+import React from "react";
+
+const Index = () => (
+  <div className="flex flex-col min-h-screen bg-background font-sans">
+    <Navbar />
+    <main className="flex-1">
+      <Hero />
+      <Features />
+      <Testimonials />
+    </main>
+    <ChatbotWidget />
+    <Footer />
+  </div>
+);
 
 export default Index;
