@@ -6,10 +6,10 @@ import React from "react";
 
 const teamMembers = [
   {
-    name: "Sarah Chen",
+    name: "Chingiz Mammadov",
     title: "CEO & Co-Founder",
     bio: "Former sustainability director at Fortune 500 companies with 15+ years in ESG strategy.",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b5bb?auto=format&fit=crop&w=400&q=80"
+    image: "/lovable-uploads/12f7c51e-436e-48cb-a6c3-c506078362cb.png"
   },
   {
     name: "Marcus Rodriguez",
