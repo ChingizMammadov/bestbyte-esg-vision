@@ -21,7 +21,7 @@ type EsgScore = {
 async function fetchEsgScores(): Promise<EsgScore[]> {
   const { data, error } = await supabase
     .from("esg_scores")
-    .select("category, score, details");
+    .select("category, score, metric_detail");
 
   if (error) {
     console.error("Error fetching ESG scores:", error);
@@ -32,9 +32,11 @@ async function fetchEsgScores(): Promise<EsgScore[]> {
     return [];
   }
 
-  // Add the 'key' property that the component expects
+  // Map DB schema to component's expected props
   return data.map((score) => ({
-    ...score,
+    category: score.category,
+    score: score.score ?? 0,
+    details: score.metric_detail ?? "No details available.",
     key: score.category ? score.category.charAt(0).toUpperCase() : "",
   }));
 }
