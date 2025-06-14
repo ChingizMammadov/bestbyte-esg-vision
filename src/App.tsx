@@ -8,6 +8,9 @@ import Index from "./pages/Index";
 import Pricing from "./pages/Pricing";
 import CarbonCalculator from "./pages/CarbonCalculator";
 import Dashboard from "./pages/Dashboard";
+import Analytics from "./pages/Analytics";
+import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import About from "./pages/About";
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/carbon-calculator" element={<CarbonCalculator />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
