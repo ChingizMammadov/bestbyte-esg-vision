@@ -19,9 +19,14 @@ type EsgScore = {
 
 // Fetch data from Supabase
 async function fetchEsgScores(): Promise<EsgScore[]> {
+  console.log("🔍 Fetching ESG scores from Supabase...");
+  
   const { data, error } = await supabase
     .from("esg_scores")
     .select("category, score, metric_detail");
+
+  console.log("📊 Raw data from Supabase:", data);
+  console.log("❌ Error from Supabase:", error);
 
   if (error) {
     console.error("Error fetching ESG scores:", error);
@@ -29,16 +34,22 @@ async function fetchEsgScores(): Promise<EsgScore[]> {
   }
 
   if (!data) {
+    console.log("⚠️ No data returned from Supabase");
     return [];
   }
 
+  console.log(`✅ Successfully fetched ${data.length} ESG scores`);
+
   // Map DB schema to component's expected props
-  return data.map((score) => ({
+  const mappedData = data.map((score) => ({
     category: score.category,
     score: score.score ?? 0,
     details: score.metric_detail ?? "No details available.",
     key: score.category ? score.category.charAt(0).toUpperCase() : "",
   }));
+
+  console.log("🔄 Mapped data:", mappedData);
+  return mappedData;
 }
 
 export function ESGScoreBreakdownChart() {
@@ -56,15 +67,27 @@ export function ESGScoreBreakdownChart() {
     queryFn: fetchEsgScores,
   });
 
+  console.log("🎯 Component state:");
+  console.log("- esgScores:", esgScores);
+  console.log("- isLoading:", isLoading);
+  console.log("- isError:", isError);
+  console.log("- error:", error);
+
   const esgOverall = React.useMemo(() => {
-    if (!esgScores || esgScores.length === 0) return 0;
-    return Math.round(
+    if (!esgScores || esgScores.length === 0) {
+      console.log("📈 No scores available for overall calculation");
+      return 0;
+    }
+    const overall = Math.round(
       esgScores.reduce((sum, s) => sum + s.score, 0) / esgScores.length
     );
+    console.log("📈 Calculated overall ESG score:", overall);
+    return overall;
   }, [esgScores]);
 
   // Loading state
   if (isLoading) {
+    console.log("⏳ Component is in loading state");
     return (
       <div className="w-full rounded-2xl shadow-[0_8px_28px_0_rgba(30,60,109,0.09)] bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80 border border-blue-200/60 my-3 p-5 animate-pulse">
         <div className="flex items-center gap-2 mb-4">
@@ -83,6 +106,7 @@ export function ESGScoreBreakdownChart() {
 
   // Error state
   if (isError) {
+    console.log("💥 Component is in error state:", error);
     return (
       <div className="w-full rounded-2xl shadow-[0_8px_28px_0_rgba(30,60,109,0.09)] my-3 p-5 bg-red-50 border border-red-200 text-center">
         <span className="text-4xl">😟</span>
@@ -96,6 +120,8 @@ export function ESGScoreBreakdownChart() {
       </div>
     );
   }
+
+  console.log("🎨 Rendering component with data:", esgScores);
 
   return (
     <div className="
@@ -147,7 +173,10 @@ export function ESGScoreBreakdownChart() {
             <span className="text-2xl text-blue-500 mb-2">📊</span>
             <p className="font-semibold text-blue-900">No ESG Data Available</p>
             <p className="text-xs text-blue-800/60 mt-1">
-              Your `esg_scores` table appears to be empty.
+              Check the console for debugging information.
+            </p>
+            <p className="text-xs text-blue-800/60 mt-1">
+              Data length: {esgScores?.length || 0}
             </p>
           </div>
         )}
