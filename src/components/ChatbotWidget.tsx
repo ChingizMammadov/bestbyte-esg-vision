@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 
 interface Message {
@@ -12,15 +12,27 @@ export const ChatbotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { 
-      text: "Hi! I'm your ESG Assistant powered by ChatGPT. I can help you with sustainability questions, ESG reporting, carbon footprint analysis, and more. How can I assist you today?", 
+      text: "Hi! I'm your ESG Assistant. I can help you with sustainability questions, ESG reporting, carbon footprint analysis, and more. How can I assist you today?", 
       isBot: true, 
       timestamp: new Date() 
     }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
-  const [showApiInput, setShowApiInput] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Show attention popup after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isOpen) {
+        setShowPopup(true);
+        // Auto hide popup after 5 seconds
+        setTimeout(() => setShowPopup(false), 5000);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -32,48 +44,13 @@ export const ChatbotWidget = () => {
     };
     
     setMessages(prev => [...prev, userMessage]);
+    const userInput = input;
     setInput("");
     setIsLoading(true);
 
-    try {
-      let response;
-      
-      if (apiKey) {
-        // Use OpenAI API if key is provided
-        const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
-          },
-          body: JSON.stringify({
-            model: 'gpt-4.1-2025-04-14',
-            messages: [
-              {
-                role: 'system',
-                content: 'You are an ESG (Environmental, Social, Governance) assistant for BestByte, a company that provides ESG analytics and carbon footprint tracking. Help users with sustainability questions, ESG reporting, carbon accounting, and environmental compliance. Be helpful, professional, and focus on actionable ESG insights.'
-              },
-              {
-                role: 'user',
-                content: input
-              }
-            ],
-            max_tokens: 500,
-            temperature: 0.7
-          })
-        });
-
-        if (openaiResponse.ok) {
-          const data = await openaiResponse.json();
-          response = data.choices[0]?.message?.content || "I apologize, but I couldn't generate a response. Please try again.";
-        } else {
-          throw new Error('OpenAI API request failed');
-        }
-      } else {
-        // Fallback to mock intelligent responses
-        response = generateMockResponse(input);
-      }
-
+    // Simulate AI thinking time
+    setTimeout(() => {
+      const response = generateResponse(userInput);
       const botMessage: Message = { 
         text: response, 
         isBot: true, 
@@ -81,39 +58,53 @@ export const ChatbotWidget = () => {
       };
       
       setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error getting AI response:', error);
-      const errorMessage: Message = { 
-        text: "I'm having trouble connecting right now. For the best experience, please add your OpenAI API key or try again later.", 
-        isBot: true, 
-        timestamp: new Date() 
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
       setIsLoading(false);
-    }
+    }, 1000 + Math.random() * 1000); // 1-2 seconds delay
   };
 
-  const generateMockResponse = (userInput: string): string => {
+  const generateResponse = (userInput: string): string => {
     const lowerInput = userInput.toLowerCase();
     
-    if (lowerInput.includes('carbon') || lowerInput.includes('footprint')) {
-      return "Carbon footprint tracking is crucial for ESG reporting. BestByte can help you measure emissions across Scope 1, 2, and 3 categories. Would you like to know more about our carbon calculator features?";
+    // Greeting responses
+    if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('hey')) {
+      return "Hello! I'm doing well, thank you for asking. I'm here to help you with all your ESG and sustainability questions. What would you like to know about?";
     }
     
-    if (lowerInput.includes('esg') || lowerInput.includes('report')) {
-      return "ESG reporting involves tracking Environmental, Social, and Governance metrics. Our platform automates data collection and generates compliance-ready reports for frameworks like GRI, SASB, and TCFD. What specific ESG metrics are you interested in?";
+    if (lowerInput.includes('how are you') || lowerInput.includes('how do you do')) {
+      return "I'm doing excellent, thank you for asking! I'm ready to assist you with ESG analytics, carbon footprint tracking, and sustainability reporting. How can I help you today?";
+    }
+
+    if (lowerInput.includes('good morning') || lowerInput.includes('good afternoon') || lowerInput.includes('good evening')) {
+      return "Good day to you too! I hope you're having a wonderful time. I'm here to help you with your ESG and sustainability needs. What can I assist you with?";
+    }
+
+    // ESG specific responses
+    if (lowerInput.includes('carbon') || lowerInput.includes('footprint') || lowerInput.includes('emissions')) {
+      return "Great question about carbon footprint! Carbon tracking is essential for ESG compliance. BestByte helps you monitor Scope 1, 2, and 3 emissions automatically. Our platform can calculate your organization's carbon footprint and suggest reduction strategies. Would you like to learn more about our carbon calculator features?";
     }
     
-    if (lowerInput.includes('sustain') || lowerInput.includes('green')) {
-      return "Sustainability initiatives can significantly impact your ESG score. Consider focusing on energy efficiency, waste reduction, and renewable energy adoption. Our predictive analytics can help identify the most impactful areas for your organization.";
+    if (lowerInput.includes('esg') || lowerInput.includes('report') || lowerInput.includes('reporting')) {
+      return "ESG reporting is crucial for modern businesses! Our platform automates ESG data collection and generates comprehensive reports that comply with GRI, SASB, and TCFD frameworks. We track Environmental, Social, and Governance metrics to give you complete visibility into your sustainability performance. What specific ESG metrics are you most interested in?";
     }
     
-    if (lowerInput.includes('price') || lowerInput.includes('cost')) {
-      return "BestByte offers flexible pricing starting at $60/month for basic analytics. Our Standard plan at $150/month includes full ESG analytics and custom reporting. Would you like to see our detailed pricing comparison?";
+    if (lowerInput.includes('sustain') || lowerInput.includes('green') || lowerInput.includes('environment')) {
+      return "Sustainability is at the heart of what we do! BestByte provides comprehensive sustainability analytics to help you make data-driven decisions. We can help you identify improvement opportunities, track progress toward sustainability goals, and benchmark against industry standards. What sustainability challenges is your organization facing?";
     }
     
-    return "That's a great question about ESG and sustainability! While I can provide basic guidance, connecting with our full AI-powered system would give you more detailed insights. For comprehensive ESG analysis, I'd recommend exploring our carbon calculator and reporting tools.";
+    if (lowerInput.includes('price') || lowerInput.includes('cost') || lowerInput.includes('pricing') || lowerInput.includes('plan')) {
+      return "I'd be happy to discuss our pricing! BestByte offers flexible plans starting at $60/month for basic ESG analytics. Our Standard plan at $150/month includes comprehensive reporting and custom analytics. For enterprise solutions, we have tailored packages. Would you like me to connect you with our sales team for a personalized quote?";
+    }
+
+    if (lowerInput.includes('help') || lowerInput.includes('assist') || lowerInput.includes('support')) {
+      return "I'm here to help! I can assist you with understanding ESG metrics, carbon footprint calculation, sustainability reporting, compliance requirements, and how BestByte's platform can benefit your organization. What specific area would you like to explore?";
+    }
+
+    if (lowerInput.includes('thank') || lowerInput.includes('thanks')) {
+      return "You're very welcome! I'm glad I could help. If you have any more questions about ESG, sustainability, or how BestByte can support your organization's goals, please don't hesitate to ask. I'm here whenever you need assistance!";
+    }
+
+    // Default response
+    return "That's an interesting question! As your ESG assistant, I'm here to help you understand sustainability metrics, carbon accounting, ESG reporting, and how BestByte can transform your environmental data into actionable insights. Could you tell me more about what you'd like to know specifically?";
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -123,49 +114,53 @@ export const ChatbotWidget = () => {
     }
   };
 
+  const handleOpenChat = () => {
+    setIsOpen(true);
+    setShowPopup(false);
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-50">
+      {/* Attention Popup */}
+      {showPopup && !isOpen && (
+        <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-xl border p-4 w-64 animate-bounce">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-sm font-semibold text-gray-800">Need help with ESG?</p>
+              <p className="text-xs text-gray-600 mt-1">Ask me anything about sustainability!</p>
+            </div>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X size={14} />
+            </button>
+          </div>
+          <div className="absolute bottom-[-8px] right-4 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white"></div>
+        </div>
+      )}
+
       {!isOpen ? (
         <button
-          onClick={() => setIsOpen(true)}
-          className="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-200 hover:scale-105"
+          onClick={handleOpenChat}
+          className="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-200 hover:scale-105 relative"
         >
           <MessageCircle size={24} />
+          {showPopup && (
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+          )}
         </button>
       ) : (
         <div className="bg-white rounded-lg shadow-xl border w-80 h-96 flex flex-col">
           <div className="bg-primary text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">ESG Assistant</h3>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowApiInput(!showApiInput)}
-                className="hover:bg-white hover:bg-opacity-20 p-1 rounded text-xs"
-                title="Configure ChatGPT"
-              >
-                ⚙️
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="hover:bg-white hover:bg-opacity-20 p-1 rounded"
-              >
-                <X size={18} />
-              </button>
-            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="hover:bg-white hover:bg-opacity-20 p-1 rounded"
+            >
+              <X size={18} />
+            </button>
           </div>
-          
-          {showApiInput && (
-            <div className="p-3 bg-gray-50 border-b">
-              <label className="text-xs text-gray-600 mb-1 block">OpenAI API Key (optional):</label>
-              <input
-                type="password"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="sk-..."
-                className="w-full px-2 py-1 text-xs border rounded outline-none focus:ring-1 focus:ring-primary"
-              />
-              <p className="text-xs text-gray-500 mt-1">Add your key for ChatGPT responses</p>
-            </div>
-          )}
           
           <div className="flex-1 p-4 overflow-y-auto space-y-3">
             {messages.map((msg, idx) => (
