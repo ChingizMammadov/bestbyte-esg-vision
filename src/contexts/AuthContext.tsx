@@ -62,6 +62,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    // Explicitly clear user state to prevent race conditions on redirect
+    setUser(null);
+    setSession(null);
   };
 
   const value = {

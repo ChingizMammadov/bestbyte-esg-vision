@@ -169,7 +169,10 @@ export default function ResetPassword() {
                     Reset Your Password
                   </h1>
                   <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base">
-                    Enter your new secure password below
+                    Please enter a new password below.
+                  </p>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs mt-2">
+                    This is a secure page where you can set a new password for your account.
                   </p>
                 </div>
 
@@ -299,6 +302,19 @@ export default function ResetPassword() {
                     {isLoading ? "Resetting Password..." : "Reset My Password"}
                   </button>
                 </form>
+                
+                {/* Help Section */}
+                <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                    Still having trouble?
+                  </p>
+                  <a
+                    href="mailto:support@bestbyte.com"
+                    className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition-colors duration-200 hover:underline underline-offset-4"
+                  >
+                    Contact our support team
+                  </a>
+                </div>
               </>
             ) : (
               /* Success Message */
