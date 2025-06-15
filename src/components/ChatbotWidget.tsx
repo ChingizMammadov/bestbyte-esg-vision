@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,6 +23,19 @@ export function ChatbotWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new messages are added
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(scrollToBottom, 100);
+    }
+  }, [messages, isTyping]);
 
   // Auto-show chat after 10 seconds only if user hasn't interacted
   useEffect(() => {
@@ -217,32 +230,35 @@ export function ChatbotWidget() {
         {isOpen ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
       </Button>
 
-      {/* Chat Window - Enhanced */}
+      {/* Chat Window - Enhanced with better dark mode */}
       {isOpen && (
-        <Card className="absolute bottom-16 right-0 w-80 max-w-[calc(100vw-2rem)] md:w-96 h-96 shadow-2xl border border-gray-200 dark:border-gray-700 animate-scale-in flex flex-col">
-          <CardHeader className="pb-3 border-b border-gray-200 dark:border-gray-700">
-            <CardTitle className="text-lg text-gray-900 dark:text-white flex items-center gap-2">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+        <Card className="absolute bottom-16 right-0 w-80 max-w-[calc(100vw-2rem)] md:w-96 h-96 shadow-2xl border border-gray-200 dark:border-amber-600/30 animate-scale-in flex flex-col bg-white dark:bg-amber-950/90 backdrop-blur-sm">
+          <CardHeader className="pb-3 border-b border-gray-200 dark:border-amber-700/50 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-amber-900/60 dark:to-orange-900/40">
+            <CardTitle className="text-lg text-gray-900 dark:text-amber-100 flex items-center gap-2">
+              <div className="w-2 h-2 bg-emerald-500 dark:bg-amber-400 rounded-full animate-pulse"></div>
               ESG Assistant
             </CardTitle>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+            <p className="text-sm text-gray-600 dark:text-amber-200/80">
               Your intelligent ESG companion
             </p>
           </CardHeader>
           
-          <CardContent className="flex-1 flex flex-col p-4 space-y-4">
+          <CardContent className="flex-1 flex flex-col p-4 space-y-4 bg-gray-50/50 dark:bg-amber-950/30">
             {/* Messages Container */}
-            <div className="flex-1 space-y-3 overflow-y-auto max-h-64 pr-2">
+            <div 
+              ref={messagesContainerRef}
+              className="flex-1 space-y-3 overflow-y-auto max-h-64 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-amber-600/50 scrollbar-track-transparent"
+            >
               {messages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                    className={`max-w-[80%] p-3 rounded-lg text-sm shadow-sm ${
                       msg.isBot
-                        ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none'
-                        : 'bg-emerald-500 text-white rounded-br-none'
+                        ? 'bg-white dark:bg-amber-800/80 text-gray-800 dark:text-amber-100 rounded-bl-none border border-gray-100 dark:border-amber-700/50'
+                        : 'bg-emerald-500 dark:bg-emerald-600 text-white rounded-br-none shadow-md'
                     }`}
                   >
                     {msg.text}
@@ -253,30 +269,33 @@ export function ChatbotWidget() {
               {/* Typing Indicator */}
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-bl-none">
-                    <div className="flex items-center gap-1">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">Thinking...</span>
+                  <div className="bg-white dark:bg-amber-800/80 border border-gray-100 dark:border-amber-700/50 p-3 rounded-lg rounded-bl-none shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-3 w-3 animate-spin text-emerald-500 dark:text-amber-400" />
+                      <span className="text-xs text-gray-600 dark:text-amber-200">Thinking...</span>
                     </div>
                   </div>
                 </div>
               )}
+              
+              {/* Invisible div for auto-scroll */}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className="flex gap-2 border-t border-gray-200 dark:border-gray-700 pt-4">
+            <div className="flex gap-2 border-t border-gray-200 dark:border-amber-700/50 pt-4 bg-white/80 dark:bg-amber-900/40 rounded-lg p-2">
               <Input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Ask about ESG, carbon footprint, reporting..."
-                className="text-sm flex-1"
+                className="text-sm flex-1 border-gray-300 dark:border-amber-600/50 bg-white dark:bg-amber-900/60 text-gray-900 dark:text-amber-100 placeholder:text-gray-500 dark:placeholder:text-amber-300/70 focus:border-emerald-500 dark:focus:border-amber-400"
                 onKeyPress={handleKeyPress}
                 disabled={isTyping}
               />
               <Button 
                 onClick={handleSend} 
                 size="sm"
-                className="px-3 bg-emerald-500 hover:bg-emerald-600"
+                className="px-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 shadow-sm"
                 disabled={!message.trim() || isTyping}
               >
                 {isTyping ? (
