@@ -1,70 +1,115 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-
-const navLinks = [
-  { name: "Features", to: "/#features" },
-  { name: "Pricing", to: "/pricing" },
-  { name: "About", to: "/about" },
-  { name: "Sign Up", to: "/signup" },
-  { name: "Log In", to: "/login" },
-];
+import { Shield, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
+import { EnhancedButton } from "./EnhancedButton";
 
 export const Navbar = () => {
-  const { pathname } = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const navItems = [
+    { name: 'Features', href: '/#features' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'About', href: '/about' },
+  ];
 
   return (
-    <header className="sticky top-0 z-20 w-full bg-white/90 backdrop-blur border-b border-gray-200">
-      <nav className="container flex items-center justify-between py-4">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl md:text-2xl text-primary tracking-tight hover:opacity-80 transition">
-          <span className="rounded-full bg-gradient-to-tr from-green-700 to-teal-400 w-6 h-6 md:w-8 md:h-8 flex items-center justify-center text-white text-sm md:text-xl">B</span>
-          <span>BestByte</span>
-        </Link>
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur-md" role="navigation" aria-label="Main navigation">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200"
+            aria-label="BestByte home"
+          >
+            <Shield className="w-8 h-8 text-primary" aria-hidden="true" />
+            <span className="font-bold text-xl text-primary">BestByte</span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <ul className="hidden md:flex gap-6 lg:gap-8 items-center font-medium">
-          {navLinks.map(link => (
-            <li key={link.name}>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
               <Link
-                to={link.to}
-                className={`hover:text-primary transition-colors text-sm lg:text-base ${pathname === link.to ? "text-primary" : "text-gray-700"}`}
+                key={item.name}
+                to={item.href}
+                className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group"
+                aria-current={location.pathname === item.href ? 'page' : undefined}
               >
-                {link.name}
+                {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
+            <Link to="/login">
+              <Button variant="ghost" className="hover:bg-gray-100 transition-colors duration-200">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <EnhancedButton premium size="sm" aria-label="Start free trial">
+                Get Started
+              </EnhancedButton>
+            </Link>
+          </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg md:hidden">
-            <ul className="flex flex-col py-4">
-              {navLinks.map(link => (
-                <li key={link.name}>
-                  <Link
-                    to={link.to}
-                    className={`block px-6 py-3 hover:bg-gray-50 transition-colors ${pathname === link.to ? "text-primary bg-gray-50" : "text-gray-700"}`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu"
+            >
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div 
+            id="mobile-menu"
+            className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-sm"
+          >
+            <div className="px-4 py-4 space-y-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block text-gray-600 hover:text-primary transition-colors duration-200 font-medium py-2"
+                  aria-current={location.pathname === item.href ? 'page' : undefined}
+                >
+                  {item.name}
+                </Link>
               ))}
-            </ul>
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup" onClick={() => setIsOpen(false)}>
+                  <EnhancedButton premium className="w-full">
+                    Get Started
+                  </EnhancedButton>
+                </Link>
+              </div>
+            </div>
           </div>
         )}
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 };
