@@ -8,8 +8,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen } from "lucide-react";
 import React from "react";
@@ -27,32 +25,34 @@ export function AppSidebar() {
   const { pathname } = useLocation();
 
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-base font-bold text-primary tracking-tight mb-1">
-            Menu
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map(item => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.url}
-                    className="transition-all duration-150"
-                  >
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="w-5 h-5 text-primary/70 group-hover/menu-item:text-primary transition" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <div className="hidden md:block">
+      <Sidebar>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-base font-bold text-primary tracking-tight mb-1">
+              Menu
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map(item => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url}
+                      className="transition-all duration-150"
+                    >
+                      <Link to={item.url} className="flex items-center gap-3">
+                        <item.icon className="w-5 h-5 text-primary/70 group-hover/menu-item:text-primary transition" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </div>
   );
 }
