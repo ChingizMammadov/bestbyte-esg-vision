@@ -202,20 +202,6 @@ export default function SignUp() {
                     </Link>
                   </p>
                 </div>
-
-                {/* Trust Box */}
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-4 animate-fade-in">
-                  <div className="flex items-center gap-2 text-sm text-green-800">
-                    <Shield className="w-4 h-4 text-green-600" />
-                    <span className="font-medium">Your data is secure</span>
-                  </div>
-                  <p className="text-xs text-green-700 mt-1">
-                    GDPR compliant • Enterprise-grade encryption • SOC 2 certified
-                    <button className="ml-2 text-primary hover:underline font-medium">
-                      Learn more
-                    </button>
-                  </p>
-                </div>
               </form>
             </Form>
           </div>
