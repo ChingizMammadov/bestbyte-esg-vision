@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -18,6 +17,7 @@ import { AccountSecuritySection } from "@/components/signup/AccountSecuritySecti
 import { ESGPreferencesSection } from "@/components/signup/ESGPreferencesSection";
 import { TermsSection } from "@/components/signup/TermsSection";
 import { SuccessScreen } from "@/components/signup/SuccessScreen";
+import { Shield, User } from "lucide-react";
 
 const formSchema = z.object({
   companyName: z.string().min(1, {
@@ -182,16 +182,38 @@ export default function SignUp() {
 
                 <TermsSection control={form.control} />
 
-                <Button type="submit" className="w-full h-12 text-sm" disabled={form.formState.isSubmitting}>
+                {/* Enhanced CTA Button */}
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 animate-fade-in" 
+                  disabled={form.formState.isSubmitting}
+                >
+                  <Shield className="w-4 h-4 mr-2" />
                   {form.formState.isSubmitting ? "Creating Account..." : "Start Your ESG Journey"}
                 </Button>
 
+                {/* Enhanced Account Prompt */}
                 <div className="text-center pt-4 border-t">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+                    <User className="w-4 h-4" />
                     Already have an account?{" "}
-                    <Link to="/login" className="text-primary font-semibold hover:underline">
+                    <Link to="/login" className="text-primary font-semibold hover:underline underline-offset-4 transition-all duration-200">
                       Sign in here
                     </Link>
+                  </p>
+                </div>
+
+                {/* Trust Box */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-4 animate-fade-in">
+                  <div className="flex items-center gap-2 text-sm text-green-800">
+                    <Shield className="w-4 h-4 text-green-600" />
+                    <span className="font-medium">Your data is secure</span>
+                  </div>
+                  <p className="text-xs text-green-700 mt-1">
+                    GDPR compliant • Enterprise-grade encryption • SOC 2 certified
+                    <button className="ml-2 text-primary hover:underline font-medium">
+                      Learn more
+                    </button>
                   </p>
                 </div>
               </form>
