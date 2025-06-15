@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Users, ShieldCheck, Vote, DollarSign, Diversity3 } from "lucide-react";
+import { Users, ShieldCheck, Vote, DollarSign, UserCheck } from "lucide-react";
 
 // Comprehensive board diversity data
 const genderDiversityData = [
@@ -198,7 +197,6 @@ const DiversityPieChart = ({
   );
 };
 
-
 const shareholderRightsData = [
   { year: "2020", votingRights: 75 },
   { year: "2021", votingRights: 78 },
@@ -232,7 +230,7 @@ export function GovernanceMetrics() {
           data={ethnicDiversityData}
           title="Ethnic & Racial Diversity"
           description="Board composition by ethnicity"
-          icon={<Diversity3 className="w-5 h-5 text-purple-600" />}
+          icon={<UserCheck className="w-5 h-5 text-purple-600" />}
         />
       </div>
 
