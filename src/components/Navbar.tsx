@@ -1,10 +1,11 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { EnhancedButton } from "./EnhancedButton";
+import { BestByteLogo } from "./BestByteLogo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +18,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur-md" role="navigation" aria-label="Main navigation">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur-md dark:border-gray-700/60 dark:bg-gray-900/80" role="navigation" aria-label="Main navigation">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -26,8 +27,7 @@ export const Navbar = () => {
             className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200"
             aria-label="BestByte home"
           >
-            <Shield className="w-8 h-8 text-primary" aria-hidden="true" />
-            <span className="font-bold text-xl text-primary">BestByte</span>
+            <BestByteLogo size="md" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -36,7 +36,7 @@ export const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group"
+                className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group dark:text-gray-300"
                 aria-current={location.pathname === item.href ? 'page' : undefined}
               >
                 {item.name}
@@ -49,7 +49,7 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" className="hover:bg-gray-100 transition-colors duration-200">
+              <Button variant="ghost" className="hover:bg-gray-100 transition-colors duration-200 dark:hover:bg-gray-800">
                 Sign In
               </Button>
             </Link>
@@ -80,7 +80,7 @@ export const Navbar = () => {
         {isOpen && (
           <div 
             id="mobile-menu"
-            className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-sm"
+            className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-900/95"
           >
             <div className="px-4 py-4 space-y-4">
               {navItems.map((item) => (
@@ -88,13 +88,13 @@ export const Navbar = () => {
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="block text-gray-600 hover:text-primary transition-colors duration-200 font-medium py-2"
+                  className="block text-gray-600 hover:text-primary transition-colors duration-200 font-medium py-2 dark:text-gray-300"
                   aria-current={location.pathname === item.href ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
               ))}
-              <div className="pt-4 border-t border-gray-200 space-y-3">
+              <div className="pt-4 border-t border-gray-200 space-y-3 dark:border-gray-700">
                 <Link to="/login" onClick={() => setIsOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">
                     Sign In
