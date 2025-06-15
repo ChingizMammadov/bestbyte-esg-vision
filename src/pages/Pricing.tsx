@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -55,7 +56,7 @@ const plans = [
       "Unlimited Storage",
       "Dedicated Manager",
     ],
-    cta: "Contact Sales",
+    cta: "Start Free Trial",
     icon: Award,
     color: "from-purple-600 to-indigo-600",
     popular: false,
@@ -73,10 +74,6 @@ export default function Pricing() {
 
   const handleStartTrial = () => {
     navigate("/signup");
-  };
-
-  const handleContactSales = () => {
-    window.location.href = "mailto:hello@bestbyte.com";
   };
 
   return (
@@ -178,13 +175,11 @@ export default function Pricing() {
 
                     {/* CTA Button */}
                     <button
-                      onClick={plan.cta === "Contact Sales" ? handleContactSales : handleStartTrial}
+                      onClick={handleStartTrial}
                       className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 ${
                         plan.popular
                           ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400 shadow-lg hover:shadow-emerald-500/25"
-                          : plan.cta === "Contact Sales"
-                          ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 shadow-lg hover:shadow-purple-500/25"
-                          : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/20 hover:border-gray-300 dark:hover:border-white/30"
+                          : "bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400 shadow-lg hover:shadow-emerald-500/25"
                       }`}
                     >
                       {plan.cta}
@@ -223,16 +218,16 @@ export default function Pricing() {
           <div className="text-center animate-fade-in" style={{ animationDelay: "800ms" }}>
             <div className="bg-white/60 dark:bg-gradient-to-r dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-2xl p-8 max-w-3xl mx-auto shadow-lg">
               <h4 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 font-montserrat">
-                Need a Custom Solution?
+                Ready to Transform Your ESG Reporting?
               </h4>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Contact our team for enterprise pricing and custom integrations tailored to your needs.
+                Join thousands of companies already using BestByte to streamline their sustainability reporting.
               </p>
               <button 
-                onClick={handleContactSales}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-purple-500 hover:to-indigo-500 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
+                onClick={handleStartTrial}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25"
               >
-                Contact Our Team
+                Start Free Trial
               </button>
             </div>
           </div>
