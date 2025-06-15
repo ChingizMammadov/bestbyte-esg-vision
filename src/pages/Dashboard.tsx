@@ -1,4 +1,3 @@
-
 import { AppSidebar } from "@/components/AppSidebar";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Footer } from "@/components/Footer";
@@ -32,11 +31,6 @@ export default function Dashboard() {
       <div className="flex min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#23638B]/40 to-[#aed9da]/10 font-sans transition-all">
         <AppSidebar />
         <div className="flex flex-col flex-1 min-w-0">
-          {/* Desktop Sidebar Trigger */}
-          <div className="hidden lg:block p-4">
-            <SidebarTrigger />
-          </div>
-          
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6">
             {/* Filter Controls with Seed Button */}
