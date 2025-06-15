@@ -7,7 +7,7 @@ export const Footer = () => (
       <div className="text-center md:text-left">
         <span className="font-semibold text-primary">BestByte</span> &copy; {new Date().getFullYear()} • All rights reserved.
       </div>
-      <nav className="flex flex-wrap justify-center gap-4 md:gap-6">
+      <nav className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
         <a href="mailto:hello@bestbyte.com" className="hover:text-primary transition-colors">Contact</a>
         <a href="/privacy" className="hover:text-primary transition-colors">Privacy</a>
         <a href="/terms" className="hover:text-primary transition-colors">Terms</a>
