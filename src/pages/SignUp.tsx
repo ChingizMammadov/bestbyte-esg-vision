@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -147,11 +148,11 @@ export default function SignUp() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
       <Navbar />
       <main className="flex-1 flex items-center justify-center py-4 md:py-16 px-4 pb-4">
         <div className="w-full max-w-md">
-          <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 md:p-8 transition-all duration-300">
+          <div className="bg-white/90 dark:bg-slate-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-4 md:p-8 transition-all duration-300">
             <SignUpHeader />
 
             <Form {...form}>
@@ -202,7 +203,7 @@ export default function SignUp() {
                     Already have an account?{" "}
                     <Link 
                       to="/login" 
-                      className="text-primary font-semibold hover:underline underline-offset-4 transition-all duration-200 hover:text-primary/80"
+                      className="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline underline-offset-4 transition-all duration-200 hover:text-emerald-700 dark:hover:text-emerald-300"
                     >
                       Sign in here
                     </Link>
