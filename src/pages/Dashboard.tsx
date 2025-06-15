@@ -13,7 +13,7 @@ import { FilterControls } from "@/components/dashboard/FilterControls";
 import { DataCards } from "@/components/dashboard/DataCards";
 import { TabNavigation } from "@/components/dashboard/TabNavigation";
 import { SeedDataButton } from "@/components/SeedDataButton";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { motion, easeOut } from "framer-motion";
 import { useState } from "react";
 
@@ -32,6 +32,11 @@ export default function Dashboard() {
       <div className="flex min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#23638B]/40 to-[#aed9da]/10 font-sans transition-all">
         <AppSidebar />
         <div className="flex flex-col flex-1 min-w-0">
+          {/* Desktop Sidebar Trigger */}
+          <div className="hidden lg:block p-4">
+            <SidebarTrigger />
+          </div>
+          
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6">
             {/* Filter Controls with Seed Button */}

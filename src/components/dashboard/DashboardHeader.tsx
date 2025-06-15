@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { LogOut, User, Calendar, Search } from 'lucide-react';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -36,10 +35,9 @@ export function DashboardHeader() {
   return (
     <header className="w-full py-3 md:py-4 px-3 md:px-6 bg-white/95 border-b border-gray-200 shadow-sm">
       <div className="flex flex-col gap-3 md:gap-4">
-        {/* Top row - Company and mobile trigger */}
+        {/* Top row - Company info */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 md:gap-4">
-            <SidebarTrigger className="lg:hidden" />
             <div>
               <h1 className="text-lg md:text-xl xl:text-2xl font-bold text-gray-900">
                 Acme Corp
