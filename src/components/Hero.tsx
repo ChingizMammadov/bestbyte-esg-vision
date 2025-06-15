@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play } from "lucide-react";
@@ -24,8 +23,8 @@ export const Hero = () => (
           <span role="status" aria-label="Trust indicator">Trusted by 500+ companies worldwide</span>
         </div>
         
-        {/* Main Headline */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+        {/* Main Headline - Using Montserrat for premium feel */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight font-montserrat">
           Real-Time ESG{" "}
           <span className="relative">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400">
@@ -35,8 +34,8 @@ export const Hero = () => (
           at Your Fingertips
         </h1>
         
-        {/* Subheading */}
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl leading-relaxed">
+        {/* Subheading - Using Inter for readability */}
+        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl leading-relaxed font-inter">
           BestByte empowers businesses with automated carbon calculators, predictive analytics, and AI-driven ESG reporting—so you can drive positive change, reduce risk, and exceed compliance.
         </p>
         
@@ -47,7 +46,7 @@ export const Hero = () => (
               premium 
               glow 
               size="lg"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-lg font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-white shadow-lg hover:shadow-xl dark:shadow-emerald-500/25 dark:hover:shadow-emerald-500/40 transition-all duration-300"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-lg font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 text-white shadow-lg hover:shadow-xl dark:shadow-emerald-500/25 dark:hover:shadow-emerald-500/40 transition-all duration-300 font-montserrat"
               aria-label="Start your ESG journey with BestByte"
             >
               Start Your ESG Journey
@@ -58,7 +57,7 @@ export const Hero = () => (
             <EnhancedButton 
               variant="outline"
               size="lg"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-emerald-400 dark:hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 shadow-sm hover:shadow-md dark:shadow-gray-900/20 transition-all duration-300"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-emerald-400 dark:hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 shadow-sm hover:shadow-md dark:shadow-gray-900/20 transition-all duration-300 font-montserrat"
               aria-label="View pricing plans"
             >
               <Play className="w-5 h-5" aria-hidden="true" />
@@ -68,7 +67,7 @@ export const Hero = () => (
         </div>
         
         {/* Trust Indicators */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-gray-500 dark:text-gray-400" role="group" aria-label="Trust indicators">
+        <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-gray-500 dark:text-gray-400 font-inter" role="group" aria-label="Trust indicators">
           <div className="flex items-center gap-2">
             <div className="flex -space-x-2" role="group" aria-label="Customer avatars">
               <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 border-2 border-white dark:border-gray-700 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-semibold text-xs" aria-label="Customer A">A</div>

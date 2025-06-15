@@ -38,7 +38,7 @@ export const BestByteLogo: React.FC<BestByteLogoProps> = ({
       {/* Logo Icon */}
       <BIcon size={size} />
 
-      {/* Brand Text */}
+      {/* Brand Text - Using Montserrat for professional look */}
       {showText && (
         <span className={`font-montserrat font-bold ${textSizeClasses[size]} ${getTextColor()} tracking-tight`}>
           BestByte
