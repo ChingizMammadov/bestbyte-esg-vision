@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
@@ -28,7 +27,9 @@ export default function Settings() {
           <header className="bg-white border-b border-gray-200 px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <SidebarTrigger />
+                <div className="hidden lg:block">
+                  <SidebarTrigger />
+                </div>
                 <Link to="/dashboard" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
                   <ArrowLeft className="w-4 h-4" />
                   <span className="hidden sm:inline">Back to Dashboard</span>

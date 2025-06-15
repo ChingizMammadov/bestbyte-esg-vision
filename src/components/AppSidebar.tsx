@@ -25,7 +25,7 @@ export function AppSidebar() {
   const { pathname } = useLocation();
 
   return (
-    <div className="hidden md:block">
+    <div className="hidden lg:block">
       <Sidebar>
         <SidebarContent>
           <SidebarGroup>
