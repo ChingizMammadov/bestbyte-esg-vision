@@ -4,7 +4,7 @@ import { Button, ButtonProps } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
 
-interface PremiumButtonProps extends ButtonProps {
+interface PremiumButtonProps extends Omit<ButtonProps, 'variant'> {
   icon?: LucideIcon;
   variant?: 'primary' | 'secondary';
   glow?: boolean;
