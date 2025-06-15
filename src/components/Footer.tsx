@@ -59,9 +59,9 @@ export const Footer = () => (
               aria-label="Follow us on X (formerly Twitter)"
             >
               <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/X_logo.jpg/1200px-X_logo.jpg" 
+                src="https://pngate.com/wp-content/uploads/2025/03/x-social-media-logo-2025-dark-letter-x-1.png" 
                 alt="X logo" 
-                className="w-4 h-4 object-contain filter brightness-0 dark:brightness-100"
+                className="w-4 h-4 object-contain"
               />
             </a>
             <a 

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { BIcon } from './BIcon';
 
 interface BestByteLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -14,13 +15,6 @@ export const BestByteLogo: React.FC<BestByteLogoProps> = ({
   showText = true,
   className = ''
 }) => {
-  const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8',
-    lg: 'w-10 h-10',
-    xl: 'w-12 h-12'
-  };
-
   const textSizeClasses = {
     sm: 'text-lg',
     md: 'text-xl',
@@ -42,13 +36,7 @@ export const BestByteLogo: React.FC<BestByteLogoProps> = ({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {/* Logo Icon */}
-      <div className={`${sizeClasses[size]} flex-shrink-0 relative`}>
-        <img
-          src="/lovable-uploads/fb131415-b7a4-4625-8e94-80178d1dec22.png"
-          alt="BestByte logo"
-          className="w-full h-full object-contain"
-        />
-      </div>
+      <BIcon size={size} />
 
       {/* Brand Text */}
       {showText && (
