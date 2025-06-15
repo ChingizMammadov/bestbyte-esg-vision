@@ -33,33 +33,39 @@ export default function Dashboard() {
         <AppSidebar />
         <div className="flex flex-col flex-1 min-w-0">
           <DashboardHeader />
-          <main className="flex-1 min-h-0 p-4 md:p-6">
+          <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6">
             {/* Filter Controls with Seed Button */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <FilterControls 
-                selectedPeriod={selectedPeriod}
-                setSelectedPeriod={setSelectedPeriod}
-                selectedRegion={selectedRegion}
-                setSelectedRegion={setSelectedRegion}
-              />
-              <SeedDataButton />
+            <div className="flex flex-col gap-3 md:gap-4 mb-4 md:mb-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <FilterControls 
+                  selectedPeriod={selectedPeriod}
+                  setSelectedPeriod={setSelectedPeriod}
+                  selectedRegion={selectedRegion}
+                  setSelectedRegion={setSelectedRegion}
+                />
+                <div className="w-full md:w-auto">
+                  <SeedDataButton />
+                </div>
+              </div>
             </div>
 
             {/* Real-time Data Cards */}
-            <DataCards />
+            <div className="mb-4 md:mb-6">
+              <DataCards />
+            </div>
 
             {/* ESG Score Breakdown at the top */}
-            <motion.div {...cardMotion}>
+            <motion.div {...cardMotion} className="mb-4 md:mb-6">
               <ESGScoreBreakdownChart />
             </motion.div>
 
             {/* Detailed ESG Metrics Tabs */}
-            <motion.div {...cardMotion} className="mt-6">
+            <motion.div {...cardMotion} className="mb-4 md:mb-6">
               <TabNavigation />
             </motion.div>
 
             {/* Main dashboard charts */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-6">
               <motion.div {...cardMotion}>
                 <MetricsPieChart />
               </motion.div>
@@ -72,7 +78,7 @@ export default function Dashboard() {
             </div>
 
             {/* Activity Feed and Alerts */}
-            <div className="w-full mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
               <motion.div {...cardMotion} className="lg:col-span-2">
                 <ActivityFeed />
               </motion.div>

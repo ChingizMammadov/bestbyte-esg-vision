@@ -34,52 +34,53 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="w-full py-4 px-4 md:px-6 bg-white/95 border-b border-gray-200 shadow-sm">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-        {/* Company and Greeting Section */}
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="lg:hidden" />
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-              Acme Corp
-            </h1>
-            <p className="text-sm text-gray-600">{getGreeting()}</p>
-            <p className="text-xs text-gray-500">{getCurrentDate()}</p>
+    <header className="w-full py-3 md:py-4 px-3 md:px-6 bg-white/95 border-b border-gray-200 shadow-sm">
+      <div className="flex flex-col gap-3 md:gap-4">
+        {/* Top row - Company and mobile trigger */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 md:gap-4">
+            <SidebarTrigger className="lg:hidden" />
+            <div>
+              <h1 className="text-lg md:text-xl xl:text-2xl font-bold text-gray-900">
+                Acme Corp
+              </h1>
+              <p className="text-xs md:text-sm text-gray-600">{getGreeting()}</p>
+              <p className="text-xs text-gray-500 hidden sm:block">{getCurrentDate()}</p>
+            </div>
+          </div>
+
+          {/* User info - always visible but compact on mobile */}
+          <div className="flex items-center gap-2 bg-gray-50 px-2 md:px-4 py-1.5 md:py-2 rounded-lg">
+            <User className="w-4 h-4 text-gray-600 flex-shrink-0" />
+            <div className="text-xs md:text-sm min-w-0">
+              <span className="text-gray-600 hidden sm:inline">Logged in as </span>
+              <span className="font-semibold text-gray-900 truncate block sm:inline">{user?.email}</span>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleLogout}
+              className="flex items-center gap-1 md:gap-2 hover:bg-red-100 hover:text-red-600 transition-colors p-1 md:p-2"
+            >
+              <LogOut className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="hidden md:inline">Log Out</span>
+            </Button>
           </div>
         </div>
 
-        {/* Search and Controls */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
-          <div className="relative w-full sm:w-auto">
+        {/* Search and Controls - stacked on mobile */}
+        <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+          <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input 
               placeholder="Search ESG data..." 
-              className="pl-10 w-full sm:w-64 bg-white border-gray-300 focus:border-blue-500" 
+              className="pl-10 bg-white border-gray-300 focus:border-blue-500 text-sm" 
             />
           </div>
-          <Button variant="outline" className="w-full sm:w-auto bg-white border-gray-300 hover:bg-gray-50">
+          <Button variant="outline" className="bg-white border-gray-300 hover:bg-gray-50 text-sm">
             <Calendar className="mr-2 h-4 w-4" />
-            Select Period
-          </Button>
-        </div>
-
-        {/* User Info and Logout */}
-        <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg w-full lg:w-auto justify-between lg:justify-start">
-          <div className="flex items-center gap-2">
-            <User className="w-5 h-5 text-gray-600" />
-            <div className="text-sm">
-              <span className="text-gray-600">Logged in as </span>
-              <span className="font-semibold text-gray-900">{user?.email}</span>
-            </div>
-          </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleLogout}
-            className="flex items-center gap-2 hover:bg-red-100 hover:text-red-600 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Log Out</span>
+            <span className="hidden sm:inline">Select Period</span>
+            <span className="sm:hidden">Period</span>
           </Button>
         </div>
       </div>
