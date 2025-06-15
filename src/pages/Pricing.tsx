@@ -50,41 +50,44 @@ export default function Pricing() {
     <div className="flex flex-col min-h-screen bg-background font-sans">
       <Navbar />
       <main className="flex-1">
-        <section className="container py-12 md:py-20">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center px-4">Pricing & Plans</h1>
-          <p className="mb-8 md:mb-12 text-base md:text-lg text-center text-muted-foreground px-4 max-w-3xl mx-auto">
+        <section className="container py-8 md:py-12">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-center px-4">Pricing & Plans</h1>
+          <p className="mb-6 md:mb-8 text-base md:text-lg text-center text-muted-foreground px-4 max-w-3xl mx-auto">
             Choose the plan that fits your sustainability goals and business needs.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto px-4">
             {plans.map((plan, idx) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl border px-6 md:px-8 py-8 md:py-12 bg-white shadow-lg flex flex-col items-center transition hover:scale-105 duration-200 ${
-                  plan.popular ? "border-4 border-primary shadow-2xl" : ""
+                className={`rounded-2xl border px-4 md:px-6 py-6 md:py-8 bg-white shadow-lg flex flex-col items-center transition hover:scale-105 duration-200 ${
+                  plan.popular ? "border-2 border-primary shadow-xl" : ""
                 }`}
               >
                 {plan.popular && (
-                  <span className="mb-2 px-3 py-1 text-xs bg-primary text-white rounded-full uppercase tracking-wider font-bold animate-pulse">
+                  <span className="mb-2 px-3 py-1 text-xs bg-primary text-white rounded-full uppercase tracking-wider font-bold">
                     Most Popular
                   </span>
                 )}
-                <h2 className="text-xl md:text-2xl font-bold mb-2">{plan.name}</h2>
-                <div className="text-3xl md:text-4xl font-extrabold mb-4 text-primary flex items-end gap-1">
+                <h2 className="text-lg md:text-xl font-bold mb-2">{plan.name}</h2>
+                <div className="text-2xl md:text-3xl font-extrabold mb-3 text-primary flex items-end gap-1">
                   ${plan.price}
-                  <span className="text-sm md:text-base font-normal text-gray-500">/ {plan.period}</span>
+                  <span className="text-sm font-normal text-gray-500">/ {plan.period}</span>
                 </div>
-                <ul className="mb-6 md:mb-8 space-y-2 text-left w-full text-gray-700 text-sm md:text-base">
+                <ul className="mb-4 md:mb-6 space-y-1.5 text-left w-full text-gray-700 text-sm">
                   {plan.features.map((f, i) => (
-                    <li key={i}>• {f}</li>
+                    <li key={i} className="flex items-start">
+                      <span className="text-primary mr-2 mt-0.5">•</span>
+                      <span className="flex-1">{f}</span>
+                    </li>
                   ))}
                 </ul>
-                <button className="w-full px-6 md:px-8 py-3 rounded-lg bg-primary text-white font-semibold text-base md:text-lg hover:bg-emerald-700 transition">
+                <button className="w-full px-4 md:px-6 py-2.5 rounded-lg bg-primary text-white font-semibold text-sm md:text-base hover:bg-emerald-700 transition mt-auto">
                   {plan.cta}
                 </button>
               </div>
             ))}
           </div>
-          <p className="mt-8 md:mt-12 text-center text-gray-500 text-sm px-4">
+          <p className="mt-6 md:mt-8 text-center text-gray-500 text-sm px-4">
             Need a custom solution? <a href="mailto:hello@bestbyte.com" className="text-primary underline">Contact our team</a>
           </p>
         </section>
