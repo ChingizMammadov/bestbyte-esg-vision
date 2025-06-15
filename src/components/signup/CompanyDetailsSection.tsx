@@ -64,8 +64,11 @@ export function CompanyDetailsSection({
             {isMobile ? (
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="text-sm h-11 md:h-10 justify-between">
-                    <SelectValue placeholder="Select industry" className="text-muted-foreground" />
+                  <SelectTrigger className={cn(
+                    "text-sm h-11 md:h-10 justify-between",
+                    !field.value && "text-muted-foreground"
+                  )}>
+                    <SelectValue placeholder="Select industry" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="max-h-60">
