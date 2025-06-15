@@ -1,15 +1,49 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Users, ShieldCheck, Vote, DollarSign } from "lucide-react";
 
 const boardDiversityData = [
-  { name: "Female Members", value: 30, color: "#EC4899" },
-  { name: "Minority Members", value: 20, color: "#10B981" },
-  { name: "Other", value: 50, color: "#6B7280" },
+  { name: "Female Members", value: 30, color: "#4CAF50" },
+  { name: "Minority Members", value: 20, color: "#F06292" },
+  { name: "Other", value: 50, color: "#BDBDBD" },
 ];
+
+const RADIAN = Math.PI / 180;
+const CustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name, color }) => {
+    // Label for percentage inside the slice
+    const radiusInside = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const xInside = cx + radiusInside * Math.cos(-midAngle * RADIAN);
+    const yInside = cy + radiusInside * Math.sin(-midAngle * RADIAN);
+
+    // Label for name outside the slice with leader line
+    const radiusOutside = outerRadius + 25;
+    const xOutside = cx + radiusOutside * Math.cos(-midAngle * RADIAN);
+    const yOutside = cy + radiusOutside * Math.sin(-midAngle * RADIAN);
+    const textAnchor = xOutside > cx ? 'start' : 'end';
+
+    // Leader line
+    const xLineStart = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
+    const yLineStart = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
+
+    return (
+        <g>
+            <text x={xInside} y={yInside} fill="white" textAnchor="middle" dominantBaseline="central" className="font-bold text-lg" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.7)' }}>
+                {`${(percent * 100).toFixed(0)}%`}
+            </text>
+            
+            <path d={`M${xLineStart},${yLineStart}L${xOutside},${yOutside}`} stroke={color} fill="none" />
+            <circle cx={xLineStart} cy={yLineStart} r={2} fill={color} stroke="none" />
+
+            <text x={xOutside + (textAnchor === 'start' ? 1 : -1) * 6} y={yOutside} textAnchor={textAnchor} fill="hsl(var(--foreground))" dominantBaseline="central" className="text-sm font-medium">
+                {name}
+            </text>
+        </g>
+    );
+};
+
 
 const shareholderRightsData = [
   { year: "2020", votingRights: 75 },
@@ -28,6 +62,21 @@ const executiveCompData = [
 const antiCorruptionTraining = 100;
 
 export function GovernanceMetrics() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+
+  const onPieLeave = () => {
+    setActiveIndex(null);
+  };
+
+  const onPieClick = (_: any, index: number) => {
+    setClickedIndex(clickedIndex === index ? null : index);
+  };
+
   return (
     <div className="space-y-6">
       {/* Board Diversity and Anti-Corruption */}
@@ -41,21 +90,55 @@ export function GovernanceMetrics() {
             <CardDescription className="text-gray-600">Gender and ethnicity representation</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                 <Pie
                   dataKey="value"
                   data={boardDiversityData}
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
-                  label={({ name, value }) => `${name}: ${value}%`}
+                  innerRadius={40}
+                  paddingAngle={2}
+                  labelLine={false}
+                  label={<CustomizedLabel />}
+                  onMouseEnter={onPieEnter}
+                  onMouseLeave={onPieLeave}
+                  onClick={onPieClick}
                 >
-                  {boardDiversityData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                  {boardDiversityData.map((entry, index) => {
+                      const isActive = activeIndex === index || clickedIndex === index;
+                      return (
+                        <Cell 
+                            key={`cell-${index}`} 
+                            fill={entry.color} 
+                            stroke="#fff"
+                            strokeWidth={2}
+                            style={{
+                                cursor: 'pointer',
+                                filter: isActive ? 'brightness(1.1)' : 'brightness(1)',
+                                transform: isActive ? 'scale(1.05)' : 'scale(1)',
+                                transformOrigin: 'center center',
+                                transition: 'transform 0.2s ease-in-out, filter 0.2s ease-in-out',
+                            }}
+                        />
+                      )
+                  })}
                 </Pie>
-                <Tooltip />
+                <Tooltip 
+                  cursor={{fill: 'transparent'}}
+                  content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                          return (
+                              <div className="bg-background p-2 border rounded-lg shadow-lg">
+                                  <p className="font-bold text-foreground">{`${payload[0].name}`}</p>
+                                  <p className="text-sm text-muted-foreground">{`Value: ${payload[0].value}%`}</p>
+                              </div>
+                          );
+                      }
+                      return null;
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
