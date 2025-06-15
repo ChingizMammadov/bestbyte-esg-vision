@@ -1,9 +1,9 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Check, Star, Zap, Shield, Award } from "lucide-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
@@ -69,6 +69,16 @@ const trustBadges = [
 ];
 
 export default function Pricing() {
+  const navigate = useNavigate();
+
+  const handleStartTrial = () => {
+    navigate("/signup");
+  };
+
+  const handleContactSales = () => {
+    window.location.href = "mailto:hello@bestbyte.com";
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800 font-inter text-gray-900 dark:text-white transition-colors duration-300">
       <Navbar />
@@ -77,16 +87,16 @@ export default function Pricing() {
         <div className="absolute inset-0 overflow-hidden">
           {/* Light Mode Background */}
           <div className="dark:hidden">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-100/60 rounded-full blur-3xl animate-blob"></div>
-            <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-teal-100/60 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl animate-blob"></div>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-emerald-100/60 to-teal-100/40 rounded-full blur-3xl animate-blob"></div>
+            <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-100/50 to-purple-100/30 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+            <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-gradient-to-r from-teal-100/40 to-emerald-100/30 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
           </div>
           
           {/* Dark Mode Background */}
           <div className="hidden dark:block">
             <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-blob"></div>
             <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"></div>
+            <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
           </div>
         </div>
 
@@ -129,11 +139,11 @@ export default function Pricing() {
                   )}
                   
                   <div
-                    className={`relative h-full bg-white/80 dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl shadow-lg ${
+                    className={`relative h-full transition-all duration-500 hover:scale-105 hover:shadow-2xl shadow-lg ${
                       plan.popular
-                        ? "border-emerald-300 dark:border-emerald-500/50 shadow-emerald-200/50 dark:shadow-emerald-500/20 hover:shadow-emerald-300/60 dark:hover:shadow-emerald-500/30"
-                        : "border-gray-200 dark:border-gray-700/50 hover:border-gray-300 dark:hover:border-gray-600/50 hover:shadow-gray-200/60 dark:hover:shadow-gray-500/10"
-                    }`}
+                        ? "bg-white/95 dark:bg-gradient-to-br dark:from-gray-800/80 dark:to-gray-900/60 border-2 border-emerald-300 dark:border-emerald-500/50 shadow-emerald-200/50 dark:shadow-emerald-500/20 hover:shadow-emerald-300/60 dark:hover:shadow-emerald-500/30"
+                        : "bg-white/90 dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-gray-300 dark:hover:border-gray-600/50 hover:shadow-gray-200/60 dark:hover:shadow-gray-500/10"
+                    } backdrop-blur-sm rounded-3xl p-8`}
                   >
                     {/* Plan Header */}
                     <div className="flex items-center gap-3 mb-6">
@@ -168,9 +178,12 @@ export default function Pricing() {
 
                     {/* CTA Button */}
                     <button
+                      onClick={plan.cta === "Contact Sales" ? handleContactSales : handleStartTrial}
                       className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 ${
                         plan.popular
                           ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400 shadow-lg hover:shadow-emerald-500/25"
+                          : plan.cta === "Contact Sales"
+                          ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 shadow-lg hover:shadow-purple-500/25"
                           : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200 dark:border-white/20 hover:border-gray-300 dark:hover:border-white/30"
                       }`}
                     >
@@ -215,12 +228,12 @@ export default function Pricing() {
               <p className="text-gray-600 dark:text-gray-300 mb-6">
                 Contact our team for enterprise pricing and custom integrations tailored to your needs.
               </p>
-              <a 
-                href="mailto:hello@bestbyte.com" 
+              <button 
+                onClick={handleContactSales}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-purple-500 hover:to-indigo-500 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
               >
                 Contact Our Team
-              </a>
+              </button>
             </div>
           </div>
         </section>
