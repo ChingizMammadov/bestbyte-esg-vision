@@ -115,20 +115,20 @@ export default function Pricing() {
             </p>
           </div>
 
-          {/* Pricing Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 items-end">
+          {/* Pricing Cards - All aligned on same horizontal line */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
             {plans.map((plan, idx) => {
               const IconComponent = plan.icon;
               return (
                 <div
                   key={plan.name}
-                  className={`relative group animate-fade-in ${
-                    plan.popular ? "lg:-mt-8 lg:mb-8 lg:scale-105" : ""
+                  className={`relative group animate-fade-in flex flex-col ${
+                    plan.popular ? "lg:pt-8" : "lg:pt-14"
                   }`}
                   style={{ animationDelay: `${idx * 200}ms` }}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20">
+                    <div className="absolute -top-0 left-1/2 transform -translate-x-1/2 z-20 mb-2">
                       <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg animate-pulse">
                         MOST POPULAR
                       </span>
