@@ -3,6 +3,7 @@ import React from 'react';
 import { Control } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 interface ESGPreferencesSectionProps {
   control: Control<any>;
@@ -24,7 +25,10 @@ export function ESGPreferencesSection({ control }: ESGPreferencesSectionProps) {
             <FormLabel>Primary ESG Focus Area *</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="text-sm h-11 md:h-10 justify-between">
+                <SelectTrigger className={cn(
+                  "text-sm h-11 md:h-10 justify-between",
+                  !field.value && "text-muted-foreground"
+                )}>
                   <SelectValue placeholder="Select ESG focus" />
                 </SelectTrigger>
               </FormControl>
@@ -49,7 +53,10 @@ export function ESGPreferencesSection({ control }: ESGPreferencesSectionProps) {
             <FormLabel>ESG Reporting Type *</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="text-sm h-11 md:h-10 justify-between">
+                <SelectTrigger className={cn(
+                  "text-sm h-11 md:h-10 justify-between",
+                  !field.value && "text-muted-foreground"
+                )}>
                   <SelectValue placeholder="Select reporting type" />
                 </SelectTrigger>
               </FormControl>

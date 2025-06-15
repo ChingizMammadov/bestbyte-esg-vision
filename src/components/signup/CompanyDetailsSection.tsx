@@ -65,7 +65,7 @@ export function CompanyDetailsSection({
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="text-sm h-11 md:h-10 justify-between">
-                    <SelectValue placeholder="Select industry" />
+                    <SelectValue placeholder="Select industry" className="text-muted-foreground" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="max-h-60">
@@ -161,7 +161,10 @@ export function CompanyDetailsSection({
             <FormLabel>Company Size *</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="text-sm h-11 md:h-10 justify-between">
+                <SelectTrigger className={cn(
+                  "text-sm h-11 md:h-10 justify-between",
+                  !field.value && "text-muted-foreground"
+                )}>
                   <SelectValue placeholder="Select company size" />
                 </SelectTrigger>
               </FormControl>
