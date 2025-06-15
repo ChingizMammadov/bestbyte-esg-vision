@@ -1,13 +1,13 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Eye, EyeOff, Shield, CheckCircle, AlertCircle, Lock } from "lucide-react";
+import { Eye, EyeOff, Shield, CheckCircle, AlertCircle, Lock, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -22,6 +22,7 @@ export default function ResetPassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordResetComplete, setPasswordResetComplete] = useState(false);
+  const [isLinkInvalid, setIsLinkInvalid] = useState(false);
   const [errors, setErrors] = useState({
     password: "",
     confirmPassword: ""
@@ -46,8 +47,15 @@ export default function ResetPassword() {
     return { text: "Very Strong", color: "text-green-500" };
   };
 
+  const getStrengthFeedback = (score: number) => {
+    if (score < 50) return "Your password is weak. Please use a mix of letters, numbers, and symbols.";
+    if (score < 80) return "Good strength. You can make it stronger with more symbols or length.";
+    return "Excellent strength! This is a very secure password.";
+  };
+
   const passwordStrength = calculatePasswordStrength(formData.password);
   const strengthInfo = getStrengthText(passwordStrength);
+  const strengthFeedback = getStrengthFeedback(passwordStrength);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -76,7 +84,7 @@ export default function ResetPassword() {
     if (!formData.confirmPassword.trim()) {
       newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = "The passwords you entered do not match. Please try again.";
     }
 
     setErrors(newErrors);
@@ -137,14 +145,55 @@ export default function ResetPassword() {
     const refreshToken = searchParams.get('refresh_token');
     
     if (!accessToken || !refreshToken) {
+      setIsLinkInvalid(true);
       toast({
         title: "Invalid Link",
         description: "This password reset link is invalid or has expired.",
         variant: "destructive",
       });
-      navigate("/forgot-password");
     }
-  }, [searchParams, navigate, toast]);
+  }, [searchParams, toast]);
+
+  if (isLinkInvalid) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center py-8 md:py-16 px-4">
+            <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-w-md"
+            >
+            <div className="bg-white/90 dark:bg-slate-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/60 dark:border-slate-700/60 p-6 md:p-8 transition-all duration-300 text-center">
+                <div className="mb-6">
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                        Oops! The password reset link has expired.
+                    </h1>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base mb-4">
+                        For your security, reset links are only valid for a short period of time.
+                    </p>
+                </div>
+
+                <div className="space-y-4">
+                    <Link
+                        to="/forgot-password"
+                        className="inline-block w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm md:text-base"
+                    >
+                        Request a new link
+                    </Link>
+                </div>
+            </div>
+            </motion.div>
+        </main>
+        <ChatbotWidget />
+        <Footer />
+    </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
@@ -168,8 +217,8 @@ export default function ResetPassword() {
                   <h1 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2">
                     Reset Your Password
                   </h1>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base">
-                    Please enter a new password below.
+                   <p className="text-center text-slate-600 dark:text-slate-300 text-sm md:text-base mb-4">
+                    We’re here to help you get back on track. Just enter a new password below and you’re all set!
                   </p>
                   <p className="text-slate-500 dark:text-slate-400 text-xs mt-2">
                     This is a secure page where you can set a new password for your account.
@@ -179,8 +228,18 @@ export default function ResetPassword() {
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                      New Password *
+                    <label className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      <span>New Password *</span>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button type="button" className="ml-1.5 align-middle">
+                            <Info size={14} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Use at least 8 characters, including a mix of letters, numbers, and symbols.</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
@@ -226,7 +285,7 @@ export default function ResetPassword() {
                           </span>
                         </div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                          Include at least 8 characters with numbers, symbols, and mixed case letters
+                          {strengthFeedback}
                         </p>
                       </motion.div>
                     )}
@@ -256,7 +315,7 @@ export default function ResetPassword() {
                         className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent outline-none transition text-sm md:text-base bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 ${
                           errors.confirmPassword ? "border-red-500" : "border-slate-300 dark:border-slate-600"
                         }`}
-                        placeholder="Confirm your new password"
+                        placeholder="Re-enter your new password"
                       />
                       <button
                         type="button"
@@ -268,8 +327,13 @@ export default function ResetPassword() {
                     </div>
                     {errors.confirmPassword && (
                       <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: -10, x: 0 }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          x: errors.confirmPassword === "The passwords you entered do not match. Please try again." ? [-5, 5, -5, 5, 0] : 0,
+                        }}
+                        transition={{ duration: 0.4 }}
                         className="text-red-500 dark:text-red-400 text-xs mt-2"
                       >
                         {errors.confirmPassword}
@@ -290,7 +354,7 @@ export default function ResetPassword() {
                   <div className="flex items-start gap-2 p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800/50">
                     <Shield className="w-4 h-4 md:w-5 md:h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs md:text-sm text-emerald-800 dark:text-emerald-300">
-                      For your safety, do not share your password with anyone and ensure it's unique
+                      This page is protected by enterprise-grade security and SSL encryption to keep your data safe.
                     </p>
                   </div>
 
