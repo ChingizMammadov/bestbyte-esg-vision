@@ -149,7 +149,7 @@ export default function SignUp() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
       <Navbar />
-      <main className="flex-1 flex items-center justify-center py-4 md:py-16 px-4">
+      <main className="flex-1 flex items-center justify-center py-4 md:py-16 px-4 pb-4">
         <div className="w-full max-w-md">
           <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 md:p-8 transition-all duration-300">
             <SignUpHeader />

@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, BarChart3, FileText, Calculator, Settings, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useAuth } from '@/contexts/AuthContext';
 
 const navigationItems = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -16,6 +17,12 @@ const navigationItems = [
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
+
+  // Only show mobile navigation if user is authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-t border-gray-200 shadow-lg">

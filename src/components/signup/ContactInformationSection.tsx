@@ -241,8 +241,8 @@ export function ContactInformationSection({
   const selectedCountry = countries.find(country => country.id === watchedCountryId);
 
   return (
-    <div className="border-b pb-4">
-      <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact Information</h3>
+    <div className="border-b border-slate-200 dark:border-slate-700 pb-4">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Contact Information</h3>
       
       <FormField 
         control={control} 
