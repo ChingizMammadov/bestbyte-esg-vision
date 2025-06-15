@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Shield, Linkedin, Mail, FileText, Users, X } from "lucide-react";
+import { Shield, Linkedin, Mail, FileText, Users } from "lucide-react";
 
 export const Footer = () => (
   <footer className="w-full border-t border-gray-200 dark:border-gray-700 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50 mt-8 transition-colors duration-300">
@@ -58,7 +58,11 @@ export const Footer = () => (
               className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary transition-all duration-200 hover:scale-105"
               aria-label="Follow us on X (formerly Twitter)"
             >
-              <X className="w-4 h-4" />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/X_logo.jpg/1200px-X_logo.jpg" 
+                alt="X logo" 
+                className="w-4 h-4 object-contain filter dark:invert-0 brightness-0 dark:brightness-100"
+              />
             </a>
             <a 
               href="https://linkedin.com/" 
@@ -67,7 +71,7 @@ export const Footer = () => (
               className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-primary hover:text-white dark:hover:bg-primary transition-all duration-200 hover:scale-105"
               aria-label="Connect with us on LinkedIn"
             >
-              <Linkedin className="w-4 h-4" />
+              <Linkedin className="w-4 h-4 text-gray-700 dark:text-gray-300" />
             </a>
           </div>
         </nav>
