@@ -77,7 +77,7 @@ export function FocusRadarChart() {
           y={labelPoint.y}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="text-sm font-medium fill-gray-700"
+          className="text-xs sm:text-sm font-medium fill-gray-700"
         >
           {item.subject}
         </text>
@@ -104,14 +104,20 @@ export function FocusRadarChart() {
     .join(' ');
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-bold text-gray-900">ESG Focus Radar</CardTitle>
-        <CardDescription className="text-gray-600">2D visualization of ESG performance</CardDescription>
+    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+      <CardHeader className="pb-2 px-3 sm:px-6">
+        <CardTitle className="text-base sm:text-lg font-bold text-gray-900">ESG Focus Radar</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-gray-600">2D visualization of ESG performance</CardDescription>
       </CardHeader>
-      <CardContent className="h-80">
+      <CardContent className="h-64 sm:h-80 px-2 sm:px-6">
         <div className="w-full h-full flex items-center justify-center">
-          <svg width="300" height="300" viewBox="0 0 300 300" className="max-w-full max-h-full">
+          <svg 
+            width="100%" 
+            height="100%" 
+            viewBox="0 0 300 300" 
+            className="max-w-full max-h-full"
+            preserveAspectRatio="xMidYMid meet"
+          >
             {/* Grid circles */}
             {gridCircles}
             
@@ -132,15 +138,17 @@ export function FocusRadarChart() {
           </svg>
         </div>
         
-        <div className="mt-4 flex justify-center space-x-6">
+        <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6">
           {radarData.map((item, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <div 
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: item.color }}
-              />
-              <span className="text-sm font-medium text-gray-700">{item.subject}</span>
-              <span className="text-sm text-gray-500">{item.score}/100</span>
+            <div key={index} className="flex items-center justify-between sm:justify-start space-x-2 p-2 sm:p-0 rounded-lg sm:rounded-none bg-gray-50 sm:bg-transparent">
+              <div className="flex items-center space-x-2">
+                <div 
+                  className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-xs sm:text-sm font-medium text-gray-700">{item.subject}</span>
+              </div>
+              <span className="text-xs sm:text-sm text-gray-500 sm:ml-1">{item.score}/100</span>
             </div>
           ))}
         </div>

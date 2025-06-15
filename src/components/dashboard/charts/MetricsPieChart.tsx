@@ -13,9 +13,9 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white p-4 border rounded-lg shadow-lg border-gray-200" role="tooltip">
-        <p className="font-semibold text-gray-900 mb-1">{data.name}</p>
-        <p className="text-sm text-gray-600 mb-1">{data.value}% ({data.value} {data.unit})</p>
+      <div className="bg-white p-2 sm:p-4 border rounded-lg shadow-lg border-gray-200 max-w-xs" role="tooltip">
+        <p className="font-semibold text-sm sm:text-base text-gray-900 mb-1">{data.name}</p>
+        <p className="text-xs sm:text-sm text-gray-600 mb-1">{data.value}% ({data.value} {data.unit})</p>
         <p className="text-xs text-gray-500">{data.description}</p>
       </div>
     );
@@ -35,12 +35,12 @@ export function MetricsPieChart() {
   };
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300" role="region" aria-labelledby="pie-chart-title">
-      <CardHeader className="pb-2">
-        <CardTitle id="pie-chart-title" className="text-lg font-bold text-gray-900">Carbon / Water / Energy</CardTitle>
-        <CardDescription className="text-gray-600">Interactive breakdown of core ESG metrics</CardDescription>
+    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden" role="region" aria-labelledby="pie-chart-title">
+      <CardHeader className="pb-2 px-3 sm:px-6">
+        <CardTitle id="pie-chart-title" className="text-base sm:text-lg font-bold text-gray-900">Carbon / Water / Energy</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-gray-600">Interactive breakdown of core ESG metrics</CardDescription>
       </CardHeader>
-      <CardContent className="pb-6">
+      <CardContent className="pb-4 sm:pb-6 px-2 sm:px-6">
         <div className="sr-only">
           <h3>ESG Metrics Data</h3>
           <ul>
@@ -51,52 +51,76 @@ export function MetricsPieChart() {
             ))}
           </ul>
         </div>
-        <ResponsiveContainer width="100%" height={250}>
-          <PieChart>
-            <ChartTooltip content={<CustomTooltip />} />
-            <Pie
-              dataKey="value"
-              data={esgData}
-              cx="50%"
-              cy="45%"
-              outerRadius={80}
-              innerRadius={35}
-              paddingAngle={3}
-              label={false}
-              labelLine={false}
-              isAnimationActive={true}
-              animationDuration={800}
-              onMouseEnter={onPieEnter}
-              onMouseLeave={onPieLeave}
-            >
-              {esgData.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={entry.color} 
-                  stroke={entry.color}
-                  className="hover:opacity-80 transition-opacity cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  style={{
-                    filter: activeIndex === index ? 'brightness(1.1)' : 'brightness(1)',
-                    transform: activeIndex === index ? 'scale(1.05)' : 'scale(1)',
-                  }}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`${entry.name}: ${entry.value}% - ${entry.description}`}
+        <div className="w-full overflow-hidden">
+          <ResponsiveContainer width="100%" height={220} minWidth={250}>
+            <PieChart margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+              <ChartTooltip content={<CustomTooltip />} />
+              <Pie
+                dataKey="value"
+                data={esgData}
+                cx="50%"
+                cy="45%"
+                outerRadius="35%"
+                innerRadius="15%"
+                paddingAngle={3}
+                label={false}
+                labelLine={false}
+                isAnimationActive={true}
+                animationDuration={800}
+                onMouseEnter={onPieEnter}
+                onMouseLeave={onPieLeave}
+              >
+                {esgData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.color} 
+                    stroke={entry.color}
+                    className="hover:opacity-80 transition-opacity cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    style={{
+                      filter: activeIndex === index ? 'brightness(1.1)' : 'brightness(1)',
+                      transform: activeIndex === index ? 'scale(1.05)' : 'scale(1)',
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`${entry.name}: ${entry.value}% - ${entry.description}`}
+                  />
+                ))}
+              </Pie>
+              <Legend 
+                verticalAlign="bottom" 
+                height={40}
+                wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }}
+                formatter={(value, entry: any) => (
+                  <span style={{ color: entry.color }} className="text-xs sm:text-sm font-medium px-1">
+                    {value}
+                  </span>
+                )}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        
+        {/* Mobile-friendly data cards */}
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:hidden">
+          {esgData.map((entry, index) => (
+            <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-4 h-4 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: entry.color }}
                 />
-              ))}
-            </Pie>
-            <Legend 
-              verticalAlign="bottom" 
-              height={50}
-              wrapperStyle={{ paddingTop: '10px' }}
-              formatter={(value, entry: any) => (
-                <span style={{ color: entry.color }} className="text-sm font-medium px-2">
-                  {value}
-                </span>
-              )}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+                <div>
+                  <span className="text-sm font-medium text-gray-900 block">{entry.name}</span>
+                  <span className="text-xs text-gray-500">{entry.description}</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-lg font-bold" style={{ color: entry.color }}>{entry.value}%</span>
+                <span className="text-xs text-gray-500 block">{entry.value} {entry.unit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

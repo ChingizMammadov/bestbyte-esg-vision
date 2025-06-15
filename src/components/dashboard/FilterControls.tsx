@@ -19,19 +19,19 @@ export function FilterControls({
   setSelectedRegion 
 }: FilterControlsProps) {
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg w-full">
-      <CardContent className="p-3 md:p-4">
-        <div className="flex flex-col gap-3">
+    <Card className="bg-white border rounded-2xl shadow-lg w-full overflow-hidden">
+      <CardContent className="p-2 sm:p-3 md:p-4">
+        <div className="flex flex-col gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-600 flex-shrink-0" />
-            <span className="text-sm font-medium text-gray-700">Filters:</span>
+            <Filter className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Filters:</span>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex items-center gap-2 flex-1">
-              <Calendar className="w-4 h-4 text-gray-500 flex-shrink-0" />
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 flex-shrink-0" />
               <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                <SelectTrigger className="w-full sm:w-32">
+                <SelectTrigger className="w-full sm:w-32 h-8 sm:h-10 text-xs sm:text-sm">
                   <SelectValue placeholder="Period" />
                 </SelectTrigger>
                 <SelectContent>
@@ -42,10 +42,10 @@ export function FilterControls({
               </Select>
             </div>
 
-            <div className="flex items-center gap-2 flex-1">
-              <Globe className="w-4 h-4 text-gray-500 flex-shrink-0" />
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <Globe className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 flex-shrink-0" />
               <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                <SelectTrigger className="w-full sm:w-40">
+                <SelectTrigger className="w-full sm:w-40 h-8 sm:h-10 text-xs sm:text-sm">
                   <SelectValue placeholder="Region" />
                 </SelectTrigger>
                 <SelectContent>
@@ -64,7 +64,7 @@ export function FilterControls({
                 setSelectedPeriod("monthly");
                 setSelectedRegion("global");
               }}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
             >
               Reset Filters
             </Button>

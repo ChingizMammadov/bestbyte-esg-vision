@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -52,21 +53,19 @@ const CustomizedLabel = ({
   name: string;
   color: string;
 }) => {
-    // Label for percentage inside the slice
     const radiusInside = innerRadius + (outerRadius - innerRadius) * 0.5;
     const xInside = cx + radiusInside * Math.cos(-midAngle * RADIAN);
     const yInside = cy + radiusInside * Math.sin(-midAngle * RADIAN);
 
-    // Only show percentage if slice is large enough
     if (percent < 0.05) return null;
 
-    // Label for name outside the slice with leader line
-    const radiusOutside = outerRadius + 30;
+    // Responsive label positioning based on screen size
+    const isSmallScreen = window.innerWidth < 768;
+    const radiusOutside = outerRadius + (isSmallScreen ? 20 : 30);
     const xOutside = cx + radiusOutside * Math.cos(-midAngle * RADIAN);
     const yOutside = cy + radiusOutside * Math.sin(-midAngle * RADIAN);
     const textAnchor = xOutside > cx ? 'start' : 'end';
 
-    // Leader line
     const xLineStart = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
     const yLineStart = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
 
@@ -78,25 +77,29 @@ const CustomizedLabel = ({
                 fill="white" 
                 textAnchor="middle" 
                 dominantBaseline="central" 
-                className="font-bold text-sm" 
+                className={`font-bold ${isSmallScreen ? 'text-xs' : 'text-sm'}`}
                 style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}
             >
                 {`${(percent * 100).toFixed(0)}%`}
             </text>
             
-            <path d={`M${xLineStart},${yLineStart}L${xOutside},${yOutside}`} stroke={color} strokeWidth={1} fill="none" />
-            <circle cx={xLineStart} cy={yLineStart} r={2} fill={color} stroke="none" />
+            {!isSmallScreen && (
+              <>
+                <path d={`M${xLineStart},${yLineStart}L${xOutside},${yOutside}`} stroke={color} strokeWidth={1} fill="none" />
+                <circle cx={xLineStart} cy={yLineStart} r={2} fill={color} stroke="none" />
 
-            <text 
-                x={xOutside + (textAnchor === 'start' ? 1 : -1) * 8} 
-                y={yOutside} 
-                textAnchor={textAnchor} 
-                fill="hsl(var(--foreground))" 
-                dominantBaseline="central" 
-                className="text-sm font-medium"
-            >
-                {name}
-            </text>
+                <text 
+                    x={xOutside + (textAnchor === 'start' ? 1 : -1) * 8} 
+                    y={yOutside} 
+                    textAnchor={textAnchor} 
+                    fill="hsl(var(--foreground))" 
+                    dominantBaseline="central" 
+                    className="text-xs md:text-sm font-medium"
+                >
+                    {name}
+                </text>
+              </>
+            )}
         </g>
     );
 };
@@ -128,70 +131,88 @@ const DiversityPieChart = ({
   };
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-      <CardHeader className="pb-2">
+    <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
+      <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center gap-2">
           {icon}
-          <CardTitle className="text-lg font-bold text-gray-900">{title}</CardTitle>
+          <CardTitle className="text-base sm:text-lg font-bold text-gray-900 leading-tight">{title}</CardTitle>
         </div>
-        <CardDescription className="text-gray-600">{description}</CardDescription>
+        <CardDescription className="text-xs sm:text-sm text-gray-600">{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart margin={{ top: 20, right: 60, left: 60, bottom: 20 }}>
-            <Pie
-              dataKey="value"
-              data={data}
-              cx="50%"
-              cy="50%"
-              outerRadius={90}
-              innerRadius={45}
-              paddingAngle={2}
-              labelLine={false}
-              label={CustomizedLabel}
-              onMouseEnter={onPieEnter}
-              onMouseLeave={onPieLeave}
-              onClick={onPieClick}
-              animationDuration={800}
-              animationBegin={0}
-            >
-              {data.map((entry, index) => {
-                  const isActive = activeIndex === index || clickedIndex === index;
-                  return (
-                    <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.color} 
-                        stroke="#fff"
-                        strokeWidth={2}
-                        style={{
-                            cursor: 'pointer',
-                            filter: isActive ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'brightness(1)',
-                            transform: isActive ? 'scale(1.02)' : 'scale(1)',
-                            transformOrigin: 'center center',
-                            transition: 'all 0.2s ease-in-out',
-                        }}
-                    />
-                  )
-              })}
-            </Pie>
-            <Tooltip 
-              cursor={{fill: 'transparent'}}
-              content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                      const data = payload[0].payload;
-                      return (
-                          <div className="bg-white p-3 border rounded-lg shadow-lg border-gray-200">
-                              <p className="font-bold text-gray-900">{data.name}</p>
-                              <p className="text-sm text-gray-600">{data.value}%</p>
-                              <p className="text-xs text-gray-500">{data.description}</p>
-                          </div>
-                      );
-                  }
-                  return null;
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+      <CardContent className="px-2 sm:px-6 pb-4">
+        <div className="w-full overflow-hidden">
+          <ResponsiveContainer width="100%" height={250} minWidth={250}>
+            <PieChart margin={{ top: 10, right: 30, left: 30, bottom: 10 }}>
+              <Pie
+                dataKey="value"
+                data={data}
+                cx="50%"
+                cy="45%"
+                outerRadius="35%"
+                innerRadius="18%"
+                paddingAngle={2}
+                labelLine={false}
+                label={CustomizedLabel}
+                onMouseEnter={onPieEnter}
+                onMouseLeave={onPieLeave}
+                onClick={onPieClick}
+                animationDuration={800}
+                animationBegin={0}
+              >
+                {data.map((entry, index) => {
+                    const isActive = activeIndex === index || clickedIndex === index;
+                    return (
+                      <Cell 
+                          key={`cell-${index}`} 
+                          fill={entry.color} 
+                          stroke="#fff"
+                          strokeWidth={2}
+                          style={{
+                              cursor: 'pointer',
+                              filter: isActive ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'brightness(1)',
+                              transform: isActive ? 'scale(1.02)' : 'scale(1)',
+                              transformOrigin: 'center center',
+                              transition: 'all 0.2s ease-in-out',
+                          }}
+                      />
+                    )
+                })}
+              </Pie>
+              <Tooltip 
+                cursor={{fill: 'transparent'}}
+                content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                            <div className="bg-white p-2 sm:p-3 border rounded-lg shadow-lg border-gray-200 max-w-xs">
+                                <p className="font-bold text-sm sm:text-base text-gray-900">{data.name}</p>
+                                <p className="text-xs sm:text-sm text-gray-600">{data.value}%</p>
+                                <p className="text-xs text-gray-500 mt-1">{data.description}</p>
+                            </div>
+                        );
+                    }
+                    return null;
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        
+        {/* Mobile-friendly legend */}
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:hidden">
+          {data.map((entry, index) => (
+            <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50">
+              <div 
+                className="w-3 h-3 rounded-full flex-shrink-0"
+                style={{ backgroundColor: entry.color }}
+              />
+              <div className="min-w-0 flex-1">
+                <span className="text-xs font-medium text-gray-700 block truncate">{entry.name}</span>
+                <span className="text-xs text-gray-500">{entry.value}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
@@ -216,58 +237,58 @@ const disabilityRepresentation = 8; // 8% disability representation
 
 export function GovernanceMetrics() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Comprehensive Board Diversity Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
         <DiversityPieChart
           data={genderDiversityData}
           title="Gender Diversity"
           description="Board composition by gender"
-          icon={<Users className="w-5 h-5 text-pink-600" />}
+          icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 flex-shrink-0" />}
         />
         
         <DiversityPieChart
           data={ethnicDiversityData}
           title="Ethnic & Racial Diversity"
           description="Board composition by ethnicity"
-          icon={<UserCheck className="w-5 h-5 text-purple-600" />}
+          icon={<UserCheck className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
         <DiversityPieChart
           data={ageDiversityData}
           title="Age Diversity"
           description="Board composition by age groups"
-          icon={<Users className="w-5 h-5 text-blue-600" />}
+          icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />}
         />
         
         <DiversityPieChart
           data={educationDiversityData}
           title="Educational Background"
           description="Board composition by education"
-          icon={<Users className="w-5 h-5 text-green-600" />}
+          icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />}
         />
       </div>
 
       {/* Disability Representation and Anti-Corruption */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
         <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-2 px-3 sm:px-6">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-indigo-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Disability & Accessibility</CardTitle>
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 flex-shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Disability & Accessibility</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Board members with disabilities</CardDescription>
+            <CardDescription className="text-xs sm:text-sm text-gray-600">Board members with disabilities</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-3 sm:px-6">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Representation</span>
-                <span className="text-2xl font-bold text-indigo-600">{disabilityRepresentation}%</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Representation</span>
+                <span className="text-xl sm:text-2xl font-bold text-indigo-600">{disabilityRepresentation}%</span>
               </div>
-              <Progress value={disabilityRepresentation} className="w-full h-3" />
-              <p className="text-sm text-gray-600">
+              <Progress value={disabilityRepresentation} className="w-full h-2 sm:h-3" />
+              <p className="text-xs sm:text-sm text-gray-600">
                 {disabilityRepresentation}% of board members have disclosed disabilities
               </p>
             </div>
@@ -275,21 +296,21 @@ export function GovernanceMetrics() {
         </Card>
 
         <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-2 px-3 sm:px-6">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-green-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Anti-Corruption Training</CardTitle>
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Anti-Corruption Training</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Employee training completion</CardDescription>
+            <CardDescription className="text-xs sm:text-sm text-gray-600">Employee training completion</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-3 sm:px-6">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Training Completion</span>
-                <span className="text-2xl font-bold text-green-600">{antiCorruptionTraining}%</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Training Completion</span>
+                <span className="text-xl sm:text-2xl font-bold text-green-600">{antiCorruptionTraining}%</span>
               </div>
-              <Progress value={antiCorruptionTraining} className="w-full h-3" />
-              <p className="text-sm text-gray-600">
+              <Progress value={antiCorruptionTraining} className="w-full h-2 sm:h-3" />
+              <p className="text-xs sm:text-sm text-gray-600">
                 All employees have completed anti-corruption training
               </p>
             </div>
@@ -299,43 +320,90 @@ export function GovernanceMetrics() {
 
       {/* Shareholder Rights */}
       <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 px-3 sm:px-6">
           <div className="flex items-center gap-2">
-            <Vote className="w-5 h-5 text-purple-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Shareholder Rights</CardTitle>
+            <Vote className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />
+            <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Shareholder Rights</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Voting rights percentage over time</CardDescription>
+          <CardDescription className="text-xs sm:text-sm text-gray-600">Voting rights percentage over time</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={shareholderRightsData}>
-              <XAxis dataKey="year" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Line type="monotone" dataKey="votingRights" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4, fill: "#8B5CF6" }} />
-            </LineChart>
-          </ResponsiveContainer>
+        <CardContent className="px-2 sm:px-6">
+          <div className="w-full overflow-hidden">
+            <ResponsiveContainer width="100%" height={200} minWidth={300}>
+              <LineChart data={shareholderRightsData} margin={{ top: 5, right: 15, left: 15, bottom: 5 }}>
+                <XAxis 
+                  dataKey="year" 
+                  stroke="#6B7280" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke="#6B7280" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    fontSize: '12px',
+                    padding: '8px',
+                    borderRadius: '8px',
+                    border: '1px solid #e5e7eb'
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="votingRights" 
+                  stroke="#8B5CF6" 
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: "#8B5CF6" }} 
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
 
       {/* Executive Compensation */}
       <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 px-3 sm:px-6">
           <div className="flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-yellow-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Executive Compensation</CardTitle>
+            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 flex-shrink-0" />
+            <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Executive Compensation</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Pay ratio compared to median employee salary</CardDescription>
+          <CardDescription className="text-xs sm:text-sm text-gray-600">Pay ratio compared to median employee salary</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={executiveCompData}>
-              <XAxis dataKey="role" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip formatter={(value) => [`${value}x`, "Pay Ratio"]} />
-              <Bar dataKey="ratio" fill="#F59E0B" />
-            </BarChart>
-          </ResponsiveContainer>
+        <CardContent className="px-2 sm:px-6">
+          <div className="w-full overflow-hidden">
+            <ResponsiveContainer width="100%" height={200} minWidth={300}>
+              <BarChart data={executiveCompData} margin={{ top: 5, right: 15, left: 15, bottom: 5 }}>
+                <XAxis 
+                  dataKey="role" 
+                  stroke="#6B7280" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke="#6B7280" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value}x`, "Pay Ratio"]} 
+                  contentStyle={{ 
+                    fontSize: '12px',
+                    padding: '8px',
+                    borderRadius: '8px',
+                    border: '1px solid #e5e7eb'
+                  }}
+                />
+                <Bar dataKey="ratio" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
     </div>

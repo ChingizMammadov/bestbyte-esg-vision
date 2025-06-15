@@ -40,19 +40,19 @@ const dataInsights = [
 
 export function DataCards() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
       {dataInsights.map((insight, index) => (
-        <Card key={index} className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
-              <insight.icon className={`w-4 h-4 ${insight.color}`} />
-              {insight.title}
+        <Card key={index} className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+          <CardHeader className="pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-600 flex items-center gap-2">
+              <insight.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${insight.color} flex-shrink-0`} />
+              <span className="truncate">{insight.title}</span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
             <div className="space-y-1">
-              <p className={`text-2xl font-bold ${insight.color}`}>{insight.value}</p>
-              <p className="text-xs text-gray-500">{insight.description}</p>
+              <p className={`text-lg sm:text-2xl font-bold ${insight.color} leading-tight`}>{insight.value}</p>
+              <p className="text-xs text-gray-500 leading-relaxed">{insight.description}</p>
             </div>
           </CardContent>
         </Card>
