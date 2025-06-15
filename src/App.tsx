@@ -11,6 +11,8 @@ import { MobileNavigation } from "@/components/MobileNavigation";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
@@ -34,6 +36,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/about" element={<About />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/dashboard" element={

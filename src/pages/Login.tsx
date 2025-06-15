@@ -166,6 +166,16 @@ export default function Login() {
                 )}
               </div>
 
+              {/* Forgot Password Link */}
+              <div className="flex justify-end">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition-colors duration-200 hover:underline underline-offset-4"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+
               <div className="flex items-start gap-2 p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800/50">
                 <Shield className="w-4 h-4 md:w-5 md:h-5 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
                 <p className="text-xs md:text-sm text-emerald-800 dark:text-emerald-300">
