@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Linkedin, Mail, FileText, Users, Shield, Lock, Award } from "lucide-react";
+import { Linkedin, Mail, FileText, Users, Shield, Award } from "lucide-react";
 import { BestByteLogo } from "./BestByteLogo";
 
 export const Footer = () => (
@@ -37,7 +37,7 @@ export const Footer = () => (
               href="/privacy" 
               className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 hover:underline underline-offset-4"
             >
-              <Lock className="w-4 h-4" />
+              <Shield className="w-4 h-4" />
               Privacy
             </a>
             <a 
@@ -101,7 +101,7 @@ export const Footer = () => (
               <span className="text-xs font-medium text-green-800 dark:text-green-300">GDPR</span>
             </div>
             <div className="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-full px-3 py-1">
-              <Lock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-xs font-medium text-blue-800 dark:text-blue-300">SOC 2</span>
             </div>
             <div className="flex items-center gap-1 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded-full px-3 py-1">
