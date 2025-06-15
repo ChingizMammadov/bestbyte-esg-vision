@@ -17,6 +17,7 @@ import { AccountSecuritySection } from "@/components/signup/AccountSecuritySecti
 import { ESGPreferencesSection } from "@/components/signup/ESGPreferencesSection";
 import { TermsSection } from "@/components/signup/TermsSection";
 import { SuccessScreen } from "@/components/signup/SuccessScreen";
+import { PremiumButton } from "@/components/signup/PremiumButton";
 import { Shield, User } from "lucide-react";
 
 const formSchema = z.object({
@@ -146,15 +147,15 @@ export default function SignUp() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background font-sans">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 font-sans transition-colors duration-300">
       <Navbar />
       <main className="flex-1 flex items-center justify-center py-4 md:py-16 px-4">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl border p-4 md:p-8">
+          <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 md:p-8 transition-all duration-300">
             <SignUpHeader />
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <CompanyDetailsSection
                   control={form.control}
                   watchedIndustry={watchedIndustry}
@@ -182,22 +183,27 @@ export default function SignUp() {
 
                 <TermsSection control={form.control} />
 
-                {/* Enhanced CTA Button */}
-                <Button 
+                {/* Premium CTA Button */}
+                <PremiumButton 
                   type="submit" 
-                  className="w-full h-12 text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 animate-fade-in" 
+                  variant="primary"
+                  icon={Shield}
+                  glow
+                  className="w-full animate-fade-in" 
                   disabled={form.formState.isSubmitting}
                 >
-                  <Shield className="w-4 h-4 mr-2" />
                   {form.formState.isSubmitting ? "Creating Account..." : "Start Your ESG Journey"}
-                </Button>
+                </PremiumButton>
 
                 {/* Enhanced Account Prompt */}
-                <div className="text-center pt-4 border-t">
-                  <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+                <div className="text-center pt-6 border-t border-slate-200 dark:border-slate-700">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 flex items-center justify-center gap-2">
                     <User className="w-4 h-4" />
                     Already have an account?{" "}
-                    <Link to="/login" className="text-primary font-semibold hover:underline underline-offset-4 transition-all duration-200">
+                    <Link 
+                      to="/login" 
+                      className="text-primary font-semibold hover:underline underline-offset-4 transition-all duration-200 hover:text-primary/80"
+                    >
                       Sign in here
                     </Link>
                   </p>
