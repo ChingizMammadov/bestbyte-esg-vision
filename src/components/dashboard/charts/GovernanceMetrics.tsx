@@ -12,7 +12,7 @@ const boardDiversityData = [
 ];
 
 const RADIAN = Math.PI / 180;
-const CustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name, color }) => {
+const CustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name, color }: any) => {
     // Label for percentage inside the slice
     const radiusInside = innerRadius + (outerRadius - innerRadius) * 0.5;
     const xInside = cx + radiusInside * Math.cos(-midAngle * RADIAN);
@@ -101,7 +101,7 @@ export function GovernanceMetrics() {
                   innerRadius={40}
                   paddingAngle={2}
                   labelLine={false}
-                  label={<CustomizedLabel />}
+                  label={CustomizedLabel}
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
                   onClick={onPieClick}
