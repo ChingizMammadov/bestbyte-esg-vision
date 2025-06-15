@@ -28,8 +28,12 @@ export function DashboardHeader() {
   };
 
   const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -59,6 +63,7 @@ export function DashboardHeader() {
               size="sm" 
               onClick={handleLogout}
               className="flex items-center gap-1 md:gap-2 hover:bg-red-100 hover:text-red-600 transition-colors p-1 md:p-2"
+              title="Log Out"
             >
               <LogOut className="w-3 h-3 md:w-4 md:h-4" />
               <span className="hidden md:inline">Log Out</span>

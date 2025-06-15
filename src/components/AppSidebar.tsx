@@ -1,4 +1,3 @@
-
 import {
   Sidebar,
   SidebarContent,
@@ -14,12 +13,11 @@ import {
 } from "@/components/ui/sidebar";
 import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen, User, LogOut, Search } from "lucide-react";
 import React, { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { BestByteLogo } from "./BestByteLogo";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -66,8 +64,12 @@ export function AppSidebar() {
   };
 
   const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   const isActiveItem = (url: string) => pathname === url;
@@ -239,6 +241,7 @@ export function AppSidebar() {
               size="sm" 
               onClick={handleLogout}
               className="text-gray-400 hover:text-white hover:bg-gray-700 p-2"
+              title="Log Out"
             >
               <LogOut className="w-4 h-4" />
             </Button>
