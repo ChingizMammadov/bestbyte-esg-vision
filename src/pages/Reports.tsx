@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ReportExtractor } from "@/components/reports/ReportExtractor";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FileText, Download, Calendar, Filter } from "lucide-react";
@@ -96,6 +97,11 @@ export default function Reports() {
                     </Button>
                   </div>
                 </div>
+              </div>
+
+              {/* Report Extractor Section */}
+              <div className="mb-8">
+                <ReportExtractor />
               </div>
 
               {/* Reports List */}
