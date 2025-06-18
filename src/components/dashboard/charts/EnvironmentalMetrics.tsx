@@ -149,14 +149,13 @@ export function EnvironmentalMetrics() {
                 cy="50%"
                 outerRadius={100}
                 innerRadius={40}
-                label={({ name, value }) => `${name}: ${value}%`}
+                label={none}
                 labelLine={false}
               >
                 {wasteData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
               <Legend />
             </PieChart>
           </ResponsiveContainer>

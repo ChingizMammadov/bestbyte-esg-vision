@@ -228,7 +228,7 @@ export function ChatbotWidget() {
       <Button
         onClick={handleToggle}
         className={`rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-105 ${
-          isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-emerald-500 hover:bg-emerald-600'
+          isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
         }`}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
