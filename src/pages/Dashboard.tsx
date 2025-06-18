@@ -1,3 +1,4 @@
+
 import { AppSidebar } from "@/components/AppSidebar";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Footer } from "@/components/Footer";
@@ -11,6 +12,8 @@ import { ESGScoreBreakdownChart } from "@/components/dashboard/charts/ESGScoreBr
 import { FilterControls } from "@/components/dashboard/FilterControls";
 import { DataCards } from "@/components/dashboard/DataCards";
 import { TabNavigation } from "@/components/dashboard/TabNavigation";
+import { CompanyOverview } from "@/components/dashboard/CompanyOverview";
+import { EsgTargets } from "@/components/dashboard/EsgTargets";
 import { SeedDataButton } from "@/components/SeedDataButton";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { motion, easeOut } from "framer-motion";
@@ -46,6 +49,16 @@ export default function Dashboard() {
                   <SeedDataButton />
                 </div>
               </div>
+            </div>
+
+            {/* Company Overview and ESG Targets */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+              <motion.div {...cardMotion}>
+                <CompanyOverview />
+              </motion.div>
+              <motion.div {...cardMotion}>
+                <EsgTargets />
+              </motion.div>
             </div>
 
             {/* Real-time Data Cards */}
