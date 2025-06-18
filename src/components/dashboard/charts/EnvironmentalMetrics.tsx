@@ -149,7 +149,7 @@ export function EnvironmentalMetrics() {
                 cy="50%"
                 outerRadius={100}
                 innerRadius={40}
-                label={none}
+                label={false}
                 labelLine={false}
               >
                 {wasteData.map((entry, index) => (
