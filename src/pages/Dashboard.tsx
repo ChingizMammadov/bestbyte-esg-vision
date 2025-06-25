@@ -31,13 +31,13 @@ export default function Dashboard() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-gradient-to-tr from-[#0f2027] via-[#23638B]/40 to-[#aed9da]/10 font-sans transition-all">
+      <div className="flex min-h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-50 font-sans transition-all">
         <AppSidebar />
         <div className="flex flex-col flex-1 min-w-0">
           <DashboardHeader />
-          <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6">
+          <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6 space-y-6">
             {/* Filter Controls with Seed Button */}
-            <div className="flex flex-col gap-3 md:gap-4 mb-4 md:mb-6">
+            <motion.div {...cardMotion} className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 md:p-6 shadow-lg border border-blue-100">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
                 <FilterControls 
                   selectedPeriod={selectedPeriod}
@@ -49,10 +49,10 @@ export default function Dashboard() {
                   <SeedDataButton />
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Company Overview and ESG Targets */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <motion.div {...cardMotion}>
                 <CompanyOverview />
               </motion.div>
@@ -62,22 +62,22 @@ export default function Dashboard() {
             </div>
 
             {/* Real-time Data Cards */}
-            <div className="mb-4 md:mb-6">
+            <motion.div {...cardMotion}>
               <DataCards />
-            </div>
+            </motion.div>
 
             {/* ESG Score Breakdown at the top */}
-            <motion.div {...cardMotion} className="mb-4 md:mb-6">
+            <motion.div {...cardMotion}>
               <ESGScoreBreakdownChart />
             </motion.div>
 
             {/* Detailed ESG Metrics Tabs */}
-            <motion.div {...cardMotion} className="mb-4 md:mb-6">
+            <motion.div {...cardMotion}>
               <TabNavigation />
             </motion.div>
 
             {/* Main dashboard charts */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               <motion.div {...cardMotion}>
                 <MetricsPieChart />
               </motion.div>
@@ -90,7 +90,7 @@ export default function Dashboard() {
             </div>
 
             {/* Activity Feed and Alerts */}
-            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <motion.div {...cardMotion} className="lg:col-span-2">
                 <ActivityFeed />
               </motion.div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LogOut, User, Calendar, Search } from 'lucide-react';
+import { LogOut, User, Calendar, Search, Sparkles } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -37,50 +37,61 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="w-full py-3 md:py-4 px-3 md:px-6 bg-white/95 border-b border-gray-200 shadow-sm">
-      <div className="flex flex-col gap-3 md:gap-4">
+    <header className="w-full py-4 md:py-6 px-4 md:px-6 bg-gradient-to-r from-white/95 via-blue-50/95 to-purple-50/95 backdrop-blur-sm border-b border-blue-100/50 shadow-lg">
+      <div className="flex flex-col gap-4 md:gap-6">
         {/* Top row - Company info */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 md:gap-4">
-            <div>
-              <h1 className="text-lg md:text-xl xl:text-2xl font-bold text-gray-900">
-                Acme Corp
-              </h1>
-              <p className="text-xs md:text-sm text-gray-600">{getGreeting()}</p>
-              <p className="text-xs text-gray-500 hidden sm:block">{getCurrentDate()}</p>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-25"></div>
+              <div className="relative bg-white p-4 rounded-2xl">
+                <h1 className="text-xl md:text-2xl xl:text-3xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Acme Corp
+                </h1>
+                <p className="text-sm md:text-base text-gray-700 font-medium flex items-center gap-1">
+                  <Sparkles className="w-4 h-4 text-yellow-500" />
+                  {getGreeting()}
+                </p>
+                <p className="text-xs text-gray-500 hidden sm:block font-medium">{getCurrentDate()}</p>
+              </div>
             </div>
           </div>
 
-          {/* User info - always visible but compact on mobile */}
-          <div className="flex items-center gap-2 bg-gray-50 px-2 md:px-4 py-1.5 md:py-2 rounded-lg">
-            <User className="w-4 h-4 text-gray-600 flex-shrink-0" />
-            <div className="text-xs md:text-sm min-w-0">
-              <span className="text-gray-600 hidden sm:inline">Logged in as </span>
-              <span className="font-semibold text-gray-900 truncate block sm:inline">{user?.email}</span>
+          {/* User info - enhanced design */}
+          <div className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 backdrop-blur-sm px-4 md:px-6 py-3 md:py-4 rounded-2xl border border-indigo-100 shadow-lg">
+            <div className="p-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl">
+              <User className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+            </div>
+            <div className="text-sm md:text-base min-w-0">
+              <span className="text-gray-600 hidden sm:inline font-medium">Logged in as </span>
+              <span className="font-bold text-gray-900 truncate block sm:inline">{user?.email}</span>
             </div>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={handleLogout}
-              className="flex items-center gap-1 md:gap-2 hover:bg-red-100 hover:text-red-600 transition-colors p-1 md:p-2"
+              className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600 transition-all duration-300 p-2 md:p-3 rounded-xl border border-transparent hover:border-red-200"
               title="Log Out"
             >
-              <LogOut className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="hidden md:inline">Log Out</span>
+              <LogOut className="w-4 h-4" />
+              <span className="hidden md:inline font-medium">Log Out</span>
             </Button>
           </div>
         </div>
 
-        {/* Search and Controls - stacked on mobile */}
-        <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+        {/* Search and Controls - enhanced design */}
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search ESG data..." 
-              className="pl-10 bg-white border-gray-300 focus:border-blue-500 text-sm" 
-            />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur"></div>
+            <div className="relative flex items-center">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input 
+                placeholder="Search ESG data, metrics, targets..." 
+                className="pl-12 pr-4 py-3 bg-white/80 backdrop-blur-sm border-0 rounded-2xl shadow-lg focus:shadow-xl transition-all duration-300 text-sm font-medium placeholder:text-gray-400" 
+              />
+            </div>
           </div>
-          <Button variant="outline" className="bg-white border-gray-300 hover:bg-gray-50 text-sm">
+          <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-sm font-medium px-6 py-3 rounded-2xl">
             <Calendar className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Select Period</span>
             <span className="sm:hidden">Period</span>
