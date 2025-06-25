@@ -39,10 +39,10 @@ export function Alerts() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-orange-50 to-red-50 border-0 shadow-xl rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 h-full">
-      <CardHeader className="bg-gradient-to-r from-orange-500/10 to-red-500/10 pb-4">
+    <Card className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200/60 rounded-2xl overflow-hidden hover:border-orange-300/60 transition-all duration-300 h-full">
+      <CardHeader className="bg-gradient-to-r from-orange-500/10 to-red-500/10 pb-4 border-b border-orange-200/50">
         <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
-          <div className="p-2 bg-orange-100 rounded-xl">
+          <div className="p-2 bg-orange-100 rounded-xl border border-orange-200/50">
             <AlertTriangle className="w-5 h-5 text-orange-600" />
           </div>
           ESG Alerts
@@ -59,7 +59,7 @@ export function Alerts() {
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-                className={`${alert.color} p-4 rounded-2xl border-2 flex items-start gap-3 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/80 backdrop-blur-sm`}
+                className={`${alert.color} p-4 rounded-xl border-2 flex items-start gap-3 hover:border-opacity-70 transition-all duration-300 cursor-pointer bg-white/80 backdrop-blur-sm`}
               >
                 <alert.icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -71,14 +71,14 @@ export function Alerts() {
                     e.stopPropagation();
                     handleDismissAlert(alert.id);
                   }}
-                  className="text-xs px-3 py-1 rounded-xl bg-white/80 hover:bg-white transition-all duration-300 font-bold shadow-md hover:shadow-lg flex-shrink-0"
+                  className="text-xs px-3 py-1 rounded-xl bg-white/80 hover:bg-white transition-all duration-300 font-bold border border-gray-200/50 hover:border-gray-300 flex-shrink-0"
                 >
                   Dismiss
                 </button>
               </motion.div>
             )) : (
-              <div className="text-center py-12 bg-white/70 rounded-2xl">
-                <div className="p-4 bg-emerald-100 rounded-2xl w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-lg">
+              <div className="text-center py-12 bg-white/70 rounded-xl border border-gray-200/50">
+                <div className="p-4 bg-emerald-100 rounded-2xl w-16 h-16 mx-auto mb-4 flex items-center justify-center border border-emerald-200/50">
                   <CheckCircle className="w-8 h-8 text-emerald-600" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">No active alerts</h3>

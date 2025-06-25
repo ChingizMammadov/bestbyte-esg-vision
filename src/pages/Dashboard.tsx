@@ -37,7 +37,7 @@ export default function Dashboard() {
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-3 md:p-6 pb-20 md:pb-6 space-y-6">
             {/* Filter Controls with Seed Button */}
-            <motion.div {...cardMotion} className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 md:p-6 shadow-lg border border-blue-100">
+            <motion.div {...cardMotion} className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-slate-200/60">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
                 <FilterControls 
                   selectedPeriod={selectedPeriod}

@@ -37,14 +37,13 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="w-full py-4 md:py-6 px-4 md:px-6 bg-gradient-to-r from-white/95 via-blue-50/95 to-purple-50/95 backdrop-blur-sm border-b border-blue-100/50 shadow-lg">
+    <header className="w-full py-4 md:py-6 px-4 md:px-6 bg-gradient-to-r from-white/95 via-blue-50/95 to-purple-50/95 backdrop-blur-sm border-b border-blue-100/60">
       <div className="flex flex-col gap-4 md:gap-6">
         {/* Top row - Company info */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-25"></div>
-              <div className="relative bg-white p-4 rounded-2xl">
+              <div className="relative bg-white p-4 rounded-2xl border border-blue-200/50 hover:border-blue-300/50 transition-all duration-300">
                 <h1 className="text-xl md:text-2xl xl:text-3xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Acme Corp
                 </h1>
@@ -58,8 +57,8 @@ export function DashboardHeader() {
           </div>
 
           {/* User info - enhanced design */}
-          <div className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 backdrop-blur-sm px-4 md:px-6 py-3 md:py-4 rounded-2xl border border-indigo-100 shadow-lg">
-            <div className="p-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-purple-50 backdrop-blur-sm px-4 md:px-6 py-3 md:py-4 rounded-2xl border border-indigo-200/60 hover:border-indigo-300/60 transition-all duration-300">
+            <div className="p-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl border border-indigo-200/50">
               <User className="w-4 h-4 text-indigo-600 flex-shrink-0" />
             </div>
             <div className="text-sm md:text-base min-w-0">
@@ -82,16 +81,15 @@ export function DashboardHeader() {
         {/* Search and Controls - enhanced design */}
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="relative flex-1">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur"></div>
             <div className="relative flex items-center">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input 
                 placeholder="Search ESG data, metrics, targets..." 
-                className="pl-12 pr-4 py-3 bg-white/80 backdrop-blur-sm border-0 rounded-2xl shadow-lg focus:shadow-xl transition-all duration-300 text-sm font-medium placeholder:text-gray-400" 
+                className="pl-12 pr-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl hover:border-gray-300 focus:border-blue-400 transition-all duration-300 text-sm font-medium placeholder:text-gray-400" 
               />
             </div>
           </div>
-          <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-sm font-medium px-6 py-3 rounded-2xl">
+          <Button variant="outline" className="bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-gray-300 hover:bg-white transition-all duration-300 text-sm font-medium px-6 py-3 rounded-2xl">
             <Calendar className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">Select Period</span>
             <span className="sm:hidden">Period</span>

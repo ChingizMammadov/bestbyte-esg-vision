@@ -84,9 +84,9 @@ export function AppSidebar() {
 
   return (
     <div className="hidden lg:block w-[280px]">
-      <Sidebar className="w-[280px] border-r-0">
+      <Sidebar className="w-[280px] border-r border-slate-200/50">
         {/* Header with Logo */}
-        <SidebarHeader className="border-b border-slate-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
+        <SidebarHeader className="border-b border-slate-200/50 bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
           <Link to="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <BestByteLogo size="md" variant="dark" showText={true} />
           </Link>
@@ -101,12 +101,12 @@ export function AppSidebar() {
                 placeholder="Search ESG data..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white border-slate-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500/20 shadow-sm"
+                className="pl-10 bg-white border border-slate-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
               />
             </div>
           </div>
 
-          <SidebarSeparator className="bg-slate-200" />
+          <SidebarSeparator className="bg-slate-200/50" />
 
           {/* Main Navigation */}
           <SidebarGroup>
@@ -124,8 +124,8 @@ export function AppSidebar() {
                         className={`
                           group relative transition-all duration-200 mx-2 rounded-xl
                           ${isParentActive(item) 
-                            ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25' 
-                            : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700'
+                            ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white border border-blue-600' 
+                            : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 border border-transparent hover:border-blue-200'
                           }
                           ${item.subItems ? 'cursor-pointer' : ''}
                         `}
@@ -167,8 +167,8 @@ export function AppSidebar() {
                               className={`
                                 transition-all duration-150 mx-2 rounded-lg
                                 ${isActiveItem(subItem.url)
-                                  ? 'bg-blue-100 text-blue-700 border-l-2 border-blue-500 shadow-sm'
-                                  : 'text-gray-600 hover:bg-slate-100 hover:text-gray-800'
+                                  ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                                  : 'text-gray-600 hover:bg-slate-100 hover:text-gray-800 border border-transparent hover:border-gray-200'
                                 }
                               `}
                             >
@@ -186,7 +186,7 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarSeparator className="bg-slate-200" />
+          <SidebarSeparator className="bg-slate-200/50" />
 
           {/* Settings Section */}
           <SidebarGroup>
@@ -203,8 +203,8 @@ export function AppSidebar() {
                       className={`
                         group transition-all duration-200 mx-2 rounded-xl
                         ${isActiveItem(item.url)
-                          ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25'
-                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700'
+                          ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white border border-blue-600'
+                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 border border-transparent hover:border-blue-200'
                         }
                       `}
                     >
@@ -224,9 +224,9 @@ export function AppSidebar() {
         </SidebarContent>
 
         {/* User Profile Footer */}
-        <SidebarFooter className="bg-gradient-to-r from-slate-100 to-gray-100 border-t border-slate-200 p-4">
+        <SidebarFooter className="bg-gradient-to-r from-slate-100 to-gray-100 border-t border-slate-200/50 p-4">
           <div className="flex items-center gap-3 text-gray-800">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center border border-blue-600/20">
               <User className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
