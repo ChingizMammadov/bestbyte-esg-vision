@@ -5,7 +5,7 @@ import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { AppSidebar } from "@/components/AppSidebar";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Settings as SettingsIcon, User, Bell, Lock, Palette, Sparkles } from "lucide-react";
+import { ArrowLeft, Settings as SettingsIcon, User, Bell, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,9 +63,8 @@ export default function Settings() {
                       </div>
                     </div>
                     <div>
-                      <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-600 to-slate-600 bg-clip-text text-transparent flex items-center gap-2">
+                      <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-600 to-slate-600 bg-clip-text text-transparent">
                         Settings
-                        <Sparkles className="w-6 h-6 text-yellow-500" />
                       </h1>
                       <p className="text-gray-600 mt-2 font-medium text-lg">
                         Manage your account and application preferences
