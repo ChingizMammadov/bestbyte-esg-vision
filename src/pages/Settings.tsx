@@ -24,7 +24,7 @@ export default function Settings() {
       <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-white to-slate-50">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
-          {/* Enhanced Header */}
+          {/* Clean Professional Header */}
           <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -46,19 +46,19 @@ export default function Settings() {
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 p-4 md:p-6 space-y-6">
+          <main className="flex-1 p-4 md:p-6 space-y-6" style={{ backgroundColor: '#F5F5F5' }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="max-w-4xl mx-auto space-y-6"
             >
-              {/* Enhanced Page Header */}
+              {/* Clean Page Header */}
               <div className="relative">
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-200 hover:border-gray-300 transition-all duration-300">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-4">
                     <div className="relative">
-                      <div className="bg-gradient-to-r from-slate-600 to-gray-600 p-3 rounded-2xl border border-gray-200">
+                      <div className="bg-gradient-to-r from-slate-600 to-gray-600 p-3 rounded-2xl">
                         <SettingsIcon className="w-8 h-8 text-white" />
                       </div>
                     </div>
@@ -74,18 +74,18 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Enhanced Settings Content */}
+              {/* Settings Content */}
               <div className="space-y-6">
                 {/* Profile Settings */}
-                <Card className="bg-white border border-gray-200 hover:border-gray-300 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4 border-b border-gray-200">
-                    <CardTitle className="flex items-center gap-3 text-xl font-bold">
-                      <div className="p-2 bg-blue-100 rounded-xl border border-blue-200">
+                <Card className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                  <CardHeader className="bg-white pb-4 border-b border-gray-100">
+                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-800">
+                      <div className="p-2 bg-blue-50 rounded-xl border border-blue-100">
                         <User className="w-5 h-5 text-blue-600" />
                       </div>
                       Profile Settings
                     </CardTitle>
-                    <CardDescription className="text-blue-700 font-medium">
+                    <CardDescription className="text-blue-600 font-medium">
                       Update your personal information and company details
                     </CardDescription>
                   </CardHeader>
@@ -96,7 +96,7 @@ export default function Settings() {
                         <Input 
                           id="firstName" 
                           defaultValue="Jane" 
-                          className="bg-white border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
+                          className="bg-white border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
                         />
                       </div>
                       <div className="space-y-2">
@@ -104,7 +104,7 @@ export default function Settings() {
                         <Input 
                           id="lastName" 
                           defaultValue="Smith" 
-                          className="bg-white border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
+                          className="bg-white border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
                         />
                       </div>
                     </div>
@@ -114,7 +114,7 @@ export default function Settings() {
                         id="email" 
                         type="email" 
                         defaultValue="jane@acme.com" 
-                        className="bg-white border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
+                        className="bg-white border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
                       />
                     </div>
                     <div className="space-y-2">
@@ -122,30 +122,35 @@ export default function Settings() {
                       <Input 
                         id="company" 
                         defaultValue="Acme Corp" 
-                        className="bg-white border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
+                        className="bg-white border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-200"
                       />
                     </div>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold px-6 py-2 transition-all duration-200 shadow-sm hover:shadow-md">
+                    <Button 
+                      className="rounded-xl font-semibold px-6 py-2 transition-all duration-200 shadow-sm hover:shadow-md"
+                      style={{ backgroundColor: '#1976D2', color: 'white' }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#1565C0'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = '#1976D2'}
+                    >
                       Save Changes
                     </Button>
                   </CardContent>
                 </Card>
 
                 {/* Notifications */}
-                <Card className="bg-white border border-gray-200 hover:border-gray-300 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm">
-                  <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 pb-4 border-b border-gray-200">
-                    <CardTitle className="flex items-center gap-3 text-xl font-bold">
-                      <div className="p-2 bg-green-100 rounded-xl border border-green-200">
+                <Card className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                  <CardHeader className="bg-white pb-4 border-b border-gray-100">
+                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-800">
+                      <div className="p-2 bg-green-50 rounded-xl border border-green-100">
                         <Bell className="w-5 h-5 text-green-600" />
                       </div>
                       Notifications
                     </CardTitle>
-                    <CardDescription className="text-green-700 font-medium">
+                    <CardDescription className="text-green-600 font-medium">
                       Configure how you receive updates and alerts
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-6 space-y-6 bg-white">
-                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-gray-300 bg-gray-50/50 transition-all duration-200">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/30">
                       <div>
                         <Label htmlFor="notifications" className="text-sm font-medium text-gray-900">
                           Push Notifications
@@ -160,7 +165,7 @@ export default function Settings() {
                         onCheckedChange={setNotifications}
                       />
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-gray-300 bg-gray-50/50 transition-all duration-200">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 bg-gray-50/30">
                       <div>
                         <Label htmlFor="emailReports" className="text-sm font-medium text-gray-900">
                           Email Reports
@@ -179,15 +184,15 @@ export default function Settings() {
                 </Card>
 
                 {/* Security */}
-                <Card className="bg-white border border-gray-200 hover:border-gray-300 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm">
-                  <CardHeader className="bg-gradient-to-r from-red-50 to-rose-50 pb-4 border-b border-gray-200">
-                    <CardTitle className="flex items-center gap-3 text-xl font-bold">
-                      <div className="p-2 bg-red-100 rounded-xl border border-red-200">
+                <Card className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                  <CardHeader className="bg-white pb-4 border-b border-gray-100">
+                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-800">
+                      <div className="p-2 bg-red-50 rounded-xl border border-red-100">
                         <Lock className="w-5 h-5 text-red-600" />
                       </div>
                       Security
                     </CardTitle>
-                    <CardDescription className="text-red-700 font-medium">
+                    <CardDescription className="text-red-600 font-medium">
                       Manage your password and security settings
                     </CardDescription>
                   </CardHeader>
