@@ -1,6 +1,6 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
@@ -12,44 +12,67 @@ export const Navbar = () => {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Features', href: '/#features' },
-    { name: 'Pricing', href: '/pricing' },
-    { name: 'About', href: '/about' },
+    { name: "Features", href: "/#features" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "About", href: "/about#hero" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur-md dark:border-gray-700/60 dark:bg-gray-900/80" role="navigation" aria-label="Main navigation">
+    <nav
+      className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/80 backdrop-blur-md dark:border-gray-700/60 dark:bg-gray-900/80"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
+          <HashLink
+            to="/#hero"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200"
             aria-label="BestByte home"
           >
             <BestByteLogo size="md" />
-          </Link>
+          </HashLink>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group dark:text-gray-300"
-                aria-current={location.pathname === item.href ? 'page' : undefined}
-              >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.href.includes("#") ? (
+                <HashLink
+                  key={item.name}
+                  to={item.href}
+                  className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group dark:text-gray-300"
+                  aria-current={
+                    location.pathname === item.href ? "page" : undefined
+                  }
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                </HashLink>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium relative group dark:text-gray-300"
+                  aria-current={
+                    location.pathname === item.href ? "page" : undefined
+                  }
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                </Link>
+              )
+            )}
           </div>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" className="hover:bg-gray-100 transition-colors duration-200 dark:hover:bg-gray-800">
+              <Button
+                variant="ghost"
+                className="hover:bg-gray-100 transition-colors duration-200 dark:hover:bg-gray-800"
+              >
                 Sign In
               </Button>
             </Link>
@@ -71,14 +94,18 @@ export const Navbar = () => {
               aria-controls="mobile-menu"
               aria-label="Toggle navigation menu"
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div 
+          <div
             id="mobile-menu"
             className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-900/95"
           >
@@ -89,7 +116,9 @@ export const Navbar = () => {
                   to={item.href}
                   onClick={() => setIsOpen(false)}
                   className="block text-gray-600 hover:text-primary transition-colors duration-200 font-medium py-2 dark:text-gray-300"
-                  aria-current={location.pathname === item.href ? 'page' : undefined}
+                  aria-current={
+                    location.pathname === item.href ? "page" : undefined
+                  }
                 >
                   {item.name}
                 </Link>

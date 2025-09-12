@@ -20,6 +20,7 @@ import { TermsSection } from "@/components/signup/TermsSection";
 import { SuccessScreen } from "@/components/signup/SuccessScreen";
 import { PremiumButton } from "@/components/signup/PremiumButton";
 import { Shield, User } from "lucide-react";
+import { PerformanceWrapper, LazySelectWrapper } from "@/components/ui/performance-wrapper";
 
 const formSchema = z.object({
   companyName: z.string().min(1, {
@@ -85,6 +86,15 @@ export default function SignUp() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signUp, user } = useAuth();
+  
+  // Debounced popover state setters to prevent UI freezing
+  const setIndustryPopoverOpenDebounced = React.useCallback((open: boolean) => {
+    setTimeout(() => setIndustryPopoverOpen(open), 0);
+  }, []);
+  
+  const setCountryPopoverOpenDebounced = React.useCallback((open: boolean) => {
+    setTimeout(() => setCountryPopoverOpen(open), 0);
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -161,16 +171,16 @@ export default function SignUp() {
                   control={form.control}
                   watchedIndustry={watchedIndustry}
                   watchedCompanySize={watchedCompanySize}
-                  isIndustryPopoverOpen={isIndustryPopoverOpen}
-                  setIndustryPopoverOpen={setIndustryPopoverOpen}
                 />
 
-                <ContactInformationSection
-                  control={form.control}
-                  watchedCountryId={watchedCountryId}
-                  isCountryPopoverOpen={isCountryPopoverOpen}
-                  setCountryPopoverOpen={setCountryPopoverOpen}
-                />
+                <PerformanceWrapper delayMs={10}>
+                  <ContactInformationSection
+                    control={form.control}
+                    watchedCountryId={watchedCountryId}
+                    isCountryPopoverOpen={isCountryPopoverOpen}
+                    setCountryPopoverOpen={setCountryPopoverOpenDebounced}
+                  />
+                </PerformanceWrapper>
 
                 <AccountSecuritySection
                   control={form.control}
@@ -180,7 +190,9 @@ export default function SignUp() {
                   setShowConfirmPassword={setShowConfirmPassword}
                 />
 
-                <ESGPreferencesSection control={form.control} />
+                <LazySelectWrapper isOpen={true}>
+                  <ESGPreferencesSection control={form.control} />
+                </LazySelectWrapper>
 
                 <TermsSection control={form.control} />
 

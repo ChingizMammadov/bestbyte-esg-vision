@@ -246,3 +246,75 @@ html {
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
+
+/* Custom scrollbars with CSS variables for easy theming */
+:root {
+  /* Default scrollbar values */
+  --scrollbar-width: 8px;
+  --scrollbar-thumb-color-1: #d1d5db;
+  --scrollbar-thumb-color-2: #9ca3af;
+  --scrollbar-thumb-hover-color-1: #9ca3af;
+  --scrollbar-thumb-hover-color-2: #6b7280;
+  --scrollbar-track-color: transparent;
+  --scrollbar-radius: 20px;
+}
+
+/* Landing theme - Emerald/Green */
+.route-landing {
+  --scrollbar-thumb-color-1: #10b981;
+  --scrollbar-thumb-color-2: #059669;
+  --scrollbar-thumb-hover-color-1: #047857;
+  --scrollbar-thumb-hover-color-2: #065f46;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color-1) var(--scrollbar-track-color);
+}
+
+/* App theme - Indigo/Blue */
+.route-app {
+  --scrollbar-thumb-color-1: #6366f1;
+  --scrollbar-thumb-color-2: #4f46e5;
+  --scrollbar-thumb-hover-color-1: #4338ca;
+  --scrollbar-thumb-hover-color-2: #3730a3;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color-1) var(--scrollbar-track-color);
+}
+
+/* Webkit scrollbar styles using CSS variables */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--scrollbar-thumb-color-1), var(--scrollbar-thumb-color-2));
+  border-radius: var(--scrollbar-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--scrollbar-thumb-hover-color-1), var(--scrollbar-thumb-hover-color-2));
+}
+
+/* Horizontal scrollbars */
+::-webkit-scrollbar:horizontal {
+  height: var(--scrollbar-width);
+}
+
+/* Tailwind components with overflow that need scrollbars */
+.overflow-auto, 
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-scroll,
+.overflow-y-scroll,
+.overflow-x-scroll {
+  /* Apply themed scrollbar properties */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color-1) var(--scrollbar-track-color);
+}
+
+/* Fix for scrollbars in dark mode */
+.dark {
+  --scrollbar-track-color: transparent;
+}

@@ -34,6 +34,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Debug session info
+      if (session) {
+        console.log("Session found:", session);
+        console.log("User info:", session.user);
+        console.log("Access token:", session.access_token?.substring(0, 20) + "...");
+      } else {
+        console.log("No session found");
+      }
     });
 
     return () => subscription.unsubscribe();

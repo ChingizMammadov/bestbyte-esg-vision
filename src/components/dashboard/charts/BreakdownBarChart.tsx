@@ -60,14 +60,18 @@ export function BreakdownBarChart({
           tick={{
             fontWeight: 600,
             fontSize: 14,
-            fill: "#374151"
+            fill: document.documentElement.classList.contains('dark') ? "#D1D5DB" : "#374151"
           }}
         />
         <YAxis
           domain={[0, 100]}
           axisLine={false}
           tickLine={false}
-          tick={{ fontSize: 12, fontWeight: 500, fill: "#6B7280" }}
+          tick={{ 
+            fontSize: 12, 
+            fontWeight: 500, 
+            fill: document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280" 
+          }}
         />
         <ChartTooltip
           cursor={{ fill: "rgba(165,180,252,0.15)" }}
@@ -75,7 +79,7 @@ export function BreakdownBarChart({
             if (active && payload && payload.length > 0) {
               const d = payload[0].payload;
               return (
-                <div className="bg-white/95 p-4 rounded-lg shadow-xl border border-border/50 max-w-xs animate-fade-in space-y-2">
+                <div className="bg-white/95 dark:bg-gray-800/95 p-4 rounded-lg shadow-xl border border-border/50 dark:border-gray-700/50 max-w-xs animate-fade-in space-y-2">
                   <div className="flex items-center gap-3 mb-2">
                     {icons[d.category as keyof typeof icons]}
                     <span className="font-bold text-lg" style={{ color: barColors[d.category as keyof typeof barColors] }}>
@@ -86,9 +90,9 @@ export function BreakdownBarChart({
                     <span className={`font-black text-3xl ${scoreColor(d.score)}`}>
                       {d.score.toFixed(1)}
                     </span>
-                    <span className="font-semibold text-sm text-gray-500">/ 100</span>
+                    <span className="font-semibold text-sm text-gray-500 dark:text-gray-300">/ 100</span>
                   </div>
-                  <p className="text-sm text-gray-600">{d.details}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">{d.details}</p>
                 </div>
               );
             }

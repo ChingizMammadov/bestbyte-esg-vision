@@ -1,10 +1,10 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Check, Star, Zap, Shield, Award } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const plans = [
   {
@@ -88,7 +88,7 @@ export default function Pricing() {
             <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-100/50 to-purple-100/30 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
             <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-gradient-to-r from-teal-100/40 to-emerald-100/30 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
           </div>
-          
+
           {/* Dark Mode Background */}
           <div className="hidden dark:block">
             <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-blob"></div>
@@ -111,7 +111,8 @@ export default function Pricing() {
               Pricing & Plans
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Choose the plan that fits your sustainability goals and business needs.
+              Choose the plan that fits your sustainability goals and business
+              needs.
             </p>
           </div>
 
@@ -122,48 +123,58 @@ export default function Pricing() {
               return (
                 <div
                   key={plan.name}
-                  className={`relative group animate-fade-in flex flex-col ${
+                  className={`relative group opacity-0 animate-fade-in flex flex-col items-center ${
                     plan.popular ? "lg:pt-8" : "lg:pt-14"
                   }`}
                   style={{ animationDelay: `${idx * 200}ms` }}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-0 left-1/2 transform -translate-x-1/2 z-20 mb-2">
-                      <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg animate-pulse">
+                    <div className="relative z-20 top-3">
+                      <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
                         MOST POPULAR
                       </span>
                     </div>
                   )}
-                  
+
                   <div
-                    className={`relative h-full flex flex-col transition-all duration-500 hover:scale-105 ${
+                    className={`relative h-full flex flex-col transition-all duration-300 bg-white dark:bg-transparent ${
                       plan.popular
-                        ? "bg-white/95 dark:bg-gradient-to-br dark:from-gray-800/90 dark:to-gray-900/70 border-2 border-emerald-300 dark:border-emerald-500/50 shadow-2xl shadow-emerald-200/50 dark:shadow-emerald-500/30 hover:shadow-emerald-300/70 dark:hover:shadow-emerald-500/40 hover:border-emerald-400 dark:hover:border-emerald-400/60"
-                        : "bg-white/90 dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 border border-gray-200 dark:border-gray-700/50 hover:border-gray-300 dark:hover:border-gray-600/50 shadow-xl hover:shadow-2xl hover:shadow-gray-200/60 dark:hover:shadow-gray-500/10"
+                        ? "dark:bg-gradient-to-br dark:from-gray-800/90 dark:to-gray-900/70 border-2 border-emerald-300/70 dark:border-emerald-500/70 shadow-2xl shadow-emerald-200/50 dark:shadow-emerald-500/30 hover:shadow-emerald-300 dark:hover:shadow-emerald-500 hover:border-emerald-400 dark:hover:border-emerald-400"
+                        : "dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600/50 shadow-xl hover:shadow-2xl hover:shadow-gray-200/60 dark:hover:shadow-gray-500/10"
                     } backdrop-blur-sm rounded-3xl p-8 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50/50 dark:group-hover:from-gray-800/70 dark:group-hover:to-gray-900/70`}
                   >
                     {/* Plan Header */}
                     <div className="flex items-center gap-3 mb-6">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${plan.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <div
+                        className={`w-12 h-12 rounded-xl bg-gradient-to-r ${plan.color} flex items-center justify-center shadow-lg transition-transform duration-300`}
+                      >
                         <IconComponent className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white font-montserrat">{plan.name}</h3>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm">{plan.description}</p>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white font-montserrat">
+                          {plan.name}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                          {plan.description}
+                        </p>
                       </div>
                     </div>
 
                     {/* Pricing */}
                     <div className="mb-8">
                       <div className="flex items-end gap-2 mb-2">
-                        <span className={`text-5xl font-bold ${
-                          plan.popular 
-                            ? "text-emerald-600 dark:text-emerald-400" 
-                            : "text-gray-900 dark:text-white"
-                        }`}>
+                        <span
+                          className={`text-5xl font-bold ${
+                            plan.popular
+                              ? "text-emerald-600 dark:text-emerald-400"
+                              : "text-gray-900 dark:text-white"
+                          }`}
+                        >
                           ${plan.price}
                         </span>
-                        <span className="text-gray-500 dark:text-gray-400 text-lg mb-2">/ {plan.period}</span>
+                        <span className="text-gray-500 dark:text-gray-400 text-lg mb-2">
+                          / {plan.period}
+                        </span>
                       </div>
                     </div>
 
@@ -171,18 +182,24 @@ export default function Pricing() {
                     <ul className="space-y-4 mb-8 flex-grow">
                       {plan.features.map((feature, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            plan.popular 
-                              ? "bg-emerald-100 dark:bg-emerald-500/20" 
-                              : "bg-emerald-100 dark:bg-emerald-500/20"
-                          }`}>
-                            <Check className={`w-3 h-3 ${
-                              plan.popular 
-                                ? "text-emerald-600 dark:text-emerald-400" 
-                                : "text-emerald-600 dark:text-emerald-400"
-                            }`} />
+                          <div
+                            className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              plan.popular
+                                ? "bg-emerald-100 dark:bg-emerald-500/20"
+                                : "bg-emerald-100 dark:bg-emerald-500/20"
+                            }`}
+                          >
+                            <Check
+                              className={`w-3 h-3 ${
+                                plan.popular
+                                  ? "text-emerald-600 dark:text-emerald-400"
+                                  : "text-emerald-600 dark:text-emerald-400"
+                              }`}
+                            />
                           </div>
-                          <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                          <span className="text-gray-700 dark:text-gray-300">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -203,12 +220,12 @@ export default function Pricing() {
 
                     {/* Enhanced Hover Gradient Overlay for Popular Plan */}
                     {plan.popular && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 via-teal-50/20 to-emerald-50/30 dark:from-emerald-500/5 dark:via-teal-500/5 dark:to-emerald-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 via-teal-50/20 to-emerald-50/30 dark:from-emerald-500/5 dark:via-teal-500/5 dark:to-emerald-500/5 rounded-3xl opacity-0 transition-opacity duration-500 pointer-events-none"></div>
                     )}
-                    
+
                     {/* Standard Hover Overlay */}
                     {!plan.popular && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white/30 dark:from-emerald-500/5 dark:to-teal-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white/30 dark:from-emerald-500/5 dark:to-teal-500/5 rounded-3xl opacity-0 transition-opacity duration-500 pointer-events-none"></div>
                     )}
                   </div>
                 </div>
@@ -217,7 +234,10 @@ export default function Pricing() {
           </div>
 
           {/* Trust Badges */}
-          <div className="text-center mb-16 animate-fade-in" style={{ animationDelay: "600ms" }}>
+          <div
+            className="text-center mb-16 opacity-0 animate-fade-in"
+            style={{ animationDelay: "600ms" }}
+          >
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 font-medium tracking-wide">
               TRUSTED & SECURE PLATFORM
             </p>
@@ -225,33 +245,34 @@ export default function Pricing() {
               {trustBadges.map((badge, index) => {
                 const IconComponent = badge.icon;
                 return (
-                  <div 
-                    key={badge.name} 
+                  <div
+                    key={badge.name}
                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors duration-300"
                   >
                     <IconComponent className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">{badge.name}</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">
+                      {badge.name}
+                    </span>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          {/* Bottom CTA */}
-          <div className="text-center animate-fade-in" style={{ animationDelay: "800ms" }}>
-            <div className="bg-white/60 dark:bg-gradient-to-r dark:from-gray-800/50 dark:to-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-2xl p-8 max-w-3xl mx-auto shadow-lg">
-              <h4 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 font-montserrat">
+          <div className="text-center mt-12">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-xl border border-gray-200 dark:border-gray-700 max-w-3xl mx-auto">
+              <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 font-montserrat">
                 Ready to Transform Your ESG Reporting?
               </h4>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Join thousands of companies already using BestByte to streamline their sustainability reporting.
+                Join thousands of companies already using BestByte to streamline
+                their sustainability reporting.
               </p>
-              <button 
-                onClick={handleStartTrial}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-teal-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25"
-              >
-                Start Free Trial
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link to="/signup" className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+                  Start Free Trial
+                </Link>
+              </div>
             </div>
           </div>
         </section>

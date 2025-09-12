@@ -127,23 +127,28 @@ export function ESGScoreBreakdownChart() {
       shadow-[0_8px_28px_0_rgba(30,60,109,0.09)]
       overflow-hidden
       bg-gradient-to-br from-blue-100/90 via-white/90 to-blue-50/80
+      dark:bg-gradient-to-br dark:from-blue-950/40 dark:via-gray-800/90 dark:to-gray-900
       border border-blue-200/60
+      dark:border-blue-900/60
       animate-fade-in
       my-3
     ">
       {/* Gradient header */}
-      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 px-5 py-4 flex flex-col md:flex-row md:items-center gap-1 border-b border-blue-100">
+      <div className="rounded-t-2xl bg-gradient-to-r from-blue-200/60 via-white/60 to-blue-50/90 
+                     dark:bg-gradient-to-r dark:from-blue-900/60 dark:via-gray-800/60 dark:to-gray-900/90 
+                     px-5 py-4 flex flex-col md:flex-row md:items-center gap-1 
+                     border-b border-blue-100 dark:border-blue-800/50">
         <div className="flex items-center gap-2 mb-1">
-          <BarChartIcon className="text-blue-500 w-7 h-7 mr-1" />
-          <h2 className="font-black text-gray-900 text-lg md:text-xl !leading-tight">
+          <BarChartIcon className="text-blue-500 dark:text-blue-400 w-7 h-7 mr-1" />
+          <h2 className="font-black text-gray-900 dark:text-gray-100 text-lg md:text-xl !leading-tight">
             Interactive ESG Score Breakdown
           </h2>
         </div>
         <div className="md:ml-4 mt-1 flex-1">
-          <p className="text-sm md:text-base text-blue-900/90 font-normal mb-0">
+          <p className="text-sm md:text-base text-blue-900/90 dark:text-blue-100/90 font-normal mb-0">
             Explore ESG performance. Click a bar to focus on a category.
           </p>
-          <span className="text-xs md:text-sm text-blue-900/60 font-light">
+          <span className="text-xs md:text-sm text-blue-900/60 dark:text-blue-200/60 font-light">
             Our ESG score breakdown helps identify strengths and areas for improvement.
           </span>
         </div>

@@ -12,12 +12,22 @@ const monthlyData = [
   { month: "Jun", Carbon: 4550, Water: 960, Energy: 455 },
 ];
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-2 sm:p-4 border rounded-lg shadow-lg border-gray-200 max-w-xs" role="tooltip">
-        <p className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{label} Performance</p>
-        {payload.map((entry: any, index: number) => (
+      <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 border rounded-lg shadow-lg border-gray-200 dark:border-gray-700 max-w-xs" role="tooltip">
+        <p className="font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100 mb-2">{label} Performance</p>
+        {payload.map((entry, index: number) => (
           <p key={index} className="text-xs sm:text-sm flex items-center gap-2" style={{ color: entry.color }}>
             <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: entry.color }}></span>
             {entry.name}: {entry.value.toLocaleString()} {
@@ -36,10 +46,10 @@ export function TrendsLineChart() {
   const [highlightedLine, setHighlightedLine] = useState<string | null>(null);
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden" role="region" aria-labelledby="trends-chart-title">
+    <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden" role="region" aria-labelledby="trends-chart-title">
       <CardHeader className="pb-2 px-3 sm:px-6">
-        <CardTitle id="trends-chart-title" className="text-base sm:text-lg font-bold text-gray-900">6-Month ESG Trends</CardTitle>
-        <CardDescription className="text-xs sm:text-sm text-gray-600">Monthly performance tracking with trend analysis</CardDescription>
+        <CardTitle id="trends-chart-title" className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">6-Month ESG Trends</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Monthly performance tracking with trend analysis</CardDescription>
       </CardHeader>
       <CardContent className="px-2 sm:px-6">
         <div className="sr-only">
@@ -75,6 +85,7 @@ export function TrendsLineChart() {
                 fontSize={10} 
                 tickLine={false} 
                 axisLine={false} 
+                className="dark:text-gray-400"
               />
               <YAxis 
                 stroke="#6B7280" 
@@ -82,11 +93,12 @@ export function TrendsLineChart() {
                 tickLine={false} 
                 axisLine={false}
                 tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+                className="dark:text-gray-400"
               />
               <ChartTooltip content={<CustomTooltip />} />
               <Legend 
                 wrapperStyle={{ fontSize: "10px", paddingTop: "8px" }} 
-                formatter={(value) => <span className="text-xs font-medium">{value}</span>}
+                formatter={(value) => <span className="text-xs font-medium dark:text-gray-300">{value}</span>}
                 onMouseEnter={(e) => setHighlightedLine(e.value)}
                 onMouseLeave={() => setHighlightedLine(null)}
               />
@@ -131,11 +143,11 @@ export function TrendsLineChart() {
             { name: 'Water', value: monthlyData[monthlyData.length - 1].Water, color: '#3B82F6', unit: 'k liters' },
             { name: 'Energy', value: monthlyData[monthlyData.length - 1].Energy, color: '#10B981', unit: 'MWh' }
           ].map((metric, index) => (
-            <div key={index} className="text-center p-2 rounded-lg bg-gray-50">
+            <div key={index} className="text-center p-2 rounded-lg bg-gray-50 dark:bg-gray-700">
               <div className="w-3 h-3 rounded-full mx-auto mb-1" style={{ backgroundColor: metric.color }}></div>
-              <p className="text-xs font-medium text-gray-900">{metric.name}</p>
+              <p className="text-xs font-medium text-gray-900 dark:text-gray-100">{metric.name}</p>
               <p className="text-sm font-bold" style={{ color: metric.color }}>{metric.value.toLocaleString()}</p>
-              <p className="text-xs text-gray-500">{metric.unit}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{metric.unit}</p>
             </div>
           ))}
         </div>

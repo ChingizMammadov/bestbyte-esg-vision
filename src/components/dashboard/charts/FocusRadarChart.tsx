@@ -33,6 +33,7 @@ export function FocusRadarChart() {
         fill="none"
         stroke="#E5E7EB"
         strokeWidth="1"
+        className="dark:stroke-gray-700"
       />
     );
   });
@@ -50,6 +51,7 @@ export function FocusRadarChart() {
         y2={endPoint.y}
         stroke="#D1D5DB"
         strokeWidth="1"
+        className="dark:stroke-gray-700"
       />
     );
   });
@@ -71,13 +73,14 @@ export function FocusRadarChart() {
           fill={item.color}
           stroke="white"
           strokeWidth="2"
+          className="dark:stroke-gray-800"
         />
         <text
           x={labelPoint.x}
           y={labelPoint.y}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="text-xs sm:text-sm font-medium fill-gray-700"
+          className="text-xs sm:text-sm font-medium fill-gray-700 dark:fill-gray-300"
         >
           {item.subject}
         </text>
@@ -86,7 +89,7 @@ export function FocusRadarChart() {
           y={labelPoint.y + 16}
           textAnchor="middle"
           dominantBaseline="middle"
-          className="text-xs fill-gray-500"
+          className="text-xs fill-gray-500 dark:fill-gray-400"
         >
           {item.value}
         </text>
@@ -104,10 +107,10 @@ export function FocusRadarChart() {
     .join(' ');
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+    <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <CardHeader className="pb-2 px-3 sm:px-6">
-        <CardTitle className="text-base sm:text-lg font-bold text-gray-900">ESG Focus Radar</CardTitle>
-        <CardDescription className="text-xs sm:text-sm text-gray-600">2D visualization of ESG performance</CardDescription>
+        <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">ESG Focus Radar</CardTitle>
+        <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">2D visualization of ESG performance</CardDescription>
       </CardHeader>
       <CardContent className="h-64 sm:h-80 px-2 sm:px-6">
         <div className="w-full h-full flex items-center justify-center">
@@ -131,6 +134,7 @@ export function FocusRadarChart() {
               fillOpacity="0.2"
               stroke="#3B82F6"
               strokeWidth="2"
+              className="dark:fill-blue-500/20 dark:stroke-blue-500"
             />
             
             {/* Data points and labels */}
@@ -140,15 +144,15 @@ export function FocusRadarChart() {
         
         <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6">
           {radarData.map((item, index) => (
-            <div key={index} className="flex items-center justify-between sm:justify-start space-x-2 p-2 sm:p-0 rounded-lg sm:rounded-none bg-gray-50 sm:bg-transparent">
+            <div key={index} className="flex items-center justify-between sm:justify-start space-x-2 p-2 sm:p-0 rounded-lg sm:rounded-none bg-gray-50 dark:bg-gray-700 sm:dark:bg-transparent">
               <div className="flex items-center space-x-2">
                 <div 
                   className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-xs sm:text-sm font-medium text-gray-700">{item.subject}</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">{item.subject}</span>
               </div>
-              <span className="text-xs sm:text-sm text-gray-500 sm:ml-1">{item.score}/100</span>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 sm:ml-1">{item.score}/100</span>
             </div>
           ))}
         </div>

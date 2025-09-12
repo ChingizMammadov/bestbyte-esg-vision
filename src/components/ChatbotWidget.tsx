@@ -37,23 +37,6 @@ export function ChatbotWidget() {
     }
   }, [messages, isTyping]);
 
-  // Auto-show chat after 10 seconds only if user hasn't interacted
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasInteracted) {
-        setIsOpen(true);
-        // Auto-hide after 5 seconds if no interaction
-        setTimeout(() => {
-          if (!hasInteracted) {
-            setIsOpen(false);
-          }
-        }, 5000);
-      }
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, [hasInteracted]);
-
   // Initialize with welcome message
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -228,11 +211,11 @@ export function ChatbotWidget() {
       <Button
         onClick={handleToggle}
         className={`rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-105 ${
-          isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
+          isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90 dark:bg-emerald-600 dark:hover:bg-emerald-700'
         }`}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
-        {isOpen ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+        {isOpen ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5 text-white" />}
       </Button>
 
       {/* Chat Window - Professional color scheme */}

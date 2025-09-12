@@ -69,30 +69,56 @@ const CustomizedLabel = ({
     const xLineStart = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
     const yLineStart = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
 
+    // Get the contrast ratio to determine if we need white or black text
+    const getContrastYIQ = (hexcolor: string) => {
+      // Convert hex to RGB
+      const r = parseInt(hexcolor.substring(1, 3), 16);
+      const g = parseInt(hexcolor.substring(3, 5), 16);
+      const b = parseInt(hexcolor.substring(5, 7), 16);
+      // Calculate YIQ
+      const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+      // Return white or black based on YIQ
+      return yiq >= 128 ? 'black' : 'white';
+    };
+
+    // If color is a named color, convert it to hex
+    const colorMap: { [key: string]: string } = {
+      "#EC4899": "#EC4899", // Pink
+      "#3B82F6": "#3B82F6", // Blue
+      "#8B5CF6": "#8B5CF6", // Purple
+      "#F59E0B": "#F59E0B", // Amber
+      "#10B981": "#10B981", // Emerald
+      "#EF4444": "#EF4444", // Red
+      "#6B7280": "#6B7280", // Gray
+      "#06B6D4": "#06B6D4", // Cyan
+    };
+
+    const textColor = colorMap[color] ? getContrastYIQ(colorMap[color]) : 'white';
+    
     return (
         <g>
             <text 
                 x={xInside} 
                 y={yInside} 
-                fill="white" 
+                fill={textColor} 
                 textAnchor="middle" 
                 dominantBaseline="central" 
                 className={`font-bold ${isSmallScreen ? 'text-xs' : 'text-sm'}`}
-                style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}
+                style={{ textShadow: textColor === 'white' ? '1px 1px 3px rgba(0,0,0,0.8)' : 'none' }}
             >
                 {`${(percent * 100).toFixed(0)}%`}
             </text>
             
             {!isSmallScreen && (
               <>
-                <path d={`M${xLineStart},${yLineStart}L${xOutside},${yOutside}`} stroke={color} strokeWidth={1} fill="none" />
+                <path d={`M${xLineStart},${yLineStart}L${xOutside},${yOutside}`} stroke={color} strokeWidth={1.5} fill="none" />
                 <circle cx={xLineStart} cy={yLineStart} r={2} fill={color} stroke="none" />
 
                 <text 
                     x={xOutside + (textAnchor === 'start' ? 1 : -1) * 8} 
                     y={yOutside} 
                     textAnchor={textAnchor} 
-                    fill="hsl(var(--foreground))" 
+                    fill="currentColor" 
                     dominantBaseline="central" 
                     className="text-xs md:text-sm font-medium"
                 >
@@ -104,13 +130,20 @@ const CustomizedLabel = ({
     );
 };
 
+interface ChartDataItem {
+  name: string;
+  value: number;
+  color: string;
+  description: string;
+}
+
 const DiversityPieChart = ({ 
   data, 
   title, 
   description, 
   icon 
 }: { 
-  data: any[]; 
+  data: ChartDataItem[]; 
   title: string; 
   description: string; 
   icon: React.ReactNode; 
@@ -118,7 +151,7 @@ const DiversityPieChart = ({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
 
@@ -126,18 +159,18 @@ const DiversityPieChart = ({
     setActiveIndex(null);
   };
 
-  const onPieClick = (_: any, index: number) => {
+  const onPieClick = (_: unknown, index: number) => {
     setClickedIndex(clickedIndex === index ? null : index);
   };
 
   return (
-    <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
+    <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 h-full overflow-hidden">
       <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center gap-2">
           {icon}
-          <CardTitle className="text-base sm:text-lg font-bold text-gray-900 leading-tight">{title}</CardTitle>
+          <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{title}</CardTitle>
         </div>
-        <CardDescription className="text-xs sm:text-sm text-gray-600">{description}</CardDescription>
+        <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{description}</CardDescription>
       </CardHeader>
       <CardContent className="px-2 sm:px-6 pb-4">
         <div className="w-full overflow-hidden">
@@ -165,11 +198,11 @@ const DiversityPieChart = ({
                       <Cell 
                           key={`cell-${index}`} 
                           fill={entry.color} 
-                          stroke="#fff"
+                          stroke="hsl(var(--background))"
                           strokeWidth={2}
                           style={{
                               cursor: 'pointer',
-                              filter: isActive ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'brightness(1)',
+                              filter: isActive ? 'brightness(1.2) drop-shadow(0 4px 8px rgba(0,0,0,0.4))' : 'brightness(1)',
                               transform: isActive ? 'scale(1.02)' : 'scale(1)',
                               transformOrigin: 'center center',
                               transition: 'all 0.2s ease-in-out',
@@ -184,10 +217,10 @@ const DiversityPieChart = ({
                     if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                            <div className="bg-white p-2 sm:p-3 border rounded-lg shadow-lg border-gray-200 max-w-xs">
-                                <p className="font-bold text-sm sm:text-base text-gray-900">{data.name}</p>
-                                <p className="text-xs sm:text-sm text-gray-600">{data.value}%</p>
-                                <p className="text-xs text-gray-500 mt-1">{data.description}</p>
+                            <div className="bg-popover p-2 sm:p-3 border rounded-lg shadow-lg border-border max-w-xs dark:bg-slate-800 dark:border-slate-700">
+                                <p className="font-bold text-sm sm:text-base text-popover-foreground">{data.name}</p>
+                                <p className="text-xs sm:text-sm text-muted-foreground">{data.value}%</p>
+                                <p className="text-xs text-muted-foreground/80 mt-1">{data.description}</p>
                             </div>
                         );
                     }
@@ -201,14 +234,14 @@ const DiversityPieChart = ({
         {/* Mobile-friendly legend */}
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:hidden">
           {data.map((entry, index) => (
-            <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50">
+            <div key={index} className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/50 dark:hover:bg-slate-800/60">
               <div 
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: entry.color }}
               />
               <div className="min-w-0 flex-1">
-                <span className="text-xs font-medium text-gray-700 block truncate">{entry.name}</span>
-                <span className="text-xs text-gray-500">{entry.value}%</span>
+                <span className="text-xs font-medium block truncate">{entry.name}</span>
+                <span className="text-xs text-muted-foreground">{entry.value}%</span>
               </div>
             </div>
           ))}
@@ -273,44 +306,44 @@ export function GovernanceMetrics() {
 
       {/* Disability Representation and Anti-Corruption */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2 px-3 sm:px-6">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 flex-shrink-0" />
-              <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Disability & Accessibility</CardTitle>
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">Disability & Accessibility</CardTitle>
             </div>
-            <CardDescription className="text-xs sm:text-sm text-gray-600">Board members with disabilities</CardDescription>
+            <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Board members with disabilities</CardDescription>
           </CardHeader>
           <CardContent className="px-3 sm:px-6">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Representation</span>
-                <span className="text-xl sm:text-2xl font-bold text-indigo-600">{disabilityRepresentation}%</span>
+                <span className="text-xs sm:text-sm font-medium">Representation</span>
+                <span className="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400">{disabilityRepresentation}%</span>
               </div>
-              <Progress value={disabilityRepresentation} className="w-full h-2 sm:h-3" />
-              <p className="text-xs sm:text-sm text-gray-600">
+              <Progress value={disabilityRepresentation} className="w-full h-2 sm:h-3 [&>div]:bg-indigo-600 dark:[&>div]:bg-indigo-500 bg-indigo-100 dark:bg-indigo-900/30" />
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {disabilityRepresentation}% of board members have disclosed disabilities
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2 px-3 sm:px-6">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
-              <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Anti-Corruption Training</CardTitle>
+              <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-500 flex-shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">Anti-Corruption Training</CardTitle>
             </div>
-            <CardDescription className="text-xs sm:text-sm text-gray-600">Employee training completion</CardDescription>
+            <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Employee training completion</CardDescription>
           </CardHeader>
           <CardContent className="px-3 sm:px-6">
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Training Completion</span>
-                <span className="text-xl sm:text-2xl font-bold text-green-600">{antiCorruptionTraining}%</span>
+                <span className="text-xs sm:text-sm font-medium">Training Completion</span>
+                <span className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-500">{antiCorruptionTraining}%</span>
               </div>
-              <Progress value={antiCorruptionTraining} className="w-full h-2 sm:h-3" />
-              <p className="text-xs sm:text-sm text-gray-600">
+              <Progress value={antiCorruptionTraining} className="w-full h-2 sm:h-3 [&>div]:bg-green-600 dark:[&>div]:bg-green-500 bg-green-100 dark:bg-green-900/30" />
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 All employees have completed anti-corruption training
               </p>
             </div>
@@ -319,13 +352,13 @@ export function GovernanceMetrics() {
       </div>
 
       {/* Shareholder Rights */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2 px-3 sm:px-6">
           <div className="flex items-center gap-2">
-            <Vote className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />
-            <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Shareholder Rights</CardTitle>
+            <Vote className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+            <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">Shareholder Rights</CardTitle>
           </div>
-          <CardDescription className="text-xs sm:text-sm text-gray-600">Voting rights percentage over time</CardDescription>
+          <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Voting rights percentage over time</CardDescription>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
           <div className="w-full overflow-hidden">
@@ -333,13 +366,13 @@ export function GovernanceMetrics() {
               <LineChart data={shareholderRightsData} margin={{ top: 5, right: 15, left: 15, bottom: 5 }}>
                 <XAxis 
                   dataKey="year" 
-                  stroke="#6B7280" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"}
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
                 />
                 <YAxis 
-                  stroke="#6B7280" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"}
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
@@ -349,7 +382,9 @@ export function GovernanceMetrics() {
                     fontSize: '12px',
                     padding: '8px',
                     borderRadius: '8px',
-                    border: '1px solid #e5e7eb'
+                    backgroundColor: document.documentElement.classList.contains('dark') ? '#1F2937' : 'white',
+                    color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#111827',
+                    borderColor: document.documentElement.classList.contains('dark') ? '#4B5563' : '#E5E7EB'
                   }}
                 />
                 <Line 
@@ -357,7 +392,8 @@ export function GovernanceMetrics() {
                   dataKey="votingRights" 
                   stroke="#8B5CF6" 
                   strokeWidth={2}
-                  dot={{ r: 3, fill: "#8B5CF6" }} 
+                  activeDot={{ r: 6, strokeWidth: 1, stroke: 'hsl(var(--background))' }}
+                  dot={{ r: 3, fill: "#8B5CF6", strokeWidth: 1, stroke: 'hsl(var(--background))' }} 
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -366,13 +402,13 @@ export function GovernanceMetrics() {
       </Card>
 
       {/* Executive Compensation */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2 px-3 sm:px-6">
           <div className="flex items-center gap-2">
-            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 flex-shrink-0" />
-            <CardTitle className="text-base sm:text-lg font-bold text-gray-900">Executive Compensation</CardTitle>
+            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0" />
+            <CardTitle className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">Executive Compensation</CardTitle>
           </div>
-          <CardDescription className="text-xs sm:text-sm text-gray-600">Pay ratio compared to median employee salary</CardDescription>
+          <CardDescription className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Pay ratio compared to median employee salary</CardDescription>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
           <div className="w-full overflow-hidden">
@@ -380,13 +416,13 @@ export function GovernanceMetrics() {
               <BarChart data={executiveCompData} margin={{ top: 5, right: 15, left: 15, bottom: 5 }}>
                 <XAxis 
                   dataKey="role" 
-                  stroke="#6B7280" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"}
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
                 />
                 <YAxis 
-                  stroke="#6B7280" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"}
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
@@ -397,10 +433,17 @@ export function GovernanceMetrics() {
                     fontSize: '12px',
                     padding: '8px',
                     borderRadius: '8px',
-                    border: '1px solid #e5e7eb'
+                    backgroundColor: document.documentElement.classList.contains('dark') ? '#1F2937' : 'white',
+                    color: document.documentElement.classList.contains('dark') ? '#F9FAFB' : '#111827',
+                    borderColor: document.documentElement.classList.contains('dark') ? '#4B5563' : '#E5E7EB'
                   }}
                 />
-                <Bar dataKey="ratio" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                <Bar 
+                  dataKey="ratio" 
+                  fill="#F59E0B" 
+                  radius={[4, 4, 0, 0]} 
+                  className="dark:opacity-85"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>

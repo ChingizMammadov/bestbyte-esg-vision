@@ -32,12 +32,24 @@ const wasteData = [
   { name: "Unrecycled", value: 40, color: "#F59E0B" },
 ];
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: number;
+    color?: string;
+    dataKey?: string;
+    payload?: any;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
-        <p className="font-semibold text-gray-900 mb-2">{label}</p>
-        {payload.map((entry: any, index: number) => (
+      <div className="bg-white dark:bg-gray-800 p-3 border dark:border-gray-700 rounded-lg shadow-lg">
+        <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">{label}</p>
+        {payload.map((entry, index: number) => (
           <p key={index} className="text-sm" style={{ color: entry.color }}>
             {entry.name}: {entry.value.toLocaleString()} 
             {entry.name.includes('renewable') ? ' tons CO2' : 
@@ -56,19 +68,30 @@ export function EnvironmentalMetrics() {
   return (
     <div className="space-y-6">
       {/* Carbon Emissions */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
-            <Leaf className="w-5 h-5 text-green-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Carbon Emissions</CardTitle>
+            <Leaf className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Carbon Emissions</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Renewable vs Non-Renewable Sources</CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Renewable vs Non-Renewable Sources</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={carbonData}>
-              <XAxis dataKey="month" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+              <XAxis 
+                dataKey="month" 
+                stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+              />
+              <YAxis 
+                stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+              />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="renewable" stackId="a" fill="#10B981" name="Renewable Energy" />
@@ -80,19 +103,30 @@ export function EnvironmentalMetrics() {
 
       {/* Water Usage and Energy Consumption */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <Droplets className="w-5 h-5 text-blue-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Water Usage</CardTitle>
+              <Droplets className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Water Usage</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Monthly consumption trends</CardDescription>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Monthly consumption trends</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={waterData}>
-                <XAxis dataKey="month" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis 
+                  dataKey="month" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
                 <Tooltip content={<CustomTooltip />} />
                 <Line type="monotone" dataKey="usage" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: "#3B82F6" }} />
               </LineChart>
@@ -100,13 +134,13 @@ export function EnvironmentalMetrics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-yellow-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Energy Sources</CardTitle>
+              <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Energy Sources</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Renewable vs Non-Renewable</CardDescription>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Renewable vs Non-Renewable</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
@@ -123,7 +157,7 @@ export function EnvironmentalMetrics() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -131,13 +165,13 @@ export function EnvironmentalMetrics() {
       </div>
 
       {/* Waste Management */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
-            <Recycle className="w-5 h-5 text-green-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Waste Management</CardTitle>
+            <Recycle className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Waste Management</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Recycled vs Unrecycled waste</CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Recycled vs Unrecycled waste</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
@@ -157,6 +191,7 @@ export function EnvironmentalMetrics() {
                 ))}
               </Pie>
               <Legend />
+              <Tooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>

@@ -1,19 +1,32 @@
 
 import React from 'react';
 import { Control } from 'react-hook-form';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { DarkSelect, DarkSelectContent, DarkSelectItem, DarkSelectTrigger, DarkSelectValue } from '@/components/ui/dark-select';
-import { cn } from '@/lib/utils';
+import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { LightweightSelect, LightweightSelectOption } from '@/components/ui/lightweight-select';
 import { Leaf } from 'lucide-react';
 
 interface ESGPreferencesSectionProps {
   control: Control<any>;
 }
 
-const esgFocusAreas = ["Environmental Impact", "Social Responsibility", "Governance"];
-const reportingTypes = ["Basic ESG Reporting", "Comprehensive ESG Reporting", "Regulatory ESG Reporting"];
+// Convert arrays to option objects required by LightweightSelect
+const esgFocusOptions: LightweightSelectOption[] = [
+  { value: "Environmental Impact", label: "Environmental Impact" },
+  { value: "Social Responsibility", label: "Social Responsibility" },
+  { value: "Governance", label: "Governance" }
+];
+
+const reportingTypeOptions: LightweightSelectOption[] = [
+  { value: "Basic ESG Reporting", label: "Basic ESG Reporting" },
+  { value: "Comprehensive ESG Reporting", label: "Comprehensive ESG Reporting" },
+  { value: "Regulatory ESG Reporting", label: "Regulatory ESG Reporting" }
+];
 
 export function ESGPreferencesSection({ control }: ESGPreferencesSectionProps) {
+  // Memoize the options to prevent unnecessary re-renders
+  const memoizedFocusOptions = React.useMemo(() => esgFocusOptions, []);
+  const memoizedReportingOptions = React.useMemo(() => reportingTypeOptions, []);
+  
   return (
     <div className="border-b border-slate-200 dark:border-slate-700 pb-6">
       <div className="flex items-center gap-2 mb-4">
@@ -25,26 +38,19 @@ export function ESGPreferencesSection({ control }: ESGPreferencesSectionProps) {
         <FormField 
           control={control} 
           name="esgFocus" 
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel className="text-slate-700 dark:text-slate-300 font-medium">Primary ESG Focus Area *</FormLabel>
-              <DarkSelect onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <DarkSelectTrigger className={cn(
-                    !field.value && "text-muted-foreground/60"
-                  )}>
-                    <DarkSelectValue placeholder="Select ESG focus" />
-                  </DarkSelectTrigger>
-                </FormControl>
-                <DarkSelectContent>
-                  {esgFocusAreas.map((area) => (
-                    <DarkSelectItem key={area} value={area}>
-                      {area}
-                    </DarkSelectItem>
-                  ))}
-                </DarkSelectContent>
-              </DarkSelect>
-              <FormMessage className="text-red-500 dark:text-red-400" />
+              <LightweightSelect
+                options={memoizedFocusOptions}
+                value={field.value}
+                onChange={(value) => {
+                  // Use setTimeout to prevent UI freezes
+                  setTimeout(() => field.onChange(value), 0);
+                }}
+                placeholder="Select ESG focus"
+                label="Primary ESG Focus Area *"
+                error={fieldState.error?.message}
+              />
             </FormItem>
           )} 
         />
@@ -52,26 +58,19 @@ export function ESGPreferencesSection({ control }: ESGPreferencesSectionProps) {
         <FormField 
           control={control} 
           name="reportingType" 
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel className="text-slate-700 dark:text-slate-300 font-medium">ESG Reporting Type *</FormLabel>
-              <DarkSelect onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <DarkSelectTrigger className={cn(
-                    !field.value && "text-muted-foreground/60"
-                  )}>
-                    <DarkSelectValue placeholder="Select reporting type" />
-                  </DarkSelectTrigger>
-                </FormControl>
-                <DarkSelectContent>
-                  {reportingTypes.map((type) => (
-                    <DarkSelectItem key={type} value={type}>
-                      {type}
-                    </DarkSelectItem>
-                  ))}
-                </DarkSelectContent>
-              </DarkSelect>
-              <FormMessage className="text-red-500 dark:text-red-400" />
+              <LightweightSelect
+                options={memoizedReportingOptions}
+                value={field.value}
+                onChange={(value) => {
+                  // Use setTimeout to prevent UI freezes
+                  setTimeout(() => field.onChange(value), 0);
+                }}
+                placeholder="Select reporting type"
+                label="ESG Reporting Type *"
+                error={fieldState.error?.message}
+              />
             </FormItem>
           )} 
         />

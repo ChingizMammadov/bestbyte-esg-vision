@@ -59,6 +59,18 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Recharts for data visualization
+
+## Responsive Design
+
+This project follows mobile-first responsive design principles. We've implemented:
+
+- A responsive utility library in `src/utils/responsiveUtils.ts`
+- Consistent breakpoints and layout patterns
+- Fully responsive dashboard components
+- Dark mode compatible visualizations
+
+See `docs/responsive-guidelines.md` for comprehensive responsive design guidelines.
 
 ## How can I deploy this project?
 

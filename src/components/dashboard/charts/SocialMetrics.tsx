@@ -30,21 +30,42 @@ export function SocialMetrics() {
   return (
     <div className="space-y-6">
       {/* Workplace Safety */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-blue-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Workplace Safety</CardTitle>
+            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Workplace Safety</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Incident tracking by severity</CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Incident tracking by severity</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={safetyData}>
-              <XAxis dataKey="type" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#3B82F6" />
+              <XAxis 
+                dataKey="type" 
+                stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+              />
+              <YAxis 
+                stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+              />
+              <Tooltip
+                contentStyle={{ 
+                  backgroundColor: document.documentElement.classList.contains('dark') ? '#1F2937' : 'white',
+                  borderColor: document.documentElement.classList.contains('dark') ? '#4B5563' : '#E5E7EB',
+                  color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#111827'
+                }}
+              />
+              <Bar dataKey="count">
+                {safetyData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -52,20 +73,37 @@ export function SocialMetrics() {
 
       {/* Employee Diversity and Wellness */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-purple-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Employee Diversity</CardTitle>
+              <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Employee Diversity</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Gender and ethnicity representation</CardDescription>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Gender and ethnicity representation</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={diversityData}>
-                <XAxis dataKey="category" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip />
+                <XAxis 
+                  dataKey="category" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: document.documentElement.classList.contains('dark') ? '#1F2937' : 'white',
+                    borderColor: document.documentElement.classList.contains('dark') ? '#4B5563' : '#E5E7EB',
+                    color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#111827'
+                  }}
+                />
                 <Bar dataKey="women" stackId="a" fill="#EC4899" name="Women" />
                 <Bar dataKey="men" stackId="a" fill="#3B82F6" name="Men" />
                 <Bar dataKey="minority" fill="#10B981" name="Minority" />
@@ -74,20 +112,37 @@ export function SocialMetrics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-600" />
-              <CardTitle className="text-lg font-bold text-gray-900">Employee Well-being</CardTitle>
+              <Heart className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Employee Well-being</CardTitle>
             </div>
-            <CardDescription className="text-gray-600">Wellness program enrollment</CardDescription>
+            <CardDescription className="text-gray-600 dark:text-gray-300">Wellness program enrollment</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={wellnessData}>
-                <XAxis dataKey="quarter" stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#6B7280" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip />
+                <XAxis 
+                  dataKey="quarter" 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <YAxis 
+                  stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false} 
+                />
+                <Tooltip
+                  contentStyle={{ 
+                    backgroundColor: document.documentElement.classList.contains('dark') ? '#1F2937' : 'white',
+                    borderColor: document.documentElement.classList.contains('dark') ? '#4B5563' : '#E5E7EB',
+                    color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#111827'
+                  }}
+                />
                 <Line type="monotone" dataKey="enrolled" stroke="#EF4444" strokeWidth={3} dot={{ r: 4, fill: "#EF4444" }} />
               </LineChart>
             </ResponsiveContainer>
@@ -96,22 +151,22 @@ export function SocialMetrics() {
       </div>
 
       {/* Labor Rights Compliance */}
-      <Card className="bg-white border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
-            <Scale className="w-5 h-5 text-indigo-600" />
-            <CardTitle className="text-lg font-bold text-gray-900">Labor Rights Compliance</CardTitle>
+            <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">Labor Rights Compliance</CardTitle>
           </div>
-          <CardDescription className="text-gray-600">Policy compliance rate</CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-300">Policy compliance rate</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Compliance Rate</span>
-              <span className="text-2xl font-bold text-green-600">{laborComplianceRate}%</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Compliance Rate</span>
+              <span className="text-2xl font-bold text-green-600 dark:text-green-400">{laborComplianceRate}%</span>
             </div>
             <Progress value={laborComplianceRate} className="w-full h-3" />
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               {laborComplianceRate}% of policies are in full compliance with labor rights standards
             </p>
           </div>
