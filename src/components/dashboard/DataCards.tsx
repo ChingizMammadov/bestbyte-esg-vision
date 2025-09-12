@@ -3,54 +3,91 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingDown, TrendingUp, Minus, Target, Sparkles } from "lucide-react";
 
-const dataInsights = [
-  {
-    title: "Carbon Emissions",
-    value: "5% reduction",
-    trend: "down",
-    description: "Compared to last quarter",
-    icon: TrendingDown,
-    color: "text-emerald-600 dark:text-emerald-400",
-    bgGradient: "from-emerald-50 to-green-50 dark:from-emerald-900/30 dark:to-green-900/30",
-    iconBg: "bg-emerald-100 dark:bg-emerald-900/50",
-    borderColor: "border-emerald-200 dark:border-emerald-900"
-  },
-  {
-    title: "Water Usage",
-    value: "12% reduction",
-    trend: "down", 
-    description: "Achieved through efficiency programs",
-    icon: TrendingDown,
-    color: "text-blue-600 dark:text-blue-400",
-    bgGradient: "from-blue-50 to-cyan-50 dark:from-blue-900/30 dark:to-cyan-900/30",
-    iconBg: "bg-blue-100 dark:bg-blue-900/50",
-    borderColor: "border-blue-200 dark:border-blue-900"
-  },
-  {
+const getLatestChange = (changeArray) => {
+  if (!changeArray || changeArray.length === 0) return null;
+  const latestEntry = changeArray[changeArray.length - 1];
+  return latestEntry ? latestEntry.percentage_change : null;
+};
+
+const getLatestAccident = (changeArray) => {
+  if (!changeArray || changeArray.length === 0) return null;
+  const latestEntry = changeArray[changeArray.length - 1];
+  return latestEntry ? latestEntry["Date of Accident"] : null;
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  console.log(date)
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+
+export function DataCards({ data }) {
+
+  const carbonChange = data ? getLatestChange(data.carbon_emissions_change) : null;
+  const waterChange = data ? getLatestChange(data.water_usage_change) : null;
+  
+  const lastAccidentDate = data ? {
     title: "Employee Safety",
-    value: "Zero incidents",
+    value: "Zero Accidents",
     trend: "stable",
     description: "For 45 consecutive days",
     icon: Minus,
-    color: "text-purple-600 dark:text-purple-400",
-    bgGradient: "from-purple-50 to-violet-50 dark:from-purple-900/30 dark:to-violet-900/30",
-    iconBg: "bg-purple-100 dark:bg-purple-900/50",
-    borderColor: "border-purple-200 dark:border-purple-900"
-  },
-  {
-    title: "ESG Goals",
-    value: "On track",
-    trend: "up",
-    description: "85% of annual targets met",
-    icon: Target,
-    color: "text-indigo-600 dark:text-indigo-400",
-    bgGradient: "from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/30",
-    iconBg: "bg-indigo-100 dark:bg-indigo-900/50",
-    borderColor: "border-indigo-200 dark:border-indigo-900"
-  }
-];
+    color: "text-purple-600",
+    bgGradient: "from-purple-50 to-violet-50",
+    iconBg: "bg-purple-100",
+    borderColor: "border-purple-200"
+  } : null;
+  const wasteRecycledChange = data ? getLatestChange(data.waste_recycled_change) : null;
 
-export function DataCards() {
+  const dataInsights = [
+    {
+      title: "Carbon Emissions",
+      value: carbonChange !== null ? `${Math.abs(carbonChange).toFixed(1)}% ${carbonChange > 0 ? "increase" : "reduction"}` : "N/A",
+      trend: carbonChange !== null ? (carbonChange > 0 ? "up" : "down") : "stable",
+      description: "Compared to last month",
+      icon: carbonChange !== null ? (carbonChange > 0 ? TrendingUp : TrendingDown) : Minus,
+      color: carbonChange !== null ? (carbonChange > 0 ? "text-red-600" : "text-emerald-600") : "text-gray-600",
+      bgGradient: "from-emerald-50 to-green-50",
+      iconBg: "bg-emerald-100",
+      borderColor: "border-emerald-200"
+    },
+    {
+      title: "Water Usage",
+      value: waterChange !== null ? `${Math.abs(waterChange).toFixed(1)}% ${waterChange > 0 ? "increase" : "reduction"}` : "N/A",
+      trend: waterChange !== null ? (waterChange > 0 ? "up" : "down") : "stable",
+      description: "Achieved through efficiency programs",
+      icon: waterChange !== null ? (waterChange > 0 ? TrendingUp : TrendingDown) : Minus,
+      color: waterChange !== null ? (waterChange > 0 ? "text-red-600" : "text-blue-600") : "text-gray-600",
+      bgGradient: "from-blue-50 to-cyan-50",
+      iconBg: "bg-blue-100",
+      borderColor: "border-blue-200"
+    },
+    {
+      title: "Employee Safety",
+      value: lastAccidentDate !== null ? lastAccidentDate.value : "N/A",
+      trend: "stable",
+      description: "Date of last reported incident",
+      icon: Minus,
+      color: "text-purple-600",
+      bgGradient: "from-purple-50 to-violet-50",
+      iconBg: "bg-purple-100",
+      borderColor: "border-purple-200"
+    },
+    {
+      title: "Waste Recycled",
+      value: wasteRecycledChange !== null ? `${Math.abs(wasteRecycledChange).toFixed(1)}% ${wasteRecycledChange > 0 ? "increase" : "reduction"}` : "N/A",
+      trend: wasteRecycledChange !== null ? (wasteRecycledChange > 0 ? "up" : "down") : "stable",
+      description: "Total recycled waste",
+      icon: wasteRecycledChange !== null ? (wasteRecycledChange > 0 ? TrendingUp : TrendingDown) : Minus,
+      color: wasteRecycledChange !== null ? (wasteRecycledChange > 0 ? "text-red-600" : "text-blue-600") : "text-gray-600",
+      bgGradient: "from-indigo-50 to-blue-50",
+      iconBg: "bg-indigo-100",
+      borderColor: "border-indigo-200"
+    }
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       {dataInsights.map((insight, index) => (
