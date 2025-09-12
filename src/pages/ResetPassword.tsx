@@ -106,11 +106,14 @@ export default function ResetPassword() {
     setIsLoading(true);
 
     try {
+      // The Supabase client automatically extracts the token from the URL hash
+      // We don't need to manually pass any token, just the new password
       const { error } = await supabase.auth.updateUser({
         password: formData.password
       });
 
       if (error) {
+        console.error("Password reset error:", error);
         toast({
           title: "Error",
           description: error.message,
@@ -129,6 +132,7 @@ export default function ResetPassword() {
         }, 3000);
       }
     } catch (error) {
+      console.error("Unexpected error during password reset:", error);
       toast({
         title: "Error",
         description: "An unexpected error occurred. Please try again.",
@@ -139,20 +143,25 @@ export default function ResetPassword() {
     }
   };
 
-  // Check if we have the necessary tokens
+  // Check if the URL hash contains auth parameters
   useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
+    // Supabase sends tokens in the URL hash fragment, not query params
+    // The library automatically handles this, but we can check if we're on a valid reset URL
+    const isValidResetURL = window.location.hash.includes('type=recovery');
     
-    if (!accessToken || !refreshToken) {
+    // If URL doesn't include the recovery type hash, it's not a valid reset link
+    if (!isValidResetURL) {
       setIsLinkInvalid(true);
       toast({
         title: "Invalid Link",
         description: "This password reset link is invalid or has expired.",
         variant: "destructive",
       });
+    } else {
+      // If hash exists, let Supabase handle it automatically
+      console.log("Valid recovery URL detected");
     }
-  }, [searchParams, toast]);
+  }, [toast]);
 
   if (isLinkInvalid) {
     return (

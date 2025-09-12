@@ -37,8 +37,14 @@ export default function ForgotPassword() {
     setIsLoading(true);
 
     try {
+      // Ensure the redirect URL is absolute and does not include any query parameters
+      // Supabase will add the necessary auth hash to the URL
+      const resetUrl = new URL("/reset-password", window.location.origin).toString();
+      
+      console.log("Reset redirect URL:", resetUrl);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: resetUrl,
       });
 
       if (error) {
