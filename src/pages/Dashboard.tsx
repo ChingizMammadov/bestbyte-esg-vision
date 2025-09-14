@@ -64,7 +64,7 @@ export default function Dashboard() {
                 <CompanyOverview data={apiData} />
               </motion.div>
               <motion.div {...cardMotion}>
-                <EsgTargets />
+                <EsgTargets data={apiData} />
               </motion.div>
             </div>
 

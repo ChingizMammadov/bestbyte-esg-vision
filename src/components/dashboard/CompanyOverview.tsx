@@ -23,7 +23,9 @@ export function CompanyOverview({ data }) {
     );
   }
 
-  const company = data.company_overview
+  const company = data.company_overview;
+  console.log(company);
+
   return (
     <Card className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/30 dark:to-purple-900/30 border-0 shadow-xl rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
       <CardHeader className="bg-gradient-to-r from-violet-500/10 to-purple-500/10 dark:from-violet-600/20 dark:to-purple-600/20 pb-4">
@@ -59,7 +61,7 @@ export function CompanyOverview({ data }) {
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Company Size</p>
-                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{company.size}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{company.size_number_of_employees}</p>
               </div>
             </div>
             
