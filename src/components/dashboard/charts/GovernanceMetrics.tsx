@@ -248,35 +248,39 @@ export function GovernanceMetrics({data}) {
     <div className="space-y-4 sm:space-y-6">
       {/* Comprehensive Board Diversity Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        <DiversityPieChart
+        {genderDiversityData ?
+          <DiversityPieChart
           data={genderDiversityData}
           title="Gender Diversity"
           description="Board composition by gender"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 flex-shrink-0" />}
-        />
+        /> :<></>}
         
-        <DiversityPieChart
+        {ethnicDiversityData ?
+          <DiversityPieChart
           data={ethnicDiversityData}
           title="Ethnic & Racial Diversity"
           description="Board composition by ethnicity"
           icon={<UserCheck className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />}
-        />
+        /> : <></>}
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        <DiversityPieChart
+        {ageDiversityData ?
+          <DiversityPieChart
           data={ageDiversityData}
           title="Age Diversity"
           description="Board composition by age groups"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />}
-        />
+        /> : <></>}
         
-        <DiversityPieChart
+        {educationDiversityData ?
+          <DiversityPieChart
           data={educationDiversityData}
           title="Educational Background"
           description="Board composition by education"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />}
-        />
+        /> : <></>}
       </div>
 
       {/* Disability Representation and Anti-Corruption */}

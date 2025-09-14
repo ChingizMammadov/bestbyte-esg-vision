@@ -8,7 +8,7 @@ import { Shield, Users, Heart, Scale } from "lucide-react";
 
 
 export function SocialMetrics({data}) {
-  const safetyData = data ? data.safety_data : null; 
+  const safetyData = data ? data.safety_data : []; 
   const diversityData = data ? data.diversity_data : null; 
   const wellnessData = data ? data.wellness_data : [];
   const laborComplianceRate = data ? data.labor_rights_compliance_score : null;
