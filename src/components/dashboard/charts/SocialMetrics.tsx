@@ -26,7 +26,7 @@ const wellnessData = [
 
 const laborComplianceRate = 90;
 
-export function SocialMetrics() {
+export function SocialMetrics({data}) {
   return (
     <div className="space-y-6">
       {/* Workplace Safety */}

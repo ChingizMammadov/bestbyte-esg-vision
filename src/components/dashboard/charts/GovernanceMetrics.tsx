@@ -268,7 +268,7 @@ const executiveCompData = [
 const antiCorruptionTraining = 100;
 const disabilityRepresentation = 8; // 8% disability representation
 
-export function GovernanceMetrics() {
+export function GovernanceMetrics({data}) {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Comprehensive Board Diversity Charts */}

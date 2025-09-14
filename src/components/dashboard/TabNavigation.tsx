@@ -6,7 +6,7 @@ import { SocialMetrics } from "./charts/SocialMetrics";
 import { GovernanceMetrics } from "./charts/GovernanceMetrics";
 import { Leaf, Users, Shield } from "lucide-react";
 
-export function TabNavigation() {
+export function TabNavigation({data}) {
   return (
     <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-3 sm:p-4 md:p-6 border border-blue-200/60 dark:border-blue-900/60 hover:border-blue-300/60 dark:hover:border-blue-800/60 transition-all duration-300">
       <Tabs defaultValue="environmental" className="w-full">
@@ -37,15 +37,15 @@ export function TabNavigation() {
         </TabsList>
         
         <TabsContent value="environmental" className="space-y-6">
-          <EnvironmentalMetrics />
+          <EnvironmentalMetrics data={data} />
         </TabsContent>
         
         <TabsContent value="social" className="space-y-6">
-          <SocialMetrics />
+          <SocialMetrics data={data} />
         </TabsContent>
         
         <TabsContent value="governance" className="space-y-6">
-          <GovernanceMetrics />
+          <GovernanceMetrics data={data} />
         </TabsContent>
       </Tabs>
     </div>

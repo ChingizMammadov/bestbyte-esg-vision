@@ -80,7 +80,7 @@ export default function Dashboard() {
 
             {/* Detailed ESG Metrics Tabs */}
             <motion.div {...cardMotion}>
-              <TabNavigation />
+              <TabNavigation data={apiData} />
             </motion.div>
 
             {/* Main dashboard charts */}
