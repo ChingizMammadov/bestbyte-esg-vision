@@ -5,7 +5,6 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tool
 import { Leaf, Droplets, Zap, Recycle } from "lucide-react";
 
 
-
 interface TooltipProps {
   active?: boolean;
   payload?: Array<{
