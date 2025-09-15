@@ -4,10 +4,22 @@ import os
 from datetime import datetime
 import io
 
-# Create database directory if it doesn't exist
-os.makedirs("db", exist_ok=True)
+# Use persistent data directory on Render
+DATA_DIR = os.environ.get("RENDER_DISK_MOUNT_PATH", "")
+if DATA_DIR:
+    print(f"Using Render persistent disk at {DATA_DIR}")
+    DB_DIR = os.path.join(DATA_DIR, "db")
+    REPORTS_DIR = os.path.join(DATA_DIR, "reports")
+else:
+    print("Using local directories")
+    DB_DIR = "db"
+    REPORTS_DIR = "reports"
 
-DB_PATH = "db/reports.db"
+# Create database directory if it doesn't exist
+os.makedirs(DB_DIR, exist_ok=True)
+os.makedirs(REPORTS_DIR, exist_ok=True)
+
+DB_PATH = os.path.join(DB_DIR, "reports.db")
 
 def get_db_connection() -> Connection:
     """Create a connection to the SQLite database"""
@@ -25,7 +37,7 @@ def init_db():
         ).fetchone()
         
         # Create reports directory if it doesn't exist
-        os.makedirs("reports", exist_ok=True)
+        os.makedirs(REPORTS_DIR, exist_ok=True)
         
         if not table_exists:
             # Create the table with file_path instead of binary data
@@ -158,7 +170,7 @@ def save_report(report_data: bytes, filename: str, user_id: str) -> int:
         
         # Create user directory if it doesn't exist
         safe_user_id = user_id.replace("/", "_").replace("\\", "_")  # Sanitize user_id for file path
-        user_dir = os.path.join("reports", safe_user_id)
+        user_dir = os.path.join(REPORTS_DIR, safe_user_id)
         os.makedirs(user_dir, exist_ok=True)
         
         # Create file path with timestamp to avoid collisions

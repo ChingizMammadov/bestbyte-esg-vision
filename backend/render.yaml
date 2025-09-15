@@ -12,3 +12,13 @@ services:
         value: "BestByte"
       - key: PORT
         value: 8000
+      - key: FRONTEND_URL
+        sync: false
+      - key: ENVIRONMENT
+        value: "production"
+      - key: RENDER_DISK_MOUNT_PATH
+        value: "/app/data"
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
