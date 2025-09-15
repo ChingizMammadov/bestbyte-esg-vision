@@ -17,5 +17,5 @@ RUN mkdir -p /app/data
 RUN mkdir -p /app/data/db
 RUN mkdir -p /app/data/reports
 
-# Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT:-8000}"]
+# Use shell form of CMD to allow environment variable substitution
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
