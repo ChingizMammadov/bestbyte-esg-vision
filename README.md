@@ -1,85 +1,94 @@
-# Welcome to your Lovable project
+# BestByte ESG Analytics Platform
 
-## Project info
+A full-stack application for ESG (Environmental, Social, and Governance) analytics and reporting.
 
-**URL**: https://lovable.dev/projects/c16893a0-6e80-48ed-9449-2f468c78710b
+## Overview
 
-## How can I edit this code?
+BestByte ESG Analytics Platform helps organizations track, analyze, and report on their environmental, social, and governance metrics. It provides a comprehensive dashboard with data visualization, report generation, and analytics features.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- 📊 Interactive ESG dashboards and analytics
+- 📄 Automated report generation and document extraction
+- 🔍 Advanced search and filtering capabilities
+- 📱 Responsive design for desktop and mobile
+- 🔒 Secure authentication and user management
+- 🌙 Dark/Light theme support
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c16893a0-6e80-48ed-9449-2f468c78710b) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Frontend
+- React with TypeScript
+- Vite for fast development
+- Tailwind CSS for styling
+- Shadcn/UI components
+- React Hook Form for form management
 
-**Use your preferred IDE**
+### Backend
+- Python with FastAPI
+- PDF data extraction utilities
+- Database integration with SQLite/Postgres
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Quick Start
 
-Follow these steps:
+Run the application with our startup script:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```powershell
+# From the project root directory
+.\start.ps1
 ```
 
-**Edit a file directly in GitHub**
+This will:
+1. Start the backend Python server
+2. Start the frontend development server with Bun
+3. Open the application in your browser
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Manual Setup
 
-**Use GitHub Codespaces**
+#### Frontend Setup
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+cd frontend
+bun install
+bun run dev
+```
 
-## What technologies are used for this project?
+#### Backend Setup
 
-This project is built with:
+```bash
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1  # Windows PowerShell
+pip install -r requirements.txt
+python main.py
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-- Recharts for data visualization
+## Development
 
-## Responsive Design
+- Frontend runs at: http://localhost:5173
+- Backend API available at: http://localhost:8000
 
-This project follows mobile-first responsive design principles. We've implemented:
+## Project Structure
 
-- A responsive utility library in `src/utils/responsiveUtils.ts`
-- Consistent breakpoints and layout patterns
-- Fully responsive dashboard components
-- Dark mode compatible visualizations
+```
+backend/
+  ├── main.py           # Main FastAPI application
+  ├── requirements.txt  # Python dependencies
+  └── utils.py          # Helper functions
 
-See `docs/responsive-guidelines.md` for comprehensive responsive design guidelines.
+frontend/
+  ├── src/
+  │   ├── components/   # Reusable UI components
+  │   ├── contexts/     # React contexts
+  │   ├── hooks/        # Custom React hooks
+  │   ├── lib/          # Utilities and API functions
+  │   ├── pages/        # Main application pages
+  │   └── utils/        # Helper functions
+  └── public/           # Static assets
+```
 
-## How can I deploy this project?
+## License
 
-Simply open [Lovable](https://lovable.dev/projects/c16893a0-6e80-48ed-9449-2f468c78710b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is proprietary and confidential.

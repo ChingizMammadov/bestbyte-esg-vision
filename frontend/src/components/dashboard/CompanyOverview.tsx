@@ -5,9 +5,26 @@ import { Badge } from "@/components/ui/badge";
 import { Building2, MapPin, Globe, Users, Sparkles } from "lucide-react";
 import { useCompanies } from "@/hooks/useEsgData";
 
-export function CompanyOverview({ data }) {
+export function CompanyOverview() {
+  const { data: companies, isLoading, error } = useCompanies();
 
-  if (!data) {
+  if (isLoading) {
+    return (
+      <Card className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/30 dark:to-purple-900/30 border-0 shadow-xl rounded-3xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-violet-500/10 to-purple-500/10 dark:from-violet-600/20 dark:to-purple-600/20 pb-4">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-violet-100 dark:bg-violet-900/50 rounded-xl">
+              <Building2 className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+            </div>
+            <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-100">Company Overview</CardTitle>
+          </div>
+          <CardDescription className="text-violet-700 dark:text-violet-300">Loading company information...</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (error || !companies || companies.length === 0) {
     return (
       <Card className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/30 dark:to-purple-900/30 border-0 shadow-xl rounded-3xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-violet-500/10 to-purple-500/10 dark:from-violet-600/20 dark:to-purple-600/20 pb-4">
@@ -23,8 +40,7 @@ export function CompanyOverview({ data }) {
     );
   }
 
-  const company = data.company_overview;
-  console.log(company);
+  const company = companies[0]; // Display first company for now
 
   return (
     <Card className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/30 dark:to-purple-900/30 border-0 shadow-xl rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -61,11 +77,11 @@ export function CompanyOverview({ data }) {
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Company Size</p>
-                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{company.size_number_of_employees}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{company.size}</p>
               </div>
             </div>
             
-            {data.website && (
+            {company.website && (
               <div className="flex items-center gap-3 p-3 bg-white/60 dark:bg-gray-800/60 rounded-xl">
                 <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                   <Globe className="w-4 h-4 text-purple-600 dark:text-purple-400" />
@@ -92,7 +108,7 @@ export function CompanyOverview({ data }) {
               </Badge>
             </div>
             
-            {data.description && (
+            {company.description && (
               <div className="p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">About</p>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">

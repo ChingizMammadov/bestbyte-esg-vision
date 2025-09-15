@@ -29,12 +29,6 @@ const cardMotion = {
 export default function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [selectedRegion, setSelectedRegion] = useState("global");
-  const [apiData, setApiData] = useState(null);
-
-  const handleApiData = (data) => {
-    setApiData(data);
-  };
-
 
   return (
     <SidebarProvider>
@@ -53,7 +47,7 @@ export default function Dashboard() {
                   setSelectedRegion={setSelectedRegion}
                 />
                 <div className="w-full">
-                  <SeedDataButton onUploadSuccess={handleApiData} />
+                  <SeedDataButton />
                 </div>
               </div>
             </motion.div>
@@ -61,16 +55,16 @@ export default function Dashboard() {
             {/* Company Overview and ESG Targets */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <motion.div {...cardMotion}>
-                <CompanyOverview data={apiData} />
+                <CompanyOverview />
               </motion.div>
               <motion.div {...cardMotion}>
-                <EsgTargets data={apiData} />
+                <EsgTargets />
               </motion.div>
             </div>
 
             {/* Real-time Data Cards */}
             <motion.div {...cardMotion}>
-              <DataCards data={apiData}/>
+              <DataCards />
             </motion.div>
 
             {/* ESG Score Breakdown at the top */}
@@ -80,7 +74,7 @@ export default function Dashboard() {
 
             {/* Detailed ESG Metrics Tabs */}
             <motion.div {...cardMotion}>
-              <TabNavigation data={apiData} />
+              <TabNavigation />
             </motion.div>
 
             {/* Main dashboard charts */}

@@ -5,15 +5,28 @@ import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Shield, Users, Heart, Scale } from "lucide-react";
 
+const safetyData = [
+  { type: "Fatal", count: 0, color: "#EF4444" },
+  { type: "Serious", count: 3, color: "#F59E0B" },
+  { type: "Minor", count: 12, color: "#10B981" },
+];
 
+const diversityData = [
+  { category: "Leadership", women: 40, men: 60, minority: 30 },
+  { category: "Management", women: 45, men: 55, minority: 25 },
+  { category: "General", women: 52, men: 48, minority: 35 },
+];
 
-export function SocialMetrics({data}) {
-  const safetyData = data ? data.safety_data : []; 
-  const diversityData = data ? data.diversity_data : null; 
-  const wellnessData = data ? data.wellness_data : [];
-  const laborComplianceRate = data ? data.labor_rights_compliance_score : null;
+const wellnessData = [
+  { quarter: "Q1", enrolled: 150 },
+  { quarter: "Q2", enrolled: 180 },
+  { quarter: "Q3", enrolled: 220 },
+  { quarter: "Q4", enrolled: 250 },
+];
 
+const laborComplianceRate = 90;
 
+export function SocialMetrics() {
   return (
     <div className="space-y-6">
       {/* Workplace Safety */}
@@ -111,7 +124,7 @@ export function SocialMetrics({data}) {
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={wellnessData}>
                 <XAxis 
-                  dataKey="Year" 
+                  dataKey="quarter" 
                   stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
                   fontSize={12} 
                   tickLine={false} 
@@ -130,7 +143,7 @@ export function SocialMetrics({data}) {
                     color: document.documentElement.classList.contains('dark') ? '#F3F4F6' : '#111827'
                   }}
                 />
-                <Line type="monotone" dataKey="Employees covered by collective bargaining Persons annual" stroke="#EF4444" strokeWidth={3} dot={{ r: 4, fill: "#EF4444" }} />
+                <Line type="monotone" dataKey="enrolled" stroke="#EF4444" strokeWidth={3} dot={{ r: 4, fill: "#EF4444" }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>

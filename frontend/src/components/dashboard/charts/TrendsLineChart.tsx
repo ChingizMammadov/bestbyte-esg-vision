@@ -2,8 +2,10 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip as ChartTooltip, ResponsiveContainer, Legend } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
+import { useLocalStorageWithRefresh } from "@/hooks/useLocalStorageWithRefresh";
 
-const monthlyData = [
+// Default data that will be shown if localStorage doesn't have any
+const defaultMonthlyData = [
   { month: "Jan", Carbon: 5000, Water: 1000, Energy: 500 },
   { month: "Feb", Carbon: 4800, Water: 950, Energy: 480 },
   { month: "Mar", Carbon: 4700, Water: 900, Energy: 460 },
@@ -44,6 +46,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
 
 export function TrendsLineChart() {
   const [highlightedLine, setHighlightedLine] = useState<string | null>(null);
+  const monthlyData = useLocalStorageWithRefresh('trendsData', defaultMonthlyData);
 
   return (
     <Card className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-2xl shadow-lg h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden" role="region" aria-labelledby="trends-chart-title">

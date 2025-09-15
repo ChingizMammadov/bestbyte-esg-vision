@@ -6,7 +6,32 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tool
 import { Users, ShieldCheck, Vote, DollarSign, UserCheck } from "lucide-react";
 
 // Comprehensive board diversity data
+const genderDiversityData = [
+  { name: "Female", value: 35, color: "#EC4899", description: "Women board members" },
+  { name: "Male", value: 65, color: "#3B82F6", description: "Men board members" },
+];
 
+const ethnicDiversityData = [
+  { name: "White", value: 45, color: "#8B5CF6", description: "White/Caucasian members" },
+  { name: "Hispanic/Latino", value: 20, color: "#F59E0B", description: "Hispanic/Latino members" },
+  { name: "Black/African American", value: 15, color: "#10B981", description: "Black/African American members" },
+  { name: "Asian", value: 12, color: "#EF4444", description: "Asian members" },
+  { name: "Other", value: 8, color: "#6B7280", description: "Other ethnicities" },
+];
+
+const ageDiversityData = [
+  { name: "30-45", value: 25, color: "#06B6D4", description: "Ages 30-45" },
+  { name: "46-60", value: 50, color: "#8B5CF6", description: "Ages 46-60" },
+  { name: "60+", value: 25, color: "#F59E0B", description: "Ages 60+" },
+];
+
+const educationDiversityData = [
+  { name: "Business/MBA", value: 40, color: "#3B82F6", description: "Business/MBA background" },
+  { name: "Law", value: 20, color: "#EC4899", description: "Legal background" },
+  { name: "Engineering/Tech", value: 15, color: "#10B981", description: "Engineering/Technology" },
+  { name: "Finance", value: 15, color: "#F59E0B", description: "Finance background" },
+  { name: "Other", value: 10, color: "#6B7280", description: "Other educational backgrounds" },
+];
 
 const RADIAN = Math.PI / 180;
 const CustomizedLabel = ({ 
@@ -226,6 +251,13 @@ const DiversityPieChart = ({
   );
 };
 
+const shareholderRightsData = [
+  { year: "2020", votingRights: 75 },
+  { year: "2021", votingRights: 78 },
+  { year: "2022", votingRights: 80 },
+  { year: "2023", votingRights: 82 },
+];
+
 const executiveCompData = [
   { role: "CEO", ratio: 200 },
   { role: "CFO", ratio: 150 },
@@ -233,54 +265,43 @@ const executiveCompData = [
   { role: "COO", ratio: 130 },
 ];
 
+const antiCorruptionTraining = 100;
+const disabilityRepresentation = 8; // 8% disability representation
 
-export function GovernanceMetrics({data}) {
-  const genderDiversityData = data ? data.gender_diversity_board : null; 
-  const ethnicDiversityData = data ? data.ethnic_diversity_data : null; 
-  const ageDiversityData = data ? data.age_group_composition : [];
-  const educationDiversityData = data ? data.education_diversity_data : [];
-  const antiCorruptionTraining = data ? data.anti_corruption_training : null; 
-  const disabilityRepresentation = data ? data.disability_representation : null; 
-  const shareholderRightsData = data ? data.shareholder_rights_data : null; 
-
-
+export function GovernanceMetrics() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Comprehensive Board Diversity Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        {genderDiversityData ?
-          <DiversityPieChart
+        <DiversityPieChart
           data={genderDiversityData}
           title="Gender Diversity"
           description="Board composition by gender"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 flex-shrink-0" />}
-        /> :<></>}
+        />
         
-        {ethnicDiversityData ?
-          <DiversityPieChart
+        <DiversityPieChart
           data={ethnicDiversityData}
           title="Ethnic & Racial Diversity"
           description="Board composition by ethnicity"
           icon={<UserCheck className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 flex-shrink-0" />}
-        /> : <></>}
+        />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        {ageDiversityData ?
-          <DiversityPieChart
+        <DiversityPieChart
           data={ageDiversityData}
           title="Age Diversity"
           description="Board composition by age groups"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />}
-        /> : <></>}
+        />
         
-        {educationDiversityData ?
-          <DiversityPieChart
+        <DiversityPieChart
           data={educationDiversityData}
           title="Educational Background"
           description="Board composition by education"
           icon={<Users className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />}
-        /> : <></>}
+        />
       </div>
 
       {/* Disability Representation and Anti-Corruption */}
@@ -344,7 +365,7 @@ export function GovernanceMetrics({data}) {
             <ResponsiveContainer width="100%" height={200} minWidth={300}>
               <LineChart data={shareholderRightsData} margin={{ top: 5, right: 15, left: 15, bottom: 5 }}>
                 <XAxis 
-                  dataKey="Year" 
+                  dataKey="year" 
                   stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"}
                   fontSize={10} 
                   tickLine={false} 
@@ -368,24 +389,8 @@ export function GovernanceMetrics({data}) {
                 />
                 <Line 
                   type="monotone" 
-                  dataKey="Pension fund" 
+                  dataKey="votingRights" 
                   stroke="#8B5CF6" 
-                  strokeWidth={2}
-                  activeDot={{ r: 6, strokeWidth: 1, stroke: 'hsl(var(--background))' }}
-                  dot={{ r: 3, fill: "#8B5CF6", strokeWidth: 1, stroke: 'hsl(var(--background))' }} 
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="Free float" 
-                  stroke="#cdf65cff" 
-                  strokeWidth={2}
-                  activeDot={{ r: 6, strokeWidth: 1, stroke: 'hsl(var(--background))' }}
-                  dot={{ r: 3, fill: "#8B5CF6", strokeWidth: 1, stroke: 'hsl(var(--background))' }} 
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="Ataturk shares" 
-                  stroke="#5cf6b6ff" 
                   strokeWidth={2}
                   activeDot={{ r: 6, strokeWidth: 1, stroke: 'hsl(var(--background))' }}
                   dot={{ r: 3, fill: "#8B5CF6", strokeWidth: 1, stroke: 'hsl(var(--background))' }} 

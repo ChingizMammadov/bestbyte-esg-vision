@@ -4,6 +4,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Leaf, Droplets, Zap, Recycle } from "lucide-react";
 
+const carbonData = [
+  { month: "Jan", renewable: 2000, nonRenewable: 3000 },
+  { month: "Feb", renewable: 2200, nonRenewable: 2800 },
+  { month: "Mar", renewable: 2400, nonRenewable: 2600 },
+  { month: "Apr", renewable: 2600, nonRenewable: 2400 },
+  { month: "May", renewable: 2800, nonRenewable: 2200 },
+  { month: "Jun", renewable: 3000, nonRenewable: 2000 },
+];
+
+const waterData = [
+  { month: "Jan", usage: 1000000 },
+  { month: "Feb", usage: 950000 },
+  { month: "Mar", usage: 980000 },
+  { month: "Apr", usage: 920000 },
+  { month: "May", usage: 900000 },
+  { month: "Jun", usage: 880000 },
+];
+
+const energyData = [
+  { name: "Renewable", value: 65, color: "#10B981" },
+  { name: "Non-Renewable", value: 35, color: "#EF4444" },
+];
+
+const wasteData = [
+  { name: "Recycled", value: 60, color: "#10B981" },
+  { name: "Unrecycled", value: 40, color: "#F59E0B" },
+];
 
 interface TooltipProps {
   active?: boolean;
@@ -18,7 +45,6 @@ interface TooltipProps {
 }
 
 const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
-
   if (active && payload && payload.length) {
     return (
       <div className="bg-white dark:bg-gray-800 p-3 border dark:border-gray-700 rounded-lg shadow-lg">
@@ -36,12 +62,8 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   return null;
 };
 
-export function EnvironmentalMetrics({data}) {
+export function EnvironmentalMetrics() {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
-  const carbonData = data ? data.carbon_emissions : null; 
-  const waterData = data ? data.water_usage : null; 
-  const energyData = data ? data.energy_usage_latest : [];
-  const wasteData = data ? data.waste_recycled_latest : [];
 
   return (
     <div className="space-y-6">
@@ -58,7 +80,7 @@ export function EnvironmentalMetrics({data}) {
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={carbonData}>
               <XAxis 
-                dataKey="Year" 
+                dataKey="month" 
                 stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
                 fontSize={12} 
                 tickLine={false} 
@@ -72,8 +94,8 @@ export function EnvironmentalMetrics({data}) {
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
-              <Bar dataKey="Carbon Emissions Renewable (%)" stackId="a" fill="#10B981" name="Renewable Energy" />
-              <Bar dataKey="Carbon Emissions Non-Renewable (%)" stackId="a" fill="#EF4444" name="Non-Renewable Energy" />
+              <Bar dataKey="renewable" stackId="a" fill="#10B981" name="Renewable Energy" />
+              <Bar dataKey="nonRenewable" stackId="a" fill="#EF4444" name="Non-Renewable Energy" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -93,7 +115,7 @@ export function EnvironmentalMetrics({data}) {
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={waterData}>
                 <XAxis 
-                  dataKey="Year" 
+                  dataKey="month" 
                   stroke={document.documentElement.classList.contains('dark') ? "#9CA3AF" : "#6B7280"} 
                   fontSize={12} 
                   tickLine={false} 
@@ -106,7 +128,7 @@ export function EnvironmentalMetrics({data}) {
                   axisLine={false} 
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="Water Usage (m3)" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: "#3B82F6" }} />
+                <Line type="monotone" dataKey="usage" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: "#3B82F6" }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>

@@ -2,6 +2,7 @@
 import { PieChart, Pie, Cell, Tooltip as ChartTooltip, ResponsiveContainer, Legend } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
+import { useLocalStorageWithRefresh } from "@/hooks/useLocalStorageWithRefresh";
 
 interface ESGData {
   name: string;
@@ -12,7 +13,8 @@ interface ESGData {
   description: string;
 }
 
-const esgData: ESGData[] = [
+// Default data that will be shown if localStorage doesn't have any
+const defaultEsgData: ESGData[] = [
   { name: "Carbon", value: 60, color: "#6B7280", darkColor: "#9CA3AF", unit: "tons CO2", description: "Total carbon emissions tracked" }, 
   { name: "Water", value: 25, color: "#3B82F6", darkColor: "#60A5FA", unit: "thousand liters", description: "Water consumption monitoring" },  
   { name: "Energy", value: 15, color: "#10B981", darkColor: "#34D399", unit: "MWh", description: "Energy usage tracking" }, 
@@ -41,6 +43,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
 
 export function MetricsPieChart() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const esgData = useLocalStorageWithRefresh<ESGData[]>('esgData', defaultEsgData);
 
   const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
