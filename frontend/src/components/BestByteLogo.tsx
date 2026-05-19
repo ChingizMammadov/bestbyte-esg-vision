@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { BIcon } from './BIcon';
 
 interface BestByteLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -9,38 +8,42 @@ interface BestByteLogoProps {
   className?: string;
 }
 
+const imgSizeClasses = {
+  sm: 'h-7 w-7',
+  md: 'h-9 w-9',
+  lg: 'h-11 w-11',
+  xl: 'h-14 w-14',
+};
+
+const textSizeClasses = {
+  sm: 'text-lg',
+  md: 'text-xl',
+  lg: 'text-2xl',
+  xl: 'text-3xl',
+};
+
 export const BestByteLogo: React.FC<BestByteLogoProps> = ({
   size = 'md',
   variant = 'default',
   showText = true,
-  className = ''
+  className = '',
 }) => {
-  const textSizeClasses = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl',
-    xl: 'text-3xl'
-  };
-
-  const getTextColor = () => {
-    switch (variant) {
-      case 'white':
-        return 'text-white';
-      case 'dark':
-        return 'text-gray-800 dark:text-gray-200';
-      default:
-        return 'text-primary';
-    }
-  };
+  const textColor =
+    variant === 'white'
+      ? 'text-white'
+      : variant === 'dark'
+      ? 'text-gray-800 dark:text-gray-200'
+      : 'text-primary';
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      {/* Logo Icon */}
-      <BIcon size={size} />
-
-      {/* Brand Text - Using Montserrat for professional look */}
+      <img
+        src="/logo_image.png"
+        alt="BestByte logo"
+        className={`${imgSizeClasses[size]} object-contain`}
+      />
       {showText && (
-        <span className={`font-montserrat font-bold ${textSizeClasses[size]} ${getTextColor()} tracking-tight`}>
+        <span className={`font-montserrat font-bold ${textSizeClasses[size]} ${textColor} tracking-tight`}>
           BestByte
         </span>
       )}
