@@ -233,19 +233,29 @@ export default function Reports() {
         variant: "destructive",
       });
       
-      // Fallback to static file if API call fails
+      // Fallback: generate PDF directly in the browser
       try {
-        console.log('Using fallback PDF');
-        const fallbackResponse = await fetch('/ESG_Report.pdf');
+        const html2pdf = (await import('html2pdf.js')).default;
+        const res = await fetch('/BankOfAmerica_ESG_Report_2024.html');
+        const html = await res.text();
+        const el = document.createElement('div');
+        el.innerHTML = html;
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-        await downloadPDFReport(fallbackResponse, `ESG_Report_${timestamp}.pdf`);
-        
-        toast({
-          title: "Report Downloaded",
-          description: "Using example report due to API error.",
-        });
+        await html2pdf().set({
+          margin: 0,
+          filename: `BankOfAmerica_ESG_Report_${timestamp}.pdf`,
+          image: { type: 'jpeg', quality: 0.97 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] },
+        }).from(el).save();
+        document.body.removeChild(el);
+        toast({ title: "Report Downloaded", description: "Bank of America ESG Report PDF saved." });
       } catch (fallbackError) {
-        console.error('Fallback download failed:', fallbackError);
+        console.error('Fallback failed:', fallbackError);
       }
     } finally {
       setIsGeneratingMainReport(false);

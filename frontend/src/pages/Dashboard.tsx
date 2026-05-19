@@ -13,12 +13,14 @@ import { FilterControls } from "@/components/dashboard/FilterControls";
 import { DataCards } from "@/components/dashboard/DataCards";
 import { TabNavigation } from "@/components/dashboard/TabNavigation";
 import { CompanyOverview } from "@/components/dashboard/CompanyOverview";
-import { EsgTargets } from "@/components/dashboard/EsgTargets";
+import { EsgTargetsSummary } from "@/components/dashboard/EsgTargetsSummary";
 import { SeedDataButton } from "@/components/SeedDataButton";
+import { ESGHeroBanner } from "@/components/dashboard/ESGHeroBanner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { motion, easeOut } from "framer-motion";
 import { useState } from "react";
 import { responsiveGridLayouts, responsivePadding } from "@/utils/responsiveUtils";
+import { FileDown, Loader2 } from "lucide-react";
 
 const cardMotion = {
   initial: { opacity: 0, y: 20 },
@@ -26,9 +28,33 @@ const cardMotion = {
   transition: { duration: 0.5, ease: easeOut },
 };
 
+async function downloadReportAsPdf() {
+  const response = await fetch('/BankOfAmerica_ESG_Report_2024.pdf');
+  if (!response.ok) throw new Error('Report file not found');
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'BankOfAmerica_ESG_Report_2024.pdf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 export default function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [selectedRegion, setSelectedRegion] = useState("global");
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownloadReport = async () => {
+    setDownloading(true);
+    try {
+      await downloadReportAsPdf();
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -37,6 +63,22 @@ export default function Dashboard() {
         <div className="flex flex-col flex-1 min-w-0 overflow-x-hidden">
           <DashboardHeader />
           <main className="flex-1 min-h-0 p-2 sm:p-3 md:p-6 pb-20 md:pb-6 space-y-3 sm:space-y-4 md:space-y-6">
+            {/* ESG Hero Banner */}
+            <motion.div {...cardMotion} className="relative">
+              <ESGHeroBanner />
+              {/* Download Report button — overlaid on hero banner bottom-right */}
+              <button
+                onClick={handleDownloadReport}
+                disabled={downloading}
+                className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/15 hover:bg-white/25 disabled:opacity-60 backdrop-blur-sm border border-white/30 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all duration-200 shadow-lg"
+              >
+                {downloading
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Generating PDF…</>
+                  : <><FileDown className="w-4 h-4" /> Download Report</>
+                }
+              </button>
+            </motion.div>
+
             {/* Filter Controls with Seed Button */}
             <motion.div {...cardMotion} className="bg-white/90 backdrop-blur-sm dark:bg-gray-800/90 rounded-xl sm:rounded-2xl p-3 md:p-4 lg:p-6 border border-slate-200/60 dark:border-gray-700/60">
               <div className="flex flex-col gap-3">
@@ -58,7 +100,7 @@ export default function Dashboard() {
                 <CompanyOverview />
               </motion.div>
               <motion.div {...cardMotion}>
-                <EsgTargets />
+                <EsgTargetsSummary />
               </motion.div>
             </div>
 

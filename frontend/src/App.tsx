@@ -29,6 +29,7 @@ import CustomReport from "./pages/CustomReport";
 import EnvironmentalAnalytics from "./pages/EnvironmentalAnalytics";
 import SocialAnalytics from "./pages/SocialAnalytics";
 import GovernanceAnalytics from "./pages/GovernanceAnalytics";
+import Targets from "./pages/Targets";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,11 @@ const App = () => (
                   <Route path="social" element={<SocialAnalytics />} />
                   <Route path="governance" element={<GovernanceAnalytics />} />
                 </Route>
+                <Route path="/targets" element={
+                  <ProtectedRoute>
+                    <Targets />
+                  </ProtectedRoute>
+                } />
                 <Route path="/settings" element={
                   <ProtectedRoute>
                     <Settings />

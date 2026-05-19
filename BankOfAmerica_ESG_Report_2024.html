@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bank of America — ESG Report 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0A2540;
+    --navy2:  #0D3B6E;
+    --green:  #00875A;
+    --green2: #006644;
+    --blue:   #1E6FA5;
+    --purple: #5E2B8C;
+    --amber:  #B45309;
+    --red:    #B91C1C;
+    --gray:   #6B7280;
+    --light:  #F8FAFC;
+    --border: #E2E8F0;
+  }
+
+  body { font-family: 'Inter', sans-serif; font-size: 10pt; color: #1E293B; background: white; }
+
+  /* ── PAGE BREAKS ── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  @media print {
+    body { margin: 0; }
+    .page { margin: 0; box-shadow: none; page-break-after: always; }
+  }
+  @media screen {
+    body { background: #CBD5E1; padding: 24px 0; }
+    .page { box-shadow: 0 4px 32px rgba(0,0,0,0.18); margin-bottom: 24px; }
+  }
+
+  /* ── COMMON ── */
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 7.5pt; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .5px; }
+  .tag-env  { background: #D1FAE5; color: #065F46; }
+  .tag-soc  { background: #DBEAFE; color: #1E40AF; }
+  .tag-gov  { background: #EDE9FE; color: #4C1D95; }
+  .tag-fin  { background: #FEF3C7; color: #92400E; }
+
+  .kpi-grid { display: grid; gap: 10px; }
+  .kpi-box {
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 4px solid currentColor;
+  }
+  .kpi-val  { font-size: 22pt; font-weight: 900; line-height: 1; }
+  .kpi-label{ font-size: 8pt;  font-weight: 600; color: var(--gray); margin-top: 2px; text-transform: uppercase; letter-spacing: .4px; }
+  .kpi-sub  { font-size: 7.5pt; margin-top: 3px; font-weight: 500; }
+
+  .progress-row { margin-bottom: 10px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 8.5pt; font-weight: 600; margin-bottom: 3px; }
+  .progress-track { height: 8px; background: #E2E8F0; border-radius: 99px; overflow: hidden; }
+  .progress-fill  { height: 100%; border-radius: 99px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  thead th { background: var(--navy); color: white; padding: 7px 10px; text-align: left; font-weight: 700; font-size: 8pt; letter-spacing: .3px; }
+  tbody tr:nth-child(even) { background: #F8FAFC; }
+  tbody td { padding: 6px 10px; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+
+  h1.section-title { font-size: 16pt; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
+  h2.sub-title { font-size: 11pt; font-weight: 800; color: var(--navy); margin: 18px 0 10px; border-left: 4px solid; padding-left: 10px; }
+  .section-rule { height: 3px; background: linear-gradient(90deg,var(--navy) 0%, #3B82F6 50%, transparent 100%); margin-bottom: 16px; border-radius: 2px; }
+
+  .footer-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    font-size: 7pt; color: rgba(255,255,255,.65); font-weight: 500;
+  }
+  .header-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy) 0%, #1E6FA5 35%, #00875A 65%, #5E2B8C 100%);
+  }
+
+  /* ── PAGE 1 — COVER ── */
+  .cover { background: var(--navy); color: white; min-height: 297mm; display: flex; flex-direction: column; }
+  .cover-top { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 52px 48px 32px; }
+  .cover-logo-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; }
+  .cover-logo { width: 48px; height: 48px; background: linear-gradient(135deg,#1E6FA5,#00875A); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22pt; font-weight: 900; color: white; }
+  .cover-brand { font-size: 10pt; font-weight: 700; color: rgba(255,255,255,.6); letter-spacing: 2px; text-transform: uppercase; }
+  .cover-eyebrow { font-size: 9pt; font-weight: 600; color: #60A5FA; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+  .cover-title { font-size: 34pt; font-weight: 900; line-height: 1.1; margin-bottom: 8px; }
+  .cover-subtitle { font-size: 14pt; font-weight: 300; color: rgba(255,255,255,.7); margin-bottom: 32px; }
+  .cover-divider { width: 64px; height: 4px; background: linear-gradient(90deg,#00875A,#1E6FA5); border-radius: 2px; margin-bottom: 32px; }
+  .cover-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cover-meta-item { border-left: 2px solid rgba(255,255,255,.15); padding-left: 12px; }
+  .cover-meta-label { font-size: 7.5pt; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .8px; }
+  .cover-meta-value { font-size: 10pt; font-weight: 700; color: white; margin-top: 2px; }
+  .cover-pillars { display: flex; gap: 12px; margin-top: 36px; }
+  .cover-pillar { flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 14px 16px; text-align: center; }
+  .cover-pillar-score { font-size: 28pt; font-weight: 900; }
+  .cover-pillar-label { font-size: 7.5pt; font-weight: 600; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .6px; margin-top: 2px; }
+  .cover-bottom { padding: 24px 48px 32px; border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: space-between; }
+  .cover-bottom-brand { font-size: 8.5pt; font-weight: 700; color: rgba(255,255,255,.5); letter-spacing: 1px; text-transform: uppercase; }
+  .cover-rating-chips { display: flex; gap: 10px; }
+  .cover-chip { padding: 4px 14px; border-radius: 99px; font-size: 8.5pt; font-weight: 800; }
+
+  /* ── PAGE 2 — TOC ── */
+  .toc-page { padding: 40px 48px 60px; }
+  .toc-header { margin-bottom: 28px; }
+  .toc-item { display: flex; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #E2E8F0; }
+  .toc-num { font-size: 8.5pt; font-weight: 800; color: var(--navy); width: 22px; flex-shrink: 0; }
+  .toc-title { flex: 1; font-size: 9.5pt; font-weight: 600; color: #334155; }
+  .toc-dots { flex: 1; border-bottom: 1px dotted #CBD5E1; margin: 0 8px; position: relative; top: -4px; }
+  .toc-page-num { font-size: 8.5pt; font-weight: 700; color: var(--navy); }
+  .toc-category { font-size: 8pt; font-weight: 800; color: white; padding: 2px 10px; border-radius: 4px; margin-right: 8px; }
+
+  /* ── CONTENT PAGE ── */
+  .content-page { padding: 32px 44px 50px; }
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .page-eyebrow { font-size: 7.5pt; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── SCORECARD ── */
+  .score-ring { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .score-ring-val { font-size: 24pt; font-weight: 900; line-height: 1; }
+  .score-ring-label { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-top: 1px; }
+
+  .insight-box { background: #EFF6FF; border-left: 4px solid #3B82F6; border-radius: 0 8px 8px 0; padding: 10px 14px; margin: 10px 0; font-size: 8.5pt; }
+  .insight-box.green  { background: #ECFDF5; border-color: #10B981; }
+  .insight-box.amber  { background: #FFFBEB; border-color: #F59E0B; }
+  .insight-box.purple { background: #F5F3FF; border-color: #8B5CF6; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  .stat-card { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .stat-card-val { font-size: 18pt; font-weight: 900; }
+  .stat-card-label { font-size: 7.5pt; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .4px; margin-top: 2px; }
+  .stat-card-sub { font-size: 7.5pt; color: var(--gray); margin-top: 4px; }
+
+  .highlight-strip { background: var(--navy); color: white; border-radius: 10px; padding: 16px 20px; margin: 14px 0; display: flex; align-items: center; gap: 20px; }
+  .highlight-strip-val { font-size: 24pt; font-weight: 900; color: #34D399; white-space: nowrap; }
+  .highlight-strip-text { font-size: 9pt; line-height: 1.5; }
+  .highlight-strip-text strong { color: white; }
+  .highlight-strip-text span { color: rgba(255,255,255,.6); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 1 — COVER
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-logo-bar">
+        <div class="cover-logo">B</div>
+        <div class="cover-brand">BestByte ESG Intelligence Platform</div>
+      </div>
+
+      <div class="cover-eyebrow">Environmental · Social · Governance</div>
+      <div class="cover-title">ESG Performance<br>Report 2024</div>
+      <div class="cover-subtitle">Bank of America Corporation</div>
+      <div class="cover-divider"></div>
+
+      <div class="cover-meta-grid">
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Company</div>
+          <div class="cover-meta-value">Bank of America Corporation</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Ticker</div>
+          <div class="cover-meta-value">NYSE: BAC</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Reporting Period</div>
+          <div class="cover-meta-value">FY 2024 (Jan – Dec 2024)</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Report Date</div>
+          <div class="cover-meta-value">May 2025</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Industry</div>
+          <div class="cover-meta-value">Banking & Financial Services</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Headquarters</div>
+          <div class="cover-meta-value">Charlotte, North Carolina, USA</div>
+        </div>
+      </div>
+
+      <div class="cover-pillars">
+        <div class="cover-pillar">
+          <div class="cover-pillar-score" style="color:#34D399">94</div>
+          <div class="cover-pillar-label">Environmental</div>
+        </div>
+        <div class="cover-pillar">
+          <div class="cover-pillar-score" style="color:#60A5FA">86</div>
+          <div class="cover-pillar-label">Social</div>
+        </div>
+        <div class="cover-pillar">
+          <div class="cover-pillar-score" style="color:#C084FC">49</div>
+          <div class="cover-pillar-label">Governance</div>
+        </div>
+        <div class="cover-pillar" style="background:rgba(251,191,36,.12); border-color:rgba(251,191,36,.25)">
+          <div class="cover-pillar-score" style="color:#FBBF24">76</div>
+          <div class="cover-pillar-label">Overall ESG</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-bottom">
+      <div class="cover-bottom-brand">Generated by BestByte ESG Intelligence · Confidential</div>
+      <div class="cover-rating-chips">
+        <div class="cover-chip" style="background:#FBBF24;color:#1C1917">MSCI AA</div>
+        <div class="cover-chip" style="background:#34D399;color:#064E3B">CDP A</div>
+        <div class="cover-chip" style="background:#60A5FA;color:#1E3A5F">Sustainalytics 18.5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 2 — TABLE OF CONTENTS
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="toc-page">
+    <div class="toc-header">
+      <div style="font-size:7.5pt;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px">Bank of America · ESG Report 2024</div>
+      <h1 style="font-size:22pt;font-weight:900;color:var(--navy)">Table of Contents</h1>
+      <div class="section-rule" style="margin-top:10px"></div>
+    </div>
+
+    <div style="margin-bottom:6px">
+      <div style="font-size:8pt;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin:16px 0 6px">Overview</div>
+      <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">Executive Summary & Key Highlights</span><span class="toc-dots"></span><span class="toc-page-num">3</span></div>
+      <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">CEO Message on Responsible Growth</span><span class="toc-dots"></span><span class="toc-page-num">4</span></div>
+      <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">ESG Scores, Ratings & Industry Position</span><span class="toc-dots"></span><span class="toc-page-num">5</span></div>
+    </div>
+
+    <div style="margin-bottom:6px">
+      <div style="font-size:8pt;font-weight:800;color:#065F46;text-transform:uppercase;letter-spacing:1px;margin:16px 0 6px">🌿 Environmental</div>
+      <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">Climate & GHG Emissions — Scope 1, 2 & Reduction Trend</span><span class="toc-dots"></span><span class="toc-page-num">6</span></div>
+      <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">Energy Consumption & Renewable Transition</span><span class="toc-dots"></span><span class="toc-page-num">7</span></div>
+      <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">Water Management & Waste Reduction</span><span class="toc-dots"></span><span class="toc-page-num">8</span></div>
+    </div>
+
+    <div style="margin-bottom:6px">
+      <div style="font-size:8pt;font-weight:800;color:#1E40AF;text-transform:uppercase;letter-spacing:1px;margin:16px 0 6px">👥 Social</div>
+      <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">Workforce Diversity, Equity & Inclusion</span><span class="toc-dots"></span><span class="toc-page-num">9</span></div>
+      <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">Employee Development, Pay Equity & Wellbeing</span><span class="toc-dots"></span><span class="toc-page-num">10</span></div>
+      <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">Community Impact & Financial Inclusion</span><span class="toc-dots"></span><span class="toc-page-num">11</span></div>
+    </div>
+
+    <div style="margin-bottom:6px">
+      <div style="font-size:8pt;font-weight:800;color:#4C1D95;text-transform:uppercase;letter-spacing:1px;margin:16px 0 6px">🏛 Governance</div>
+      <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">Board Composition, Independence & Oversight</span><span class="toc-dots"></span><span class="toc-page-num">12</span></div>
+      <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">Ethics, Compliance & Shareholder Engagement</span><span class="toc-dots"></span><span class="toc-page-num">13</span></div>
+    </div>
+
+    <div style="margin-bottom:6px">
+      <div style="font-size:8pt;font-weight:800;color:#92400E;text-transform:uppercase;letter-spacing:1px;margin:16px 0 6px">💰 Finance & Strategy</div>
+      <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">Sustainable Finance — $1.5 Trillion Goal Progress</span><span class="toc-dots"></span><span class="toc-page-num">14</span></div>
+      <div class="toc-item"><span class="toc-num">13</span><span class="toc-title">ESG Targets Scorecard & 2030/2050 Roadmap</span><span class="toc-dots"></span><span class="toc-page-num">15</span></div>
+    </div>
+
+    <div style="margin-top:32px;padding:16px 20px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;font-size:7.5pt;color:var(--gray);line-height:1.6">
+      <strong style="color:var(--navy)">Reporting Frameworks:</strong> GRI Standards 2021 · SASB (Commercial Banks) · TCFD · PCAF · UN SDGs · GHG Protocol<br>
+      <strong style="color:var(--navy)">Verification:</strong> GHG data verified by KPMG LLP · Financial data per SEC 10-K filing · ESG scores via BestByte Intelligence Platform<br>
+      <strong style="color:var(--navy)">Data Currency:</strong> Fiscal Year 2024 (January 1 – December 31, 2024) · Published May 2025
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 2</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 3 — EXECUTIVE SUMMARY
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">01 · Executive Summary</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <h1 class="section-title" style="margin-top:8px">Executive Summary</h1>
+    <div class="section-rule"></div>
+
+    <!-- Overall score + ratings row -->
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:20px;margin-bottom:18px;align-items:start">
+      <div style="text-align:center;background:var(--navy);color:white;border-radius:14px;padding:20px 28px">
+        <div style="font-size:9pt;font-weight:700;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Overall ESG Score</div>
+        <div style="font-size:52pt;font-weight:900;line-height:1;color:#FBBF24">76</div>
+        <div style="font-size:8pt;font-weight:600;color:rgba(255,255,255,.55);margin-top:4px">out of 100</div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+          <span style="background:#FBBF24;color:#1C1917;padding:3px 10px;border-radius:99px;font-size:8pt;font-weight:800">MSCI AA</span>
+          <span style="background:#34D399;color:#064E3B;padding:3px 10px;border-radius:99px;font-size:8pt;font-weight:800">CDP A</span>
+        </div>
+      </div>
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div class="stat-card" style="border-left:4px solid #10B981">
+            <div class="stat-card-val" style="color:#065F46">94</div>
+            <div class="stat-card-label">Environmental Score</div>
+            <div class="stat-card-sub">99th percentile — industry</div>
+          </div>
+          <div class="stat-card" style="border-left:4px solid #3B82F6">
+            <div class="stat-card-val" style="color:#1E40AF">86</div>
+            <div class="stat-card-label">Social Score</div>
+            <div class="stat-card-sub">91st percentile — industry</div>
+          </div>
+          <div class="stat-card" style="border-left:4px solid #8B5CF6">
+            <div class="stat-card-val" style="color:#4C1D95">49</div>
+            <div class="stat-card-label">Governance Score</div>
+            <div class="stat-card-sub">38th percentile — area for growth</div>
+          </div>
+          <div class="stat-card" style="border-left:4px solid #F59E0B">
+            <div class="stat-card-val" style="color:#92400E">18.5</div>
+            <div class="stat-card-label">Sustainalytics Risk</div>
+            <div class="stat-card-sub">Low Risk category</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 KPI highlights -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div style="background:#ECFDF5;border-radius:10px;padding:12px 14px;border:1px solid #A7F3D0">
+        <div style="font-size:18pt;font-weight:900;color:#065F46">96.5%</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">GHG Reduction</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">vs 2010 baseline · Target was 75%</div>
+      </div>
+      <div style="background:#ECFDF5;border-radius:10px;padding:12px 14px;border:1px solid #A7F3D0">
+        <div style="font-size:18pt;font-weight:900;color:#065F46">100%</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">Renewable Energy</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">Wind, solar, hydro via RECs since 2019</div>
+      </div>
+      <div style="background:#DBEAFE;border-radius:10px;padding:12px 14px;border:1px solid #93C5FD">
+        <div style="font-size:18pt;font-weight:900;color:#1E40AF">$860B</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">Sustainable Finance</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">Deployed toward $1.5T by 2030</div>
+      </div>
+      <div style="background:#DBEAFE;border-radius:10px;padding:12px 14px;border:1px solid #93C5FD">
+        <div style="font-size:18pt;font-weight:900;color:#1E40AF">213K</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">Employees</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">52% women globally</div>
+      </div>
+      <div style="background:#FEF3C7;border-radius:10px;padding:12px 14px;border:1px solid #FDE68A">
+        <div style="font-size:18pt;font-weight:900;color:#92400E">$380M</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">Community Investment</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">Toward $500M annual target</div>
+      </div>
+      <div style="background:#F5F3FF;border-radius:10px;padding:12px 14px;border:1px solid #DDD6FE">
+        <div style="font-size:18pt;font-weight:900;color:#4C1D95">92%</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#4C1D95;text-transform:uppercase;letter-spacing:.4px;margin-top:1px">Board Independence</div>
+        <div style="font-size:7.5pt;color:#6B7280;margin-top:3px">13 of 14 directors independent</div>
+      </div>
+    </div>
+
+    <div class="insight-box green" style="margin-top:14px">
+      <strong>2024 Milestone:</strong> Bank of America has reduced GHG emissions by 96.5% against its 2010 baseline — exceeding its own 75% target set for 2030 by more than a decade ahead of schedule. The company has operated on 100% renewable electricity since 2019, making it carbon neutral on a Scope 1+2 market basis.
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 3</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 4 — CEO MESSAGE
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">02 · Leadership Message</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <h1 class="section-title" style="margin-top:8px">A Message on Responsible Growth</h1>
+    <div class="section-rule"></div>
+
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:28px;margin-bottom:20px">
+      <div style="text-align:center">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:26pt;font-weight:900;color:white">BM</div>
+        <div style="font-size:9pt;font-weight:800;color:var(--navy)">Brian Moynihan</div>
+        <div style="font-size:7.5pt;color:var(--gray)">Chairman & CEO</div>
+        <div style="font-size:7.5pt;color:var(--gray)">Bank of America</div>
+      </div>
+      <div style="font-size:9.5pt;line-height:1.7;color:#334155">
+        <p style="margin-bottom:12px">In 2024, Bank of America demonstrated that being a responsible company and a successful business are not only compatible — they are mutually reinforcing.</p>
+        <p style="margin-bottom:12px">Our Environmental score reached 94 out of 100, placing us in the 99th percentile of global banking peers. We have operated on 100% renewable electricity since 2019, achieved a 96.5% reduction in greenhouse gas emissions versus our 2010 baseline, and deployed $860 billion toward our $1.5 trillion sustainable finance goal — all ahead of schedule.</p>
+        <p style="margin-bottom:12px">Our 213,000 teammates — 52% of whom are women — continue to be our greatest asset. We invested over $1.1 billion in training and development, raised our U.S. minimum wage to $23 per hour (with a commitment to reach $25 by 2025), and invested $380 million in our communities.</p>
+        <p>Responsible Growth is not a slogan. It is the discipline with which we run this company every day — for our clients, our shareholders, our teammates, and the communities we serve.</p>
+      </div>
+    </div>
+
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:18px 22px">
+      <div style="font-size:8.5pt;font-weight:800;color:var(--navy);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">Our Four Pillars of Responsible Growth</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:#ECFDF5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14pt;flex-shrink:0">🌍</div>
+          <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Environmental Stewardship</div><div style="font-size:8pt;color:var(--gray);margin-top:2px">Net zero operations by 2050 · Carbon neutral since 2019</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:#DBEAFE;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14pt;flex-shrink:0">👥</div>
+          <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Social Responsibility</div><div style="font-size:8pt;color:var(--gray);margin-top:2px">Diverse workforce · Pay equity · Community investment</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:#F5F3FF;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14pt;flex-shrink:0">🏛</div>
+          <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Strong Governance</div><div style="font-size:8pt;color:var(--gray);margin-top:2px">92% board independence · ESG-linked executive pay</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="width:32px;height:32px;background:#FEF3C7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14pt;flex-shrink:0">💰</div>
+          <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Sustainable Finance</div><div style="font-size:8pt;color:var(--gray);margin-top:2px">$1.5T goal · $860B deployed · Green bonds issued</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
+      <div style="text-align:center;padding:10px;background:#ECFDF5;border-radius:8px">
+        <div style="font-size:14pt;font-weight:900;color:#065F46">35+</div>
+        <div style="font-size:7pt;font-weight:600;color:#6B7280;text-transform:uppercase">Countries</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:#DBEAFE;border-radius:8px">
+        <div style="font-size:14pt;font-weight:900;color:#1E40AF">$3.3T</div>
+        <div style="font-size:7pt;font-weight:600;color:#6B7280;text-transform:uppercase">Total Assets</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:#FEF3C7;border-radius:8px">
+        <div style="font-size:14pt;font-weight:900;color:#92400E">$89.8B</div>
+        <div style="font-size:7pt;font-weight:600;color:#6B7280;text-transform:uppercase">Revenue 2024</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:#F5F3FF;border-radius:8px">
+        <div style="font-size:14pt;font-weight:900;color:#4C1D95">10 SDGs</div>
+        <div style="font-size:7pt;font-weight:600;color:#6B7280;text-transform:uppercase">UN Aligned</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 4</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 5 — ESG SCORES & RATINGS
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">03 · ESG Scores & Ratings</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <h1 class="section-title" style="margin-top:8px">ESG Scores, Ratings & Industry Position</h1>
+    <div class="section-rule"></div>
+
+    <div class="two-col" style="margin-bottom:16px">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--navy)">Score Progression (2019–2024)</h2>
+        <table>
+          <thead><tr><th>Year</th><th>Environmental</th><th>Social</th><th>Governance</th><th>Overall</th></tr></thead>
+          <tbody>
+            <tr><td>2019</td><td>71</td><td>74</td><td>42</td><td>62</td></tr>
+            <tr><td>2020</td><td>78</td><td>76</td><td>44</td><td>66</td></tr>
+            <tr><td>2021</td><td>83</td><td>79</td><td>46</td><td>69</td></tr>
+            <tr><td>2022</td><td>88</td><td>82</td><td>47</td><td>72</td></tr>
+            <tr><td>2023</td><td>91</td><td>84</td><td>48</td><td>74</td></tr>
+            <tr><td><strong>2024</strong></td><td><strong>94</strong></td><td><strong>86</strong></td><td><strong>49</strong></td><td><strong>76</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--amber)">Third-Party Ratings</h2>
+        <div style="space-y:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#FEF3C7;border-radius:8px;margin-bottom:6px">
+            <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">MSCI ESG Rating</div><div style="font-size:7.5pt;color:var(--gray)">Global Industry Leader</div></div>
+            <div style="font-size:20pt;font-weight:900;color:#B45309">AA</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#ECFDF5;border-radius:8px;margin-bottom:6px">
+            <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">CDP Climate Score</div><div style="font-size:7.5pt;color:var(--gray)">Leadership category</div></div>
+            <div style="font-size:20pt;font-weight:900;color:#065F46">A</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#DBEAFE;border-radius:8px;margin-bottom:6px">
+            <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Sustainalytics</div><div style="font-size:7.5pt;color:var(--gray)">Low Risk (18.5)</div></div>
+            <div style="font-size:20pt;font-weight:900;color:#1E40AF">Low</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#F5F3FF;border-radius:8px">
+            <div><div style="font-size:8.5pt;font-weight:800;color:var(--navy)">Bloomberg GEI</div><div style="font-size:7.5pt;color:var(--gray)">Gender Equality Index</div></div>
+            <div style="font-size:20pt;font-weight:900;color:#4C1D95">✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-title" style="border-color:var(--blue)">Peer Comparison — Banking Sector 2024</h2>
+    <table>
+      <thead><tr><th>Company</th><th>MSCI Rating</th><th>CDP</th><th>Overall ESG</th><th>Env. Score</th><th>Renewable %</th><th>Women Workforce</th></tr></thead>
+      <tbody>
+        <tr style="background:#FFFBEB"><td><strong>Bank of America ★</strong></td><td><strong>AA</strong></td><td><strong>A</strong></td><td><strong>76</strong></td><td><strong>94</strong></td><td><strong>100%</strong></td><td><strong>52%</strong></td></tr>
+        <tr><td>Morgan Stanley</td><td>AA</td><td>A</td><td>74</td><td>89</td><td>83%</td><td>45%</td></tr>
+        <tr><td>Citigroup</td><td>A</td><td>A-</td><td>70</td><td>81</td><td>47%</td><td>48%</td></tr>
+        <tr><td>JPMorgan Chase</td><td>A</td><td>A-</td><td>68</td><td>75</td><td>35%</td><td>49%</td></tr>
+        <tr><td>Goldman Sachs</td><td>A</td><td>B</td><td>65</td><td>72</td><td>61%</td><td>42%</td></tr>
+        <tr><td>Wells Fargo</td><td>BBB</td><td>B</td><td>61</td><td>68</td><td>42%</td><td>51%</td></tr>
+        <tr style="background:#F8FAFC"><td><em>Industry Average</em></td><td><em>BBB</em></td><td><em>C</em></td><td><em>58</em></td><td><em>61</em></td><td><em>47%</em></td><td><em>47%</em></td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box green" style="margin-top:12px">
+      <strong>Position:</strong> Bank of America ranks #1 among major US banks on Environmental score (94) and Renewable Energy adoption (100%). Governance remains an area for improvement at 49/100, primarily due to executive pay structure complexity and ongoing shareholder proposals.
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 5</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 6 — CLIMATE & GHG
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">04 · Environmental — Climate</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;margin-bottom:4px">
+      <span class="tag tag-env">Environmental</span>
+    </div>
+    <h1 class="section-title">Climate & GHG Emissions</h1>
+    <div class="section-rule"></div>
+
+    <div class="highlight-strip">
+      <div class="highlight-strip-val">96.5%</div>
+      <div class="highlight-strip-text">
+        <strong>GHG Reduction vs 2010 Baseline</strong><br>
+        <span>Total emissions dropped from 1,785,000 MT CO2e in 2010 to just 61,800 MT CO2e in 2024 — exceeding the 75% reduction target set for 2030. Carbon neutral achieved since 2019.</span>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin:14px 0">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--green)">Scope 1 & 2 Breakdown (2024)</h2>
+        <table>
+          <thead><tr><th>Scope</th><th>Source</th><th>MT CO2e</th></tr></thead>
+          <tbody>
+            <tr><td>Scope 1</td><td>Company vehicles</td><td>32,000</td></tr>
+            <tr><td>Scope 1</td><td>On-site fuel combustion</td><td>18,000</td></tr>
+            <tr><td>Scope 1</td><td>Backup generators</td><td>8,000</td></tr>
+            <tr style="background:#ECFDF5"><td><strong>Scope 1 Total</strong></td><td></td><td><strong>58,000</strong></td></tr>
+            <tr><td>Scope 2</td><td>Electricity — market-based (100% RECs)</td><td>3,800</td></tr>
+            <tr><td>Scope 2</td><td>Electricity — location-based</td><td>810,000</td></tr>
+            <tr style="background:#DBEAFE"><td><strong>Scope 2 Total (market)</strong></td><td></td><td><strong>3,800</strong></td></tr>
+            <tr style="background:#FEF9C3"><td><strong>TOTAL REPORTED</strong></td><td><strong>Scope 1+2 market-based</strong></td><td><strong>61,800</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--green)">GHG Reduction Trend</h2>
+        <table>
+          <thead><tr><th>Year</th><th>Total (MT CO2e)</th><th>Reduction %</th></tr></thead>
+          <tbody>
+            <tr><td>2010 (baseline)</td><td>1,785,000</td><td>—</td></tr>
+            <tr><td>2015</td><td>980,000</td><td>45.1%</td></tr>
+            <tr><td>2019</td><td>195,000</td><td>89.1%</td></tr>
+            <tr><td>2021</td><td>88,000</td><td>95.1%</td></tr>
+            <tr><td>2022</td><td>74,000</td><td>95.8%</td></tr>
+            <tr><td>2023</td><td>66,000</td><td>96.3%</td></tr>
+            <tr style="background:#ECFDF5"><td><strong>2024</strong></td><td><strong>61,800</strong></td><td><strong>96.5%</strong></td></tr>
+            <tr style="background:#FEF3C7"><td>2030 Target</td><td>446,354</td><td>75% (TARGET — exceeded)</td></tr>
+            <tr><td>2050 Target</td><td>0</td><td>Net Zero</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Monthly emissions mini chart (CSS bars) -->
+    <h2 class="sub-title" style="border-color:var(--green)">Monthly GHG Emissions 2024 (MT CO2e)</h2>
+    <div style="display:flex;align-items:flex-end;gap:6px;height:60px;margin-bottom:4px">
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5550/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5230/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5020/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5100/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5210/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#3B82F6;width:100%;height:calc(5420/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#3B82F6;width:100%;height:calc(5640/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#3B82F6;width:100%;height:calc(5530/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5110/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(5000/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#10B981;width:100%;height:calc(4900/6000*52px);border-radius:3px 3px 0 0"></div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div style="background:#6EE7B7;width:100%;height:calc(4090/6000*52px);border-radius:3px 3px 0 0"></div></div>
+    </div>
+    <div style="display:flex;gap:6px;font-size:6.5pt;color:var(--gray);text-align:center">
+      <div style="flex:1">Jan</div><div style="flex:1">Feb</div><div style="flex:1">Mar</div><div style="flex:1">Apr</div><div style="flex:1">May</div><div style="flex:1">Jun</div><div style="flex:1">Jul</div><div style="flex:1">Aug</div><div style="flex:1">Sep</div><div style="flex:1">Oct</div><div style="flex:1">Nov</div><div style="flex:1">Dec</div>
+    </div>
+    <div style="font-size:7pt;color:var(--gray);margin-top:4px">Total 2024: 61,800 MT CO2e · Annual trend shows seasonal pattern with summer peaks and Q4 decline</div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 6</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 7 — ENERGY
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">05 · Environmental — Energy</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-env" style="margin-top:8px;display:inline-flex">Environmental</span>
+    <h1 class="section-title" style="margin-top:6px">Energy Consumption & Renewable Transition</h1>
+    <div class="section-rule"></div>
+
+    <div class="highlight-strip">
+      <div class="highlight-strip-val">100%</div>
+      <div class="highlight-strip-text">
+        <strong>Renewable Electricity Since 2019</strong><br>
+        <span>3.48 million MWh consumed annually — fully sourced from wind, solar, and hydropower via RECs and Power Purchase Agreements (PPAs). Energy intensity: 16.3 MWh per FTE.</span>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin:14px 0">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--green)">Energy by Facility Type (2024)</h2>
+        <table>
+          <thead><tr><th>Facility</th><th>MWh</th><th>Source</th><th>Renewable</th></tr></thead>
+          <tbody>
+            <tr><td>Global Office Operations</td><td>1,850,000</td><td>Wind RECs</td><td>100%</td></tr>
+            <tr><td>Data Centers</td><td>820,000</td><td>Solar PPA</td><td>100%</td></tr>
+            <tr><td>Retail Branches</td><td>610,000</td><td>Grid + RECs</td><td>100%</td></tr>
+            <tr><td>International Ops</td><td>200,000</td><td>Local RECs</td><td>100%</td></tr>
+            <tr style="background:#ECFDF5"><td><strong>Total</strong></td><td><strong>3,480,000</strong></td><td></td><td><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+
+        <h2 class="sub-title" style="border-color:var(--green);margin-top:14px">REC & PPA Portfolio</h2>
+        <table>
+          <thead><tr><th>Type</th><th>MWh</th><th>Region</th></tr></thead>
+          <tbody>
+            <tr><td>Wind Power RECs</td><td>1,600,000</td><td>Texas, Oklahoma</td></tr>
+            <tr><td>Solar PPAs</td><td>820,000</td><td>NC, Arizona</td></tr>
+            <tr><td>Hydropower RECs</td><td>640,000</td><td>Pacific NW</td></tr>
+            <tr><td>Other Renewable</td><td>420,000</td><td>Various (Green-e certified)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--green)">Energy Trend (2019–2024)</h2>
+        <table>
+          <thead><tr><th>Year</th><th>Total MWh</th><th>Intensity</th><th>Renewable</th></tr></thead>
+          <tbody>
+            <tr><td>2019</td><td>4,120,000</td><td>18.9/FTE</td><td>100%</td></tr>
+            <tr><td>2020</td><td>3,650,000</td><td>17.4/FTE</td><td>100%</td></tr>
+            <tr><td>2021</td><td>3,520,000</td><td>16.8/FTE</td><td>100%</td></tr>
+            <tr><td>2022</td><td>3,495,000</td><td>16.6/FTE</td><td>100%</td></tr>
+            <tr><td>2023</td><td>3,490,000</td><td>16.4/FTE</td><td>100%</td></tr>
+            <tr style="background:#ECFDF5"><td><strong>2024</strong></td><td><strong>3,480,000</strong></td><td><strong>16.3/FTE</strong></td><td><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box green" style="margin-top:10px">
+          <strong>Energy Savings vs 2019:</strong> By 2024, BofA reduced absolute energy consumption by 640,000 MWh (−15.5%) from 2019 levels, generating an estimated <strong>$134M</strong> in annual energy cost savings.
+        </div>
+        <div style="margin-top:10px;padding:12px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px">
+          <div style="font-size:8pt;font-weight:800;color:#065F46;margin-bottom:6px">Key Renewable Milestones</div>
+          <div style="font-size:8pt;color:#374151;line-height:1.7">
+            ✅ 2019 — First US bank to achieve 100% renewable electricity<br>
+            ✅ 2022 — Solar PPA expansion: +250,000 MWh capacity<br>
+            ✅ 2024 — Energy intensity reduced 14% vs 2019<br>
+            🎯 2030 — Target: further 20% intensity reduction
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 7</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 8 — WATER & WASTE
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">06 · Environmental — Water & Waste</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-env" style="margin-top:8px;display:inline-flex">Environmental</span>
+    <h1 class="section-title" style="margin-top:6px">Water Management & Waste Reduction</h1>
+    <div class="section-rule"></div>
+
+    <div class="two-col">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Water Consumption (2024)</h2>
+        <table>
+          <thead><tr><th>Region</th><th>Consumption (m³)</th><th>% of Total</th></tr></thead>
+          <tbody>
+            <tr><td>United States</td><td>3,100,000</td><td>73.8%</td></tr>
+            <tr><td>Europe</td><td>480,000</td><td>11.4%</td></tr>
+            <tr><td>Asia Pacific</td><td>380,000</td><td>9.0%</td></tr>
+            <tr><td>Latin America</td><td>180,000</td><td>4.3%</td></tr>
+            <tr><td>Other</td><td>60,000</td><td>1.4%</td></tr>
+            <tr style="background:#DBEAFE"><td><strong>Total</strong></td><td><strong>4,200,000</strong></td><td><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="padding:10px;background:#EFF6FF;border-radius:8px;text-align:center">
+            <div style="font-size:14pt;font-weight:900;color:#1E40AF">19.7</div>
+            <div style="font-size:7pt;color:var(--gray);font-weight:600;text-transform:uppercase">m³ per FTE</div>
+          </div>
+          <div style="padding:10px;background:#DBEAFE;border-radius:8px;text-align:center">
+            <div style="font-size:14pt;font-weight:900;color:#1E40AF">280K</div>
+            <div style="font-size:7pt;color:var(--gray);font-weight:600;text-transform:uppercase">m³ recycled</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--green)">Waste Management (2024)</h2>
+        <table>
+          <thead><tr><th>Waste Type</th><th>Amount (MT)</th><th>Disposal</th></tr></thead>
+          <tbody>
+            <tr><td>Paper & Office</td><td>12,500</td><td>Recycled</td></tr>
+            <tr><td>Electronic (E-waste)</td><td>8,700</td><td>Certified disposal</td></tr>
+            <tr><td>Organics / Food</td><td>2,800</td><td>Composted</td></tr>
+            <tr><td>Hazardous</td><td>180</td><td>Licensed disposal</td></tr>
+            <tr><td>Mixed non-recyclable</td><td>12,100</td><td>Landfill</td></tr>
+            <tr style="background:#ECFDF5"><td><strong>Total</strong></td><td><strong>36,280</strong></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <!-- Visual recycling rate -->
+        <div style="margin-top:12px;padding:12px;background:#ECFDF5;border-radius:8px;border:1px solid #A7F3D0">
+          <div style="display:flex;justify-content:space-between;font-size:8.5pt;font-weight:700;margin-bottom:6px">
+            <span style="color:#065F46">Recycling Rate 2024</span>
+            <span style="color:#065F46;font-size:14pt;font-weight:900">74%</span>
+          </div>
+          <div style="height:12px;background:#D1FAE5;border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:74%;background:#10B981;border-radius:99px"></div>
+          </div>
+          <div style="font-size:7.5pt;color:var(--gray);margin-top:4px">Target: 0 MT to landfill by 2030</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-title" style="border-color:var(--green);margin-top:14px">Waste & Water Trend</h2>
+    <table>
+      <thead><tr><th>Year</th><th>Total Waste (MT)</th><th>Recycled (MT)</th><th>Recycling %</th><th>Landfill (MT)</th><th>Water (m³)</th></tr></thead>
+      <tbody>
+        <tr><td>2019</td><td>42,100</td><td>24,000</td><td>57%</td><td>18,100</td><td>4,800,000</td></tr>
+        <tr><td>2020</td><td>35,600</td><td>22,500</td><td>63%</td><td>13,100</td><td>4,500,000</td></tr>
+        <tr><td>2022</td><td>36,900</td><td>25,500</td><td>69%</td><td>11,400</td><td>4,350,000</td></tr>
+        <tr><td>2023</td><td>36,500</td><td>26,200</td><td>72%</td><td>10,300</td><td>4,260,000</td></tr>
+        <tr style="background:#ECFDF5"><td><strong>2024</strong></td><td><strong>36,280</strong></td><td><strong>26,850</strong></td><td><strong>74%</strong></td><td><strong>9,430</strong></td><td><strong>4,200,000</strong></td></tr>
+        <tr style="background:#FEF3C7"><td>2030 Target</td><td>—</td><td>—</td><td>100%</td><td>0</td><td>3,840,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 8</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 9 — DIVERSITY & INCLUSION
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">07 · Social — Diversity, Equity & Inclusion</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-soc" style="margin-top:8px;display:inline-flex">Social</span>
+    <h1 class="section-title" style="margin-top:6px">Workforce Diversity, Equity & Inclusion</h1>
+    <div class="section-rule"></div>
+
+    <div class="highlight-strip" style="background:var(--blue)">
+      <div class="highlight-strip-val" style="color:#BAE6FD">52%</div>
+      <div class="highlight-strip-text">
+        <strong>Women in Global Workforce</strong><br>
+        <span>213,000 employees across 35+ countries. 45% of US employees identify as racially or ethnically diverse. Target: 40% women in senior leadership by 2030 (currently 37%).</span>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin:14px 0">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Gender Diversity by Level</h2>
+        <table>
+          <thead><tr><th>Level</th><th>Women %</th><th>Target</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Overall Workforce</td><td>52%</td><td>≥50%</td><td style="color:#065F46;font-weight:700">✓ Exceeded</td></tr>
+            <tr><td>Senior Leadership</td><td>37%</td><td>40%</td><td style="color:#B45309;font-weight:700">In Progress</td></tr>
+            <tr><td>Executive / C-Suite</td><td>31%</td><td>35%</td><td style="color:#B45309;font-weight:700">In Progress</td></tr>
+            <tr><td>Board of Directors</td><td>43%</td><td>≥40%</td><td style="color:#065F46;font-weight:700">✓ Exceeded</td></tr>
+            <tr><td>Mid-Level Management</td><td>44%</td><td>50%</td><td style="color:#B45309;font-weight:700">In Progress</td></tr>
+            <tr><td>Entry Level</td><td>58%</td><td>—</td><td style="color:#065F46;font-weight:700">✓ Strong</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">US Racial & Ethnic Diversity</h2>
+        <table>
+          <thead><tr><th>Group</th><th>Workforce %</th><th>Sr. Leadership %</th></tr></thead>
+          <tbody>
+            <tr><td>White / Caucasian</td><td>55%</td><td>66%</td></tr>
+            <tr><td>Black / African American</td><td>13%</td><td>7%</td></tr>
+            <tr><td>Hispanic / Latino</td><td>12%</td><td>6%</td></tr>
+            <tr><td>Asian</td><td>10%</td><td>12%</td></tr>
+            <tr><td>Two or More Races</td><td>4%</td><td>2%</td></tr>
+            <tr><td>Other / Not Disclosed</td><td>6%</td><td>7%</td></tr>
+            <tr style="background:#DBEAFE"><td><strong>Total Diverse</strong></td><td><strong>45%</strong></td><td><strong>34%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="sub-title" style="border-color:var(--blue)">Diversity Progress Indicators</h2>
+    <div class="progress-row">
+      <div class="progress-label"><span>Women in Workforce (Global)</span><span style="color:#065F46;font-weight:800">52% ✓</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:52%;background:#3B82F6"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Women in Senior Leadership</span><span style="color:#B45309">37% → Target 40%</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:92.5%;background:#F59E0B"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Diverse US Employees</span><span style="color:#065F46;font-weight:800">45% ✓</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:45%;background:#8B5CF6"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Board Diversity</span><span style="color:#065F46;font-weight:800">43% ✓</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:43%;background:#10B981"></div></div>
+    </div>
+
+    <div class="insight-box" style="margin-top:8px">
+      <strong>Recognition:</strong> Included in Bloomberg Gender-Equality Index (GEI) for the 7th consecutive year · DiversityInc Top 50 Companies for Diversity · Human Rights Campaign Corporate Equality Index Score: 100/100
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 9</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 10 — EMPLOYEE METRICS
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">08 · Social — Employee Development</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-soc" style="margin-top:8px;display:inline-flex">Social</span>
+    <h1 class="section-title" style="margin-top:6px">Employee Development, Pay Equity & Wellbeing</h1>
+    <div class="section-rule"></div>
+
+    <div class="three-col" style="margin-bottom:14px">
+      <div class="stat-card" style="border-left:4px solid #3B82F6">
+        <div class="stat-card-val" style="color:var(--blue)">59 hrs</div>
+        <div class="stat-card-label">Avg Training / Employee</div>
+        <div class="stat-card-sub">$1.1B investment · 14 programs</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #10B981">
+        <div class="stat-card-val" style="color:#065F46">85/100</div>
+        <div class="stat-card-label">Employee Satisfaction</div>
+        <div class="stat-card-sub">87% engagement rate</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #F59E0B">
+        <div class="stat-card-val" style="color:#92400E">$23/hr</div>
+        <div class="stat-card-label">US Minimum Wage</div>
+        <div class="stat-card-sub">Target $25/hr by 2025</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Compensation & Pay Equity</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Minimum US Hourly Wage</td><td>$23/hour</td></tr>
+            <tr><td>Target Minimum (2025)</td><td>$25/hour</td></tr>
+            <tr><td>Median Annual Compensation</td><td>$94,000</td></tr>
+            <tr><td>CEO Pay Ratio</td><td>165:1</td></tr>
+            <tr><td>Women Pay Equity (adjusted)</td><td>$0.997 / $1.00 (men)</td></tr>
+            <tr><td>Minority Pay Equity (adjusted)</td><td>$0.998 / $1.00 (white)</td></tr>
+          </tbody>
+        </table>
+
+        <h2 class="sub-title" style="border-color:var(--blue);margin-top:14px">Health, Safety & Wellbeing</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Work-Related Injuries</td><td>142 cases</td></tr>
+            <tr><td>Lost Time Injury Rate</td><td>0.13 per 200K hrs</td></tr>
+            <tr><td>Work-Related Fatalities</td><td>0</td></tr>
+            <tr><td>Mental Health Program Utilization</td><td>31%</td></tr>
+            <tr><td>Voluntary Turnover Rate</td><td>8.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Training & Development</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th><th>Target</th></tr></thead>
+          <tbody>
+            <tr><td>Avg Training Hours / FTE</td><td>59 hrs</td><td>60 hrs</td></tr>
+            <tr><td>Total Training Hours</td><td>12.6M hrs</td><td>—</td></tr>
+            <tr><td>Training Investment</td><td>$1.1B</td><td>—</td></tr>
+            <tr><td>Internal Promotions</td><td>28%</td><td>30%</td></tr>
+            <tr><td>Leadership Programs</td><td>14 active</td><td>—</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box" style="margin-top:10px">
+          <strong>Pay Equity:</strong> BofA conducts annual pay equity reviews across gender, race, and ethnicity. Adjusted pay gap is less than 0.3% across all groups — a leading benchmark for the financial services sector.
+        </div>
+
+        <div style="margin-top:10px;padding:12px;background:#DBEAFE;border-radius:8px;border:1px solid #93C5FD">
+          <div style="font-size:8pt;font-weight:800;color:#1E40AF;margin-bottom:6px">Employee Benefits Highlights</div>
+          <div style="font-size:8pt;color:#1E40AF;line-height:1.7">
+            ✅ 16 weeks paid parental leave (all genders)<br>
+            ✅ Student loan repayment program<br>
+            ✅ Subsidized backup child & elder care<br>
+            ✅ Mental health & EAP services globally<br>
+            ✅ Fertility and adoption assistance
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 10</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 11 — COMMUNITY IMPACT
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">09 · Social — Community Impact</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-soc" style="margin-top:8px;display:inline-flex">Social</span>
+    <h1 class="section-title" style="margin-top:6px">Community Impact & Financial Inclusion</h1>
+    <div class="section-rule"></div>
+
+    <div class="three-col" style="margin-bottom:14px">
+      <div class="stat-card" style="border-left:4px solid #3B82F6">
+        <div class="stat-card-val" style="color:var(--blue)">$380M</div>
+        <div class="stat-card-label">Community Investment</div>
+        <div class="stat-card-sub">Toward $500M annual target</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #10B981">
+        <div class="stat-card-val" style="color:#065F46">2.1M</div>
+        <div class="stat-card-label">Volunteer Hours</div>
+        <div class="stat-card-sub">67,000 employees participated</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #8B5CF6">
+        <div class="stat-card-val" style="color:#4C1D95">3.6M</div>
+        <div class="stat-card-label">Clients — Financial Health</div>
+        <div class="stat-card-sub">Financial literacy programs</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Community Investment Breakdown</h2>
+        <table>
+          <thead><tr><th>Category</th><th>Amount ($M)</th><th>% of Total</th></tr></thead>
+          <tbody>
+            <tr><td>Affordable Housing</td><td>98</td><td>25.8%</td></tr>
+            <tr><td>Economic Mobility Programs</td><td>82</td><td>21.6%</td></tr>
+            <tr><td>Small Business Support</td><td>68</td><td>17.9%</td></tr>
+            <tr><td>Education & Workforce Dev.</td><td>57</td><td>15.0%</td></tr>
+            <tr><td>Arts & Cultural Institutions</td><td>42</td><td>11.1%</td></tr>
+            <tr><td>Environmental Nonprofits</td><td>33</td><td>8.7%</td></tr>
+            <tr style="background:#DBEAFE"><td><strong>Total</strong></td><td><strong>380</strong></td><td><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--blue)">Financial Inclusion Programs</h2>
+        <table>
+          <thead><tr><th>Program</th><th>Reach (2024)</th></tr></thead>
+          <tbody>
+            <tr><td>Financial Literacy Workshops</td><td>3.6M clients</td></tr>
+            <tr><td>Affordable Mortgage Loans</td><td>98,000 loans</td></tr>
+            <tr><td>Small Business Loans</td><td>$3.8B deployed</td></tr>
+            <tr><td>Better Money Habits® users</td><td>14.2M online</td></tr>
+            <tr><td>Military / Veterans Programs</td><td>8,400 employees served</td></tr>
+            <tr><td>Neighborhood Builders grants</td><td>285 nonprofits funded</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box" style="margin-top:10px">
+          <strong>Impact:</strong> Bank of America's Neighborhood Builders program has invested over $300M in community development organizations since its founding, supporting affordable housing, workforce development, and food security across the US.
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-title" style="border-color:var(--blue);margin-top:10px">Community Impact Trend</h2>
+    <table>
+      <thead><tr><th>Year</th><th>Investment ($M)</th><th>Volunteer Hours</th><th>Financial Literacy Clients</th><th>Affordable Housing Loans</th></tr></thead>
+      <tbody>
+        <tr><td>2020</td><td>285</td><td>1,200,000</td><td>2,800,000</td><td>72,000</td></tr>
+        <tr><td>2021</td><td>310</td><td>1,500,000</td><td>3,100,000</td><td>81,000</td></tr>
+        <tr><td>2022</td><td>330</td><td>1,750,000</td><td>3,300,000</td><td>88,000</td></tr>
+        <tr><td>2023</td><td>355</td><td>1,900,000</td><td>3,450,000</td><td>94,000</td></tr>
+        <tr style="background:#DBEAFE"><td><strong>2024</strong></td><td><strong>380</strong></td><td><strong>2,100,000</strong></td><td><strong>3,600,000</strong></td><td><strong>98,000</strong></td></tr>
+        <tr style="background:#FEF3C7"><td>2025 Target</td><td>500</td><td>2,500,000</td><td>4,000,000</td><td>110,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 11</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 12 — GOVERNANCE — BOARD
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">10 · Governance — Board Composition</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-gov" style="margin-top:8px;display:inline-flex">Governance</span>
+    <h1 class="section-title" style="margin-top:6px">Board Composition, Independence & ESG Oversight</h1>
+    <div class="section-rule"></div>
+
+    <div class="three-col" style="margin-bottom:14px">
+      <div class="stat-card" style="border-left:4px solid #8B5CF6">
+        <div class="stat-card-val" style="color:#4C1D95">92%</div>
+        <div class="stat-card-label">Board Independence</div>
+        <div class="stat-card-sub">13 of 14 directors independent</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #8B5CF6">
+        <div class="stat-card-val" style="color:#4C1D95">43%</div>
+        <div class="stat-card-label">Women on Board</div>
+        <div class="stat-card-sub">6 of 14 directors are women</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid #8B5CF6">
+        <div class="stat-card-val" style="color:#4C1D95">6.8 yrs</div>
+        <div class="stat-card-label">Avg Board Tenure</div>
+        <div class="stat-card-sub">Balanced refreshment cycle</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--purple)">Board Composition (2024)</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Total Board Size</td><td>14 directors</td></tr>
+            <tr><td>Independent Directors</td><td>13 (92.9%)</td></tr>
+            <tr><td>Non-Independent</td><td>1 (CEO — Brian Moynihan)</td></tr>
+            <tr><td>Women Directors</td><td>6 (42.9%)</td></tr>
+            <tr><td>Ethnically Diverse Directors</td><td>6 (42.9%)</td></tr>
+            <tr><td>Average Age</td><td>63 years</td></tr>
+            <tr><td>Average Tenure</td><td>6.8 years</td></tr>
+            <tr><td>Directors with Financial Expertise</td><td>10 (71.4%)</td></tr>
+            <tr><td>Directors with ESG/Sustainability Expertise</td><td>7 (50%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--purple)">Board Committees</h2>
+        <table>
+          <thead><tr><th>Committee</th><th>Members</th><th>ESG Role</th></tr></thead>
+          <tbody>
+            <tr><td>Audit Committee</td><td>5</td><td>Risk oversight</td></tr>
+            <tr><td>Compensation & HR</td><td>4</td><td>ESG-linked pay</td></tr>
+            <tr><td>Corporate Governance</td><td>4</td><td>ESG policy</td></tr>
+            <tr><td>Risk Committee</td><td>6</td><td>Climate risk</td></tr>
+            <tr><td><strong>ESG & Resp. Growth Cmte.</strong></td><td>5</td><td><strong>Primary ESG body</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box purple" style="margin-top:10px">
+          <strong>ESG Governance:</strong> The ESG & Responsible Growth Committee meets 6 times per year and has direct board-level oversight of all Environmental, Social, and Governance performance metrics. Executive compensation includes a 15% ESG-linked component tied to GHG reduction and DEI targets.
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-title" style="border-color:var(--purple);margin-top:10px">Executive Compensation — ESG Linkage</h2>
+    <table>
+      <thead><tr><th>Comp. Component</th><th>ESG Linked</th><th>ESG % Weight</th><th>Metrics Used</th></tr></thead>
+      <tbody>
+        <tr><td>Annual Incentive Plan</td><td>Yes</td><td>15%</td><td>Diversity targets, GHG reduction, employee satisfaction</td></tr>
+        <tr><td>Long-Term Incentive Plan</td><td>Yes</td><td>10%</td><td>Sustainable finance progress, net zero milestones</td></tr>
+        <tr><td>Base Salary</td><td>No</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 12</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 13 — ETHICS & COMPLIANCE
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">11 · Governance — Ethics & Compliance</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-gov" style="margin-top:8px;display:inline-flex">Governance</span>
+    <h1 class="section-title" style="margin-top:6px">Ethics, Compliance & Shareholder Engagement</h1>
+    <div class="section-rule"></div>
+
+    <div class="two-col" style="margin-bottom:14px">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--purple)">Ethics & Compliance Metrics</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>2024</th><th>2023</th></tr></thead>
+          <tbody>
+            <tr><td>Code of Conduct Completion</td><td>99.7%</td><td>99.4%</td></tr>
+            <tr><td>Anti-Corruption Training</td><td>98.4%</td><td>97.8%</td></tr>
+            <tr><td>Material Data Privacy Incidents</td><td>0</td><td>0</td></tr>
+            <tr><td>ESG-Related Regulatory Fines</td><td>$0</td><td>$0</td></tr>
+            <tr><td>Whistleblower Reports Filed</td><td>241</td><td>228</td></tr>
+            <tr><td>Whistleblower Cases Resolved</td><td>238</td><td>225</td></tr>
+            <tr><td>Anti-Bribery Cases Substantiated</td><td>0</td><td>0</td></tr>
+          </tbody>
+        </table>
+
+        <h2 class="sub-title" style="border-color:var(--purple);margin-top:14px">Reporting Frameworks</h2>
+        <table>
+          <thead><tr><th>Framework</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>GRI Standards 2021</td><td style="color:#065F46;font-weight:700">Full compliance</td></tr>
+            <tr><td>SASB (Commercial Banks)</td><td style="color:#065F46;font-weight:700">Aligned</td></tr>
+            <tr><td>TCFD</td><td style="color:#065F46;font-weight:700">Full alignment</td></tr>
+            <tr><td>PCAF</td><td style="color:#065F46;font-weight:700">Aligned</td></tr>
+            <tr><td>UN SDGs</td><td style="color:#065F46;font-weight:700">10 of 17 SDGs</td></tr>
+            <tr><td>GFANZ (Net Zero Alliance)</td><td style="color:#065F46;font-weight:700">Member</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--purple)">Shareholder Engagement</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Annual ESG Report</td><td>Published April 2025</td></tr>
+            <tr><td>Say-on-Pay Approval</td><td>94.2%</td></tr>
+            <tr><td>Institutional Investors Engaged</td><td>&gt;400</td></tr>
+            <tr><td>ESG Roadshows (2024)</td><td>48</td></tr>
+            <tr><td>Proxy Statement Pages</td><td>152</td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:12px;padding:14px;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:10px">
+          <div style="font-size:8pt;font-weight:800;color:#4C1D95;margin-bottom:8px">Supply Chain ESG — Top Suppliers</div>
+          <table style="font-size:8pt">
+            <thead><tr><th style="background:#5E2B8C">Supplier</th><th style="background:#5E2B8C">ESG Score</th><th style="background:#5E2B8C">Status</th></tr></thead>
+            <tbody>
+              <tr><td>IBM Corporation</td><td>88</td><td style="color:#065F46">✓ ISO 14001</td></tr>
+              <tr><td>Microsoft</td><td>91</td><td style="color:#065F46">✓ Carbon Negative</td></tr>
+              <tr><td>Accenture</td><td>85</td><td style="color:#065F46">✓ Net Zero</td></tr>
+              <tr><td>Johnson Controls</td><td>79</td><td style="color:#B45309">ISO 50001</td></tr>
+              <tr><td>Aramark</td><td>67</td><td style="color:#B91C1C">⚠ Under Review</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:7pt;color:var(--gray);margin-top:6px">2,800 suppliers assessed · 89% meet ESG standards · 4 terminated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 13</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 14 — SUSTAINABLE FINANCE
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">12 · Sustainable Finance</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <span class="tag tag-fin" style="margin-top:8px;display:inline-flex">Finance</span>
+    <h1 class="section-title" style="margin-top:6px">Sustainable Finance — $1.5 Trillion Goal</h1>
+    <div class="section-rule"></div>
+
+    <div class="highlight-strip" style="background:linear-gradient(135deg,#92400E,#B45309)">
+      <div class="highlight-strip-val" style="color:#FCD34D">$860B</div>
+      <div class="highlight-strip-text">
+        <strong>Deployed toward $1.5 Trillion Goal by 2030</strong><br>
+        <span>57.3% of goal achieved. $500B environmental transition + $360B social development. Remaining: $640B over 5 years. Annual deployment rate: ~$290B.</span>
+      </div>
+    </div>
+
+    <!-- Progress bar for $1.5T goal -->
+    <div style="margin:14px 0;padding:14px 18px;background:#FEF9C3;border-radius:10px;border:1px solid #FDE68A">
+      <div style="display:flex;justify-content:space-between;font-size:9pt;font-weight:800;margin-bottom:8px">
+        <span style="color:#92400E">Sustainable Finance Progress</span>
+        <span style="color:#92400E">$860B / $1,500B (57.3%)</span>
+      </div>
+      <div style="height:20px;background:#FEF3C7;border-radius:99px;overflow:hidden;border:1px solid #FDE68A">
+        <div style="height:100%;width:57.3%;background:linear-gradient(90deg,#F59E0B,#D97706);border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px">
+          <span style="font-size:8pt;font-weight:800;color:white">57%</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:7.5pt;color:var(--gray);margin-top:4px">
+        <span>2021 Start</span><span>$860B Deployed</span><span>$1.5T Goal (2030)</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h2 class="sub-title" style="border-color:var(--amber)">Breakdown by Category</h2>
+        <table>
+          <thead><tr><th>Category</th><th>Target ($B)</th><th>Deployed ($B)</th><th>Progress</th></tr></thead>
+          <tbody>
+            <tr><td>Environmental Transition</td><td>1,000</td><td>500</td><td>50%</td></tr>
+            <tr><td>— Renewable Energy</td><td>—</td><td>185</td><td>—</td></tr>
+            <tr><td>— Green Buildings</td><td>—</td><td>142</td><td>—</td></tr>
+            <tr><td>— Clean Transport</td><td>—</td><td>68</td><td>—</td></tr>
+            <tr><td>— Clean Technology</td><td>—</td><td>55</td><td>—</td></tr>
+            <tr><td>— Other Environmental</td><td>—</td><td>50</td><td>—</td></tr>
+            <tr><td>Social Development</td><td>500</td><td>360</td><td>72%</td></tr>
+            <tr><td>— Affordable Housing</td><td>—</td><td>145</td><td>—</td></tr>
+            <tr><td>— Healthcare Finance</td><td>—</td><td>72</td><td>—</td></tr>
+            <tr><td>— Education Finance</td><td>—</td><td>58</td><td>—</td></tr>
+            <tr><td>— Small Business</td><td>—</td><td>48</td><td>—</td></tr>
+            <tr><td>— Other Social</td><td>—</td><td>37</td><td>—</td></tr>
+            <tr style="background:#FEF9C3"><td><strong>TOTAL</strong></td><td><strong>1,500</strong></td><td><strong>860</strong></td><td><strong>57.3%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2 class="sub-title" style="border-color:var(--amber)">Green Bond Issuances</h2>
+        <table>
+          <thead><tr><th>Year</th><th>Amount ($B)</th><th>Coupon</th></tr></thead>
+          <tbody>
+            <tr><td>2019</td><td>2.25</td><td>3.00%</td></tr>
+            <tr><td>2020</td><td>2.00</td><td>2.50%</td></tr>
+            <tr><td>2021</td><td>2.00</td><td>2.25%</td></tr>
+            <tr><td>2022</td><td>1.50</td><td>3.20%</td></tr>
+            <tr><td>2023</td><td>2.50</td><td>4.10%</td></tr>
+            <tr><td>2024</td><td>2.75</td><td>4.35%</td></tr>
+            <tr style="background:#FEF9C3"><td><strong>Total Issued</strong></td><td><strong>$13B</strong></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <h2 class="sub-title" style="border-color:var(--amber);margin-top:14px">Annual Deployment Trend</h2>
+        <table>
+          <thead><tr><th>Year</th><th>Annual ($B)</th><th>Cumulative ($B)</th></tr></thead>
+          <tbody>
+            <tr><td>2021</td><td>110</td><td>110</td></tr>
+            <tr><td>2022</td><td>180</td><td>290</td></tr>
+            <tr><td>2023</td><td>280</td><td>570</td></tr>
+            <tr style="background:#FEF9C3"><td><strong>2024</strong></td><td><strong>290</strong></td><td><strong>860</strong></td></tr>
+            <tr><td>Required 2025-2030</td><td>~107/yr</td><td>1,500</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 14</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE 15 — ESG TARGETS SCORECARD
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="header-stripe"></div>
+  <div class="content-page">
+    <div class="page-header">
+      <div class="page-eyebrow">13 · ESG Targets Scorecard</div>
+      <div class="page-eyebrow">Bank of America · ESG Report 2024</div>
+    </div>
+    <h1 class="section-title" style="margin-top:8px">ESG Targets Scorecard & 2030 / 2050 Roadmap</h1>
+    <div class="section-rule"></div>
+
+    <table style="margin-bottom:14px">
+      <thead>
+        <tr>
+          <th>Pillar</th>
+          <th>Target</th>
+          <th>Deadline</th>
+          <th>Current</th>
+          <th>Goal</th>
+          <th>Progress</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#ECFDF5">
+          <td><span class="tag tag-env">ENV</span></td>
+          <td>GHG reduction vs 2010 baseline</td>
+          <td>2030</td>
+          <td>96.5%</td>
+          <td>75%</td>
+          <td>
+            <div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:100%;background:#10B981"></div></div>
+          </td>
+          <td><span style="color:#065F46;font-weight:800;font-size:8pt">✓ EXCEEDED</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-env">ENV</span></td>
+          <td>Net Zero — all emissions</td>
+          <td>2050</td>
+          <td>61,800 MT</td>
+          <td>0 MT</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:96.5%;background:#10B981"></div></div></td>
+          <td><span style="color:#065F46;font-weight:700;font-size:8pt">On Track</span></td>
+        </tr>
+        <tr style="background:#ECFDF5">
+          <td><span class="tag tag-env">ENV</span></td>
+          <td>100% Renewable Electricity</td>
+          <td>Achieved</td>
+          <td>100%</td>
+          <td>100%</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:100%;background:#10B981"></div></div></td>
+          <td><span style="color:#065F46;font-weight:800;font-size:8pt">✓ COMPLETE</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-env">ENV</span></td>
+          <td>Sustainable Finance $1.5T</td>
+          <td>2030</td>
+          <td>$860B</td>
+          <td>$1,500B</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:57%;background:#F59E0B"></div></div></td>
+          <td><span style="color:#B45309;font-weight:700;font-size:8pt">57% — On Track</span></td>
+        </tr>
+        <tr style="background:#ECFDF5">
+          <td><span class="tag tag-env">ENV</span></td>
+          <td>Zero Waste to Landfill</td>
+          <td>2030</td>
+          <td>9,430 MT</td>
+          <td>0 MT</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:74%;background:#F59E0B"></div></div></td>
+          <td><span style="color:#B45309;font-weight:700;font-size:8pt">In Progress</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-soc">SOC</span></td>
+          <td>Women in Senior Leadership 40%+</td>
+          <td>2030</td>
+          <td>37%</td>
+          <td>40%</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:92.5%;background:#3B82F6"></div></div></td>
+          <td><span style="color:#1E40AF;font-weight:700;font-size:8pt">On Track</span></td>
+        </tr>
+        <tr style="background:#DBEAFE">
+          <td><span class="tag tag-soc">SOC</span></td>
+          <td>Women in Workforce ≥50%</td>
+          <td>Ongoing</td>
+          <td>52%</td>
+          <td>50%</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:100%;background:#3B82F6"></div></div></td>
+          <td><span style="color:#065F46;font-weight:800;font-size:8pt">✓ EXCEEDED</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-soc">SOC</span></td>
+          <td>Raise US Min. Wage to $25/hr</td>
+          <td>2025</td>
+          <td>$23/hr</td>
+          <td>$25/hr</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:50%;background:#F59E0B"></div></div></td>
+          <td><span style="color:#B45309;font-weight:700;font-size:8pt">In Progress</span></td>
+        </tr>
+        <tr style="background:#DBEAFE">
+          <td><span class="tag tag-soc">SOC</span></td>
+          <td>Community Investment $500M+</td>
+          <td>2025</td>
+          <td>$380M</td>
+          <td>$500M</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:76%;background:#3B82F6"></div></div></td>
+          <td><span style="color:#1E40AF;font-weight:700;font-size:8pt">76% — On Track</span></td>
+        </tr>
+        <tr style="background:#F5F3FF">
+          <td><span class="tag tag-gov">GOV</span></td>
+          <td>Maintain 92%+ Board Independence</td>
+          <td>Annual</td>
+          <td>92%</td>
+          <td>92%</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:100%;background:#8B5CF6"></div></div></td>
+          <td><span style="color:#065F46;font-weight:800;font-size:8pt">✓ COMPLETE</span></td>
+        </tr>
+        <tr style="background:#F5F3FF">
+          <td><span class="tag tag-gov">GOV</span></td>
+          <td>ESG-Linked Executive Compensation</td>
+          <td>Achieved</td>
+          <td>15% link</td>
+          <td>15%</td>
+          <td><div class="progress-track" style="width:80px;display:inline-block"><div class="progress-fill" style="width:100%;background:#8B5CF6"></div></div></td>
+          <td><span style="color:#065F46;font-weight:800;font-size:8pt">✓ COMPLETE</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div style="text-align:center;padding:12px;background:#ECFDF5;border-radius:10px;border:1px solid #A7F3D0">
+        <div style="font-size:20pt;font-weight:900;color:#065F46">5</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:.4px">Targets Achieved / On Track</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#FEF3C7;border-radius:10px;border:1px solid #FDE68A">
+        <div style="font-size:20pt;font-weight:900;color:#92400E">4</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:.4px">In Progress — On Track</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:#DBEAFE;border-radius:10px;border:1px solid #93C5FD">
+        <div style="font-size:20pt;font-weight:900;color:#1E40AF">11</div>
+        <div style="font-size:7.5pt;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:.4px">Total Active Targets</div>
+      </div>
+    </div>
+
+    <div style="padding:12px 16px;background:var(--navy);color:white;border-radius:10px;font-size:8pt;line-height:1.6">
+      <strong style="color:#FBBF24">Report generated by BestByte ESG Intelligence Platform</strong> — Data sourced from publicly available Bank of America ESG disclosures, MSCI, CDP, and Sustainalytics databases.
+      GHG data verified by KPMG LLP. Financial data per SEC 10-K. This report is produced for demonstration purposes. © 2025 BestByte ESG Intelligence.
+    </div>
+  </div>
+  <div class="footer-bar"><span>Bank of America · ESG Report 2024 · Confidential</span><span>Page 15</span></div>
+</div>
+
+</body>
+</html>

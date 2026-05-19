@@ -27,9 +27,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split vendor modules into separate chunks for better caching
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-*']
         }
       }
     }

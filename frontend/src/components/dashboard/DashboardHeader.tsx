@@ -49,7 +49,7 @@ export function DashboardHeader() {
             <div className="relative">
               <div className="relative bg-white dark:bg-gray-800 p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl border border-blue-200/50 dark:border-blue-900/50 hover:border-blue-300/50 dark:hover:border-blue-800/50 transition-all duration-300">
                 <h1 className="text-base sm:text-xl md:text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                  Acme Corp
+                  Bank of America
                 </h1>
                 <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 font-medium flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-yellow-500 dark:text-yellow-400" />

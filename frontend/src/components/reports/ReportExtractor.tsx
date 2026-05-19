@@ -57,24 +57,29 @@ export function ReportExtractor() {
         variant: "destructive",
       });
       
-      // Fallback to static file if API call fails
+      // Fallback: generate PDF directly in the browser
       try {
-        console.log('Using fallback PDF');
-        const fallbackResponse = await fetch('/ESG_Report.pdf');
-        await downloadPDFReport(fallbackResponse, `ESG_Report_${new Date().toISOString().split('T')[0]}.pdf`);
-        
-        toast({
-          title: "Report Downloaded",
-          description: "Using fallback report due to API error.",
-        });
+        const html2pdf = (await import('html2pdf.js')).default;
+        const res = await fetch('/BankOfAmerica_ESG_Report_2024.html');
+        const html = await res.text();
+        const el = document.createElement('div');
+        el.innerHTML = html;
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        await html2pdf().set({
+          margin: 0,
+          filename: `BankOfAmerica_ESG_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+          image: { type: 'jpeg', quality: 0.97 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] },
+        }).from(el).save();
+        document.body.removeChild(el);
+        toast({ title: "Report Downloaded", description: "Bank of America ESG Report PDF saved." });
       } catch (fallbackError) {
-        console.error('Fallback download failed:', fallbackError);
-        
-        toast({
-          title: "Error",
-          description: "Could not download the report. Please try again later.",
-          variant: "destructive",
-        });
+        console.error('Fallback failed:', fallbackError);
+        toast({ title: "Error", description: "Could not generate PDF. Please try again.", variant: "destructive" });
       }
     } finally {
       setIsGenerating(false);

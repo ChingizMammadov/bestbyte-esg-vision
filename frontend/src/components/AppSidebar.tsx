@@ -12,7 +12,7 @@ import {
   SidebarFooter,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen, User, LogOut, Search, ChevronDown } from "lucide-react";
+import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen, User, LogOut, Search, ChevronDown, Target } from "lucide-react";
 import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { BestByteLogo } from "./BestByteLogo";
@@ -44,6 +44,7 @@ const mainItems: MenuItem[] = [
       { title: "Custom Reports", url: "/reports/custom" },
     ]
   },
+  { title: "ESG Targets", url: "/targets", icon: Target },
   { title: "Carbon Calculator", url: "/carbon-calculator", icon: FolderOpen },
   { 
     title: "ESG Analytics", 
