@@ -12,7 +12,7 @@ import {
   SidebarFooter,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen, User, LogOut, Search, ChevronDown, Target } from "lucide-react";
+import { LayoutDashboard, FileText, Cog, ChartBar, FolderOpen, User, LogOut, Search, ChevronDown, Target, Bot, Database, Truck, FileSearch } from "lucide-react";
 import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { BestByteLogo } from "./BestByteLogo";
@@ -46,9 +46,9 @@ const mainItems: MenuItem[] = [
   },
   { title: "ESG Targets", url: "/targets", icon: Target },
   { title: "Carbon Calculator", url: "/carbon-calculator", icon: FolderOpen },
-  { 
-    title: "ESG Analytics", 
-    url: "/analytics", 
+  {
+    title: "ESG Analytics",
+    url: "/analytics",
     icon: ChartBar,
     subItems: [
       { title: "Environmental", url: "/analytics/environmental" },
@@ -56,6 +56,10 @@ const mainItems: MenuItem[] = [
       { title: "Governance", url: "/analytics/governance" },
     ]
   },
+  { title: "AI ESG Assistant", url: "/ai-assistant", icon: Bot },
+  { title: "Data Hub", url: "/data-hub", icon: Database },
+  { title: "Supplier Portal", url: "/supplier-portal", icon: Truck },
+  { title: "Document Extraction", url: "/document-extraction", icon: FileSearch },
 ];
 
 const settingsItems = [

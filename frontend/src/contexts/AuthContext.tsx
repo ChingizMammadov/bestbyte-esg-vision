@@ -1,97 +1,135 @@
+import React, { createContext, useContext } from 'react'
+import { useUser, useSignIn, useSignUp, useClerk } from '@clerk/clerk-react'
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
-  signOut: () => Promise<void>;
+export interface AppUser {
+  id: string
+  email: string
+  firstName: string | null
+  lastName: string | null
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+interface AuthContextType {
+  user: AppUser | null
+  loading: boolean
+  signIn: (email: string, password: string) => Promise<{ error: any }>
+  signUp: (email: string, password: string) => Promise<{ error: any }>
+  signOut: () => Promise<void>
+  getToken: () => Promise<string | null>
+}
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+const NO_CLERK_VALUE: AuthContextType = {
+  user: null,
+  loading: false,
+  signIn: async () => ({
+    error: { message: 'Add VITE_CLERK_PUBLISHABLE_KEY to frontend/.env.local' },
+  }),
+  signUp: async () => ({
+    error: { message: 'Add VITE_CLERK_PUBLISHABLE_KEY to frontend/.env.local' },
+  }),
+  signOut: async () => {},
+  getToken: async () => null,
+}
+
+function ClerkAuthProvider({ children }: { children: React.ReactNode }) {
+  const { isLoaded: userLoaded, isSignedIn, user: clerkUser } = useUser()
+  const { isLoaded: signInLoaded, signIn: clerkSignIn, setActive: setSignInActive } = useSignIn()
+  const { isLoaded: signUpLoaded, signUp: clerkSignUp, setActive: setSignUpActive } = useSignUp()
+  const { signOut: clerkSignOut, session } = useClerk()
+
+  const user: AppUser | null =
+    userLoaded && isSignedIn && clerkUser
+      ? {
+          id: clerkUser.id,
+          email: clerkUser.primaryEmailAddress?.emailAddress ?? '',
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+        }
+      : null
+
+  const signIn = async (email: string, password: string): Promise<{ error: any }> => {
+    if (!signInLoaded) return { error: { message: 'Auth is still loading' } }
+    try {
+      const result = await clerkSignIn.create({ identifier: email, password })
+      if (result.status === 'complete') {
+        await setSignInActive({ session: result.createdSessionId })
+        return { error: null }
       }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-      
-      // Debug session info
-      if (session) {
-        console.log("Session found:", session);
-        console.log("User info:", session.user);
-        console.log("Access token:", session.access_token?.substring(0, 20) + "...");
-      } else {
-        console.log("No session found");
+      return { error: { message: 'Sign in requires additional verification' } }
+    } catch (err: any) {
+      return {
+        error: {
+          message:
+            err?.errors?.[0]?.longMessage ??
+            err?.errors?.[0]?.message ??
+            err?.message ??
+            'Sign in failed',
+        },
       }
-    });
+    }
+  }
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    return { error };
-  };
-
-  const signUp = async (email: string, password: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl
+  const signUp = async (email: string, password: string): Promise<{ error: any }> => {
+    if (!signUpLoaded) return { error: { message: 'Auth is still loading' } }
+    try {
+      const result = await clerkSignUp.create({ emailAddress: email, password })
+      if (result.status === 'complete') {
+        await setSignUpActive({ session: result.createdSessionId })
+        return { error: null }
       }
-    });
-    return { error };
-  };
+      // Email verification required — send a magic link
+      await clerkSignUp.prepareEmailAddressVerification({
+        strategy: 'email_link',
+        redirectUrl: `${window.location.origin}/dashboard`,
+      })
+      return { error: { message: 'EMAIL_VERIFICATION_REQUIRED' } }
+    } catch (err: any) {
+      return {
+        error: {
+          message:
+            err?.errors?.[0]?.longMessage ??
+            err?.errors?.[0]?.message ??
+            err?.message ??
+            'Sign up failed',
+        },
+      }
+    }
+  }
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    // Explicitly clear user state to prevent race conditions on redirect
-    setUser(null);
-    setSession(null);
-  };
+    await clerkSignOut()
+  }
 
-  const value = {
-    user,
-    session,
-    loading,
-    signIn,
-    signUp,
-    signOut
-  };
+  const getToken = async (): Promise<string | null> => {
+    if (!session) return null
+    return session.getToken()
+  }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, loading: !userLoaded, signIn, signUp, signOut, getToken }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+function FallbackAuthProvider({ children }: { children: React.ReactNode }) {
+  return <AuthContext.Provider value={NO_CLERK_VALUE}>{children}</AuthContext.Provider>
+}
+
+const CLERK_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  if (CLERK_KEY) {
+    return <ClerkAuthProvider>{children}</ClerkAuthProvider>
+  }
+  return <FallbackAuthProvider>{children}</FallbackAuthProvider>
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context;
+  return context
 }

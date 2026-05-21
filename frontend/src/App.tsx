@@ -30,6 +30,10 @@ import EnvironmentalAnalytics from "./pages/EnvironmentalAnalytics";
 import SocialAnalytics from "./pages/SocialAnalytics";
 import GovernanceAnalytics from "./pages/GovernanceAnalytics";
 import Targets from "./pages/Targets";
+import AIAssistant from "./pages/AIAssistant";
+import DataHub from "./pages/DataHub";
+import SupplierPortal from "./pages/SupplierPortal";
+import DocumentExtraction from "./pages/DocumentExtraction";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +91,26 @@ const App = () => (
                 <Route path="/settings" element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/ai-assistant" element={
+                  <ProtectedRoute>
+                    <AIAssistant />
+                  </ProtectedRoute>
+                } />
+                <Route path="/data-hub" element={
+                  <ProtectedRoute>
+                    <DataHub />
+                  </ProtectedRoute>
+                } />
+                <Route path="/supplier-portal" element={
+                  <ProtectedRoute>
+                    <SupplierPortal />
+                  </ProtectedRoute>
+                } />
+                <Route path="/document-extraction" element={
+                  <ProtectedRoute>
+                    <DocumentExtraction />
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />

@@ -4,21 +4,25 @@ services:
     runtime: docker
     plan: free
     envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: CLERK_JWKS_URL
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY
+        sync: false
+      - key: R2_SECRET_KEY
+        sync: false
+      - key: R2_BUCKET
+        value: "bestbyte-reports"
       - key: GEMINI_API_KEY
         sync: false
-      - key: SUPABASE_JWT_SECRET
-        sync: false
-      - key: COMPANY
-        value: "BestByte"
       - key: PORT
         value: 8000
       - key: FRONTEND_URL
         sync: false
       - key: ENVIRONMENT
         value: "production"
-      - key: RENDER_DISK_MOUNT_PATH
-        value: "/app/data"
-    disk:
-      name: data
-      mountPath: /app/data
-      sizeGB: 1

@@ -44,21 +44,12 @@ export interface ESGMetrics {
   }>;
 }
 
-/**
- * Get the current user's JWT token from Supabase session
- */
-import { supabase } from '@/integrations/supabase/client';
-
 async function getAuthToken(): Promise<string | null> {
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  // For debugging large token size
-  if (session?.access_token) {
-    const tokenSize = new Blob([session.access_token]).size;
-    console.log(`JWT token size: ${tokenSize} bytes`);
+  const clerk = (window as any).Clerk
+  if (clerk?.session) {
+    return clerk.session.getToken()
   }
-  
-  return session?.access_token || null;
+  return null
 }
 
 // Cache for API responses
@@ -307,14 +298,25 @@ export interface ReportMetadata {
 }
 
 /**
+ * Generate a report from live database — no file upload needed.
+ */
+export async function generateReportFromDB(
+  reportType: 'full' | 'monthly' | 'annual' | 'custom' = 'full',
+  period: string = '',
+): Promise<Response> {
+  const params = new URLSearchParams({ report_type: reportType, period })
+  return apiRequest<Response>(`/api/reports/generate?${params}`, 'POST')
+}
+
+/**
  * Get all reports for the current user
  */
 export async function getUserReports(): Promise<ReportMetadata[]> {
   console.log("Calling getUserReports API endpoint");
-  
+
   try {
     // Use caching for this endpoint to improve performance
-    const response = await apiRequest<{reports: ReportMetadata[]}>('/reports', 'GET', undefined, undefined, true);
+    const response = await apiRequest<{reports: ReportMetadata[]}>('/api/reports', 'GET', undefined, undefined, true);
     
     // Check if response or response.reports is undefined
     if (!response || !response.reports) {
@@ -373,7 +375,7 @@ export async function downloadReportById(reportId: number, filename: string): Pr
     } catch (signedUrlError) {
       console.warn('Failed to use signed URL, falling back to regular download:', signedUrlError);
       // Fall back to regular download if signed URL fails
-      const response = await apiRequest<Response>(`/reports/${reportId}`, 'GET');
+      const response = await apiRequest<Response>(`/api/reports/${reportId}`, 'GET');
       return downloadPDFReport(response, filename);
     }
   } catch (error) {

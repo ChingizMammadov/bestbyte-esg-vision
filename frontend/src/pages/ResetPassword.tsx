@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Shield, CheckCircle, AlertCircle, Lock, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useSignIn } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -13,6 +13,7 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signIn, isLoaded: clerkLoaded } = useSignIn();
   
   const [formData, setFormData] = useState({
     password: "",
@@ -106,31 +107,15 @@ export default function ResetPassword() {
     setIsLoading(true);
 
     try {
-      // The Supabase client automatically extracts the token from the URL hash
-      // We don't need to manually pass any token, just the new password
-      const { error } = await supabase.auth.updateUser({
-        password: formData.password
-      });
-
-      if (error) {
-        console.error("Password reset error:", error);
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        setPasswordResetComplete(true);
-        toast({
-          title: "Success!",
-          description: "Your password has been reset successfully",
-        });
-        
-        // Redirect to login after 3 seconds
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+      if (!clerkLoaded || !signIn) throw new Error("Auth not ready");
+      const ticket = searchParams.get("__clerk_ticket") || "";
+      if (ticket) {
+        await signIn.create({ strategy: "ticket", ticket });
       }
+      await signIn.resetPassword({ password: formData.password });
+      setPasswordResetComplete(true);
+      toast({ title: "Success!", description: "Your password has been reset successfully" });
+      setTimeout(() => navigate("/login"), 3000);
     } catch (error) {
       console.error("Unexpected error during password reset:", error);
       toast({
@@ -143,25 +128,13 @@ export default function ResetPassword() {
     }
   };
 
-  // Check if the URL hash contains auth parameters
   useEffect(() => {
-    // Supabase sends tokens in the URL hash fragment, not query params
-    // The library automatically handles this, but we can check if we're on a valid reset URL
-    const isValidResetURL = window.location.hash.includes('type=recovery');
-    
-    // If URL doesn't include the recovery type hash, it's not a valid reset link
-    if (!isValidResetURL) {
+    const hasTicket = searchParams.has("__clerk_ticket");
+    if (!hasTicket) {
       setIsLinkInvalid(true);
-      toast({
-        title: "Invalid Link",
-        description: "This password reset link is invalid or has expired.",
-        variant: "destructive",
-      });
-    } else {
-      // If hash exists, let Supabase handle it automatically
-      console.log("Valid recovery URL detected");
+      toast({ title: "Invalid Link", description: "This password reset link is invalid or has expired.", variant: "destructive" });
     }
-  }, [toast]);
+  }, [searchParams, toast]);
 
   if (isLinkInvalid) {
     return (

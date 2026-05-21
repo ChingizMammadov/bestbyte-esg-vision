@@ -2,53 +2,25 @@
 import React from "react";
 import { BarChartIcon } from "@/components/icons/BarChartIcon";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { BreakdownBarChart } from "./BreakdownBarChart";
 import { icons, barColors } from "./EsgBarIcons";
 import { EsgScoreSummaryCard } from "./EsgScoreSummaryCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Define the shape of our data
-type EsgScore = {
-  category: string;
-  score: number;
-  details: string;
-  key: string;
-};
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const COMPANY_ID = "8479cb95-2057-490d-813c-825e83d71890";
 
-// Fetch data from Supabase
+type EsgScore = { category: string; score: number; details: string; key: string };
+
 async function fetchEsgScores(): Promise<EsgScore[]> {
-  console.log("🔍 Fetching ESG scores from Supabase...");
-  
-  const { data, error } = await supabase
-    .from("esg_scores")
-    .select("category, score, metric_detail");
-
-  console.log("📊 Raw data from Supabase:", data);
-  console.log("❌ Error from Supabase:", error);
-
-  if (error) {
-    console.error("Error fetching ESG scores:", error);
-    throw error; // Let react-query handle the error
-  }
-
-  if (!data) {
-    console.log("⚠️ No data returned from Supabase");
-    return [];
-  }
-
-  console.log(`✅ Successfully fetched ${data.length} ESG scores`);
-
-  // Map DB schema to component's expected props
-  const mappedData = data.map((score) => ({
-    category: score.category,
-    score: score.score ?? 0,
-    details: score.metric_detail ?? "No details available.",
-    key: score.category ? score.category.charAt(0).toUpperCase() : "",
-  }));
-
-  console.log("🔄 Mapped data:", mappedData);
-  return mappedData;
+  const res = await fetch(`${API}/api/analytics/scores/breakdown?company_id=${COMPANY_ID}`);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  const data = await res.json();
+  return [
+    { category: "Environmental", score: data.environmental?.score ?? 0, details: data.environmental?.methodology ?? "", key: "E" },
+    { category: "Social",        score: data.social?.score ?? 0,        details: data.social?.methodology ?? "",        key: "S" },
+    { category: "Governance",    score: data.governance?.score ?? 0,    details: data.governance?.methodology ?? "",    key: "G" },
+  ];
 }
 
 export function ESGScoreBreakdownChart() {

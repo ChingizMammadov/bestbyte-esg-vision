@@ -13,15 +13,15 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { 
-  uploadESGFile, 
-  generateESGReport, 
-  downloadPDFReport, 
-  getUserReports, 
+import {
+  uploadESGFile,
+  generateESGReport,
+  generateReportFromDB,
+  downloadPDFReport,
+  getUserReports,
   downloadReportById,
   getSignedReportUrl,
-  ReportMetadata 
+  ReportMetadata
 } from "@/lib/api";
 
 interface Report {
@@ -160,103 +160,26 @@ export default function Reports() {
     }
   };
 
-  // Generate a report when the Generate Report button is clicked
+  // Generate a full ESG report from live Supabase data (no file upload needed)
   const handleGenerateMainReport = async () => {
-    if (!selectedFile) {
-      fileInputRef.current?.click();
-      return;
-    }
-
-    // Check file size
-    if (selectedFile.size > 10 * 1024 * 1024) { // 10MB limit
-      toast({
-        title: "File Too Large",
-        description: "Please select a file smaller than 10MB.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsGeneratingMainReport(true);
-    
-    // Add progress indicator
     toast({
       title: "Generating Report",
-      description: "Please wait while we generate your custom ESG report. This may take up to 60 seconds.",
+      description: "Building your ESG report from live data. This takes a few seconds.",
     });
-    
-    // Create a timeout to show another progress message
-    const timeoutId = setTimeout(() => {
-      toast({
-        title: "Still Working",
-        description: "Your report is taking longer than expected. Please continue waiting...",
-      });
-    }, 15000); // Show after 15 seconds
-    
-    try {      
-      console.log('Generating custom ESG report with file:', selectedFile.name);
-      
-      // Generate report using the API
-      const response = await generateESGReport(selectedFile);
-      
-      // Clear the progress timeout
-      clearTimeout(timeoutId);
-      
-      console.log('Report generation successful, downloading PDF');
-      
-      // Create a unique filename with date and time
+    try {
+      const response = await generateReportFromDB("full");
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      const filename = `ESG_Report_${timestamp}.pdf`;
-      
-      // Download the generated PDF
-      await downloadPDFReport(response, filename);
-
-      toast({
-        title: "Report Generated Successfully",
-        description: "Your ESG report has been generated and downloaded.",
-      });
-      
-      // Refresh the user reports list after successful generation
-      setTimeout(() => fetchUserReports(), 1000); // Small delay to ensure backend has finished processing
-      
-      // Clear the selected file
-      setSelectedFile(null);
+      await downloadPDFReport(response, `ESG_Report_${timestamp}.pdf`);
+      toast({ title: "Report Downloaded", description: "Your full ESG report has been saved." });
+      setTimeout(() => fetchUserReports(), 1500);
     } catch (error) {
-      // Clear the progress timeout
-      clearTimeout(timeoutId);
-      
       console.error('Report generation failed:', error);
-      
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to generate report. Please try again.",
         variant: "destructive",
       });
-      
-      // Fallback: generate PDF directly in the browser
-      try {
-        const html2pdf = (await import('html2pdf.js')).default;
-        const res = await fetch('/BankOfAmerica_ESG_Report_2024.html');
-        const html = await res.text();
-        const el = document.createElement('div');
-        el.innerHTML = html;
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-        await html2pdf().set({
-          margin: 0,
-          filename: `BankOfAmerica_ESG_Report_${timestamp}.pdf`,
-          image: { type: 'jpeg', quality: 0.97 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css', 'legacy'] },
-        }).from(el).save();
-        document.body.removeChild(el);
-        toast({ title: "Report Downloaded", description: "Bank of America ESG Report PDF saved." });
-      } catch (fallbackError) {
-        console.error('Fallback failed:', fallbackError);
-      }
     } finally {
       setIsGeneratingMainReport(false);
     }
@@ -439,15 +362,8 @@ export default function Reports() {
                         <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                         <span>Filter</span>
                       </Button>
-                      <input 
-                        type="file" 
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        accept=".xlsx,.xls"
-                        className="hidden"
-                      />
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 dark:from-purple-600 dark:to-pink-600 dark:hover:from-purple-500 dark:hover:to-pink-500 text-white rounded-lg sm:rounded-xl shadow-lg text-xs sm:text-sm h-8 sm:h-9 px-2.5 sm:px-3 flex-1 sm:flex-auto"
                         onClick={handleGenerateMainReport}
                         disabled={isGeneratingMainReport}
@@ -459,8 +375,8 @@ export default function Reports() {
                           </>
                         ) : (
                           <>
-                            {selectedFile ? <Download className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" /> : <Upload className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />}
-                            <span className="truncate">{selectedFile ? "Generate Report" : "Upload Data"}</span>
+                            <Download className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
+                            <span className="truncate">Generate Report</span>
                           </>
                         )}
                       </Button>
